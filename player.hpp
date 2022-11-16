@@ -52,6 +52,7 @@ public:
     }
 
     Point getPosFltk() const {return pos;}
+    int getSize()const {return boxSize;}
 
     void setPos(int x, int y){ pos.x = x; pos.y = y;}
     void move(int keyCode);

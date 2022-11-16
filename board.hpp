@@ -24,7 +24,7 @@ public:
     void setWall(int &line, int &col, Wall &myWall){ getElem(line, col).push(myWall);}
     void setEmpty(int line, int col){ getElem(line, col).push();} //Set the cell as empty
                                                                     
-    void configBoard(int &line, int &col, char &symbol);
+    void configBoard(int &line, int &col, char &symbol, int size);
     
     int getPosX(){ return posPlayerLine;}
     int getPosY(){ return posPlayerCol;}

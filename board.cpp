@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fstream>
 #include <vector>
 #include <variant>
@@ -11,14 +12,17 @@
 #include "rectangle.hpp"
 #include "wall.hpp"
 
-void Board::configBoard(int &line, int &col, char &symbol){
+void Board::configBoard(int &line, int &col, char &symbol, int size){
     //Start board at 50,50
-    int yGrid = 50*(line+1);
-    int xGrid = 50*(col+1);
+    //int yGrid = size*(line+1);
+    //int xGrid = size*(col+1);
+    std::cout << "here :" << size << std::endl;
+    int yGrid = 200+(line*size);
+    int xGrid = 200+(col*size);
     if (symbol == '@') {
         //Player
         std::cout << "Pos player at start : " << line << "," << col << std::endl;
-        Player myPlayer{{xGrid, yGrid}};
+        Player myPlayer{{xGrid, yGrid}, size};
         setPlayer(line, col, myPlayer);
     }
     else if (symbol == ' ') {
@@ -26,7 +30,7 @@ void Board::configBoard(int &line, int &col, char &symbol){
     }
     else if (symbol == '#') {
         //Wall
-        Wall myWall{{xGrid, yGrid}};
+        Wall myWall{{xGrid, yGrid}, size};
         setWall(line, col, myWall);
     }
 }
@@ -52,7 +56,7 @@ void loadBoard(Board &board, std::string file){
     std::ifstream myFile (file);
     int idx = 0;
     std::string lineS;
-    int line = 0, col = 0;
+    int line = 0, col = 0, boxSize = 70;
     if (myFile.is_open()) {
         while (myFile) {
             if (!idx) {
@@ -65,11 +69,14 @@ void loadBoard(Board &board, std::string file){
                 lineS = myFile.get();    
                 //std::cout << line << "real : " << board.getBoard().size() << std::endl;
                 //std::cout << col << "real : " << board.getBoard()[0].size() << std::endl;
+                boxSize = std::min(500/line, 500/col);
+                //boxSize = std::min(500, 50);
+                //std::cout << std::min(500/line, 500/col) << std::endl;
 
             }
             std::getline(myFile, lineS);
             for (char &letter :  lineS) {
-                board.configBoard(line, col, letter);
+                board.configBoard(line, col, letter, boxSize);
                 col++;
             }
             col=0;
@@ -106,23 +113,24 @@ void Controll::movePlayer(int keyCode){
     std::cout << "Pos player before when moving: " << newX << "," << newY << std::endl;
     Player *tmp = board->getElem(newX, newY).getPlayer();
     Point PlayerPos = tmp->getPosFltk();
+    int boxSize = tmp->getSize();
     if (keyCode == FL_Right or keyCode == 'd') {
         std::cout << "Move to the  right" << std::endl;
         //board->getElem(board->getPosX(), board->getPosY()).getPlayer().setPos(x+50, y);
         newY++;
-        tmp->setPos(PlayerPos.x + 50, PlayerPos.y);
+        tmp->setPos(PlayerPos.x + boxSize, PlayerPos.y);
     }else if (keyCode == FL_Left or keyCode == 'q') {
         newY--;
         std::cout << "Move to the  left" << std::endl;
-        tmp->setPos(PlayerPos.x - 50, PlayerPos.y);
+        tmp->setPos(PlayerPos.x - boxSize, PlayerPos.y);
     }else if (keyCode == FL_Up or keyCode == 'z') {
         newX--;
         std::cout << "Move up" << std::endl;
-        tmp->setPos(PlayerPos.x, PlayerPos.y - 50);
+        tmp->setPos(PlayerPos.x, PlayerPos.y - boxSize);
     }else if (keyCode == FL_Down or keyCode == 's') {
         newX++;
         std::cout << "Move down" << std::endl;
-        tmp->setPos(PlayerPos.x, PlayerPos.y + 50);
+        tmp->setPos(PlayerPos.x, PlayerPos.y + boxSize);
     }
     std::cout << "Pos player after when moving: " << newX << "," << newY << std::endl;
     std::cout << "---------------------------------------------------" << std::endl;
