@@ -30,10 +30,10 @@ class MainWindow : public Fl_Window {
     DisplayBoard displayBoard;
 
 public:
-    MainWindow(std::string file) : Fl_Window(000, 000, 1000, 975, "Sokoban") {
+    MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
         Fl::add_timeout(1.0 / 60, Timer_CB, this);
         resizable(this);
-        loadBoard(board, file);
+        loadBoard(board, "test.txt");
         displayBoard.setBoard(&board);
 
     }
@@ -72,7 +72,7 @@ Do not edit!!!!
 
 int main(int argc, char *argv[]) {
     srand(time(0));
-    MainWindow window(argv[1]);
+    MainWindow window;
     window.show(argc, argv);
     return Fl::run();
 }
