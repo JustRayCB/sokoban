@@ -3,6 +3,8 @@
 
 
 #include "rectangle.hpp"
+#include <FL/Enumerations.H>
+#include <FL/Fl_Window.H>
 
 class Wall{
     Point pos;
@@ -16,7 +18,7 @@ class Wall{
 
     }
 public:
-    Wall (Point center={100,100}, int boxSize=50): pos(center), boxSize(boxSize), wall(center, boxSize, boxSize, FL_BLACK, FL_BLACK){}
+    Wall (Point center={100,100}, int boxSize=50): pos(center), boxSize(boxSize), wall(center, boxSize, boxSize, FL_WHITE, FL_BLUE){}
     Wall(const Wall  &other){
         copyFromOther(other);
     }

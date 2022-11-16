@@ -28,7 +28,7 @@ class Rectangle {
 public:
     //Methods
     Rectangle()=default;
-    Rectangle(Point center, int w=20, int h=20, Fl_Color frameColor = FL_BLACK,
+    Rectangle(Point center, int w=20, int h=20, Fl_Color frameColor = FL_WHITE,
               Fl_Color fillColor = FL_GREEN);
 
     Rectangle &operator=(const Rectangle &other){

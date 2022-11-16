@@ -51,11 +51,12 @@ public:
         return *this;
     }
 
-    Point getPos() const {return pos;}
+    Point getPosFltk() const {return pos;}
 
     void setPos(int x, int y){ pos.x = x; pos.y = y;}
     void move(int keyCode);
     void draw();
+    Rectangle &getRectangle(){ return player;}
 
 
 };

@@ -28,18 +28,21 @@ class MainWindow : public Fl_Window {
     //shared_ptr<Board> board;
     Board board;
     DisplayBoard displayBoard;
+    Controll controller;
 
 public:
     MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
         Fl::add_timeout(1.0 / 60, Timer_CB, this);
         resizable(this);
-        loadBoard(board, "test.txt");
+        loadBoard(board, "/home/cbr/Unif2/ldp/sokoban/test.txt");
         displayBoard.setBoard(&board);
+        controller.setBoard(&board);
 
     }
     void draw() override {
         Fl_Window::draw();
         displayBoard.draw();
+        //board.draw();
     }
     int handle(int event) override {
         switch (event) {
@@ -49,9 +52,10 @@ public:
             //case FL_KEYDOWN:
                 //canvas.keyPressed(Fl::event_key());
                 //return 1;
-            //case FL_KEYDOWN:
-                //keyPressed(Fl::event_key());
-                //player.move(Fl::event_key());
+            case FL_KEYDOWN:
+                ////keyPressed(Fl::event_key());
+                ////player.move(Fl::event_key());
+                controller.move(Fl::event_key());
         }
         return 0;
     }

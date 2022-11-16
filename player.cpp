@@ -18,7 +18,7 @@ void Player::draw(){
 }
 
 void Player::move(int keyCode){
-    Point tmp = this->getPos();
+    Point tmp = this->getPosFltk();
     if (keyCode == FL_Right or keyCode == 'd') {
         cout << "Move to the  right" << endl;
         this->setPos(tmp.x + boxSize, tmp.y);
@@ -32,6 +32,6 @@ void Player::move(int keyCode){
         cout << "Move down" << endl;
         this->setPos(tmp.x, tmp.y + boxSize);
     }
-    this->player.setCenter(this->getPos());
+    this->player.setCenter(this->getPosFltk());
 }
 

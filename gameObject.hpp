@@ -24,7 +24,7 @@ public:
     //void push(const Box &myBox){ box = myBox; name = "box";}
     void push(){ name = "empty";}
     std::string getName(){ return name;}
-    Player getPlayer(){ return player;}
+    Player *getPlayer(){ return &player;}
     Wall getWall(){return wall;}
 
     void draw();
