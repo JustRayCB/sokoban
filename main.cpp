@@ -5,14 +5,17 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
 #include <math.h>
+#include <memory>
 #include <time.h>
 #include <chrono>
 #include <iostream>
 #include <random>
 #include <string>
 #include <vector>
+#include <memory.h>
 
 #include "player.hpp"
+#include "board.hpp"
 
 using namespace std;
 
@@ -21,16 +24,22 @@ class MainWindow : public Fl_Window {
     //const int windowWidth = 1000;
     //const int windowHeight = 975;
     //const double refreshPerSecond = 60;
-    Player player{{500, 500}};    
+    //Player player{{500, 500}};    
+    //shared_ptr<Board> board;
+    Board board;
+    DisplayBoard displayBoard;
 
 public:
-    MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
+    MainWindow(std::string file) : Fl_Window(000, 000, 1000, 975, "Sokoban") {
         Fl::add_timeout(1.0 / 60, Timer_CB, this);
         resizable(this);
+        loadBoard(board, file);
+        displayBoard.setBoard(&board);
+
     }
     void draw() override {
         Fl_Window::draw();
-        player.draw();
+        displayBoard.draw();
     }
     int handle(int event) override {
         switch (event) {
@@ -40,9 +49,9 @@ public:
             //case FL_KEYDOWN:
                 //canvas.keyPressed(Fl::event_key());
                 //return 1;
-            case FL_KEYDOWN:
+            //case FL_KEYDOWN:
                 //keyPressed(Fl::event_key());
-                player.move(Fl::event_key());
+                //player.move(Fl::event_key());
         }
         return 0;
     }
@@ -63,7 +72,7 @@ Do not edit!!!!
 
 int main(int argc, char *argv[]) {
     srand(time(0));
-    MainWindow window;
+    MainWindow window(argv[1]);
     window.show(argc, argv);
     return Fl::run();
 }

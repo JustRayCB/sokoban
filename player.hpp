@@ -11,23 +11,54 @@
   //void printPoint();
 //};
 
+
+//class Player{
+    //const int boxSize = 20;
+    //Point pos;
+    //Rectangle player;
+
+//public:
+    //Player(Point center={0, 0}):player(center){}
+    //void draw();
+    //Point getPos() const { return player.getCenter(); }
+    //void setPos(int x, int y){ player.setCenter(x, y); };
+    //void move(int keyCode);
+
+
+
+
+//};
+
 class Player{
-    const int boxSize = 20;
     Point pos;
+    int boxSize;
     Rectangle player;
 
+    void copyFromOther(const Player &other){
+        pos = other.pos;
+        boxSize = other.boxSize;
+        player = other.player;
+        
+    }
 public:
-    Player(Point center={0, 0}):player(center){}
-    void draw();
-    Point getPos() const { return player.getCenter(); }
-    void setPos(int x, int y){ player.setCenter(x, y); };
+    Player(Point center={0,0}, int boxSize=50): pos(center), boxSize(boxSize), player(center, boxSize, boxSize){}
+    Player(const Player &other){
+        copyFromOther(other);
+    }
+    
+    Player &operator=(const Player &copy){
+        copyFromOther(copy);
+        return *this;
+    }
+
+    Point getPos() const {return pos;}
+
+    void setPos(int x, int y){ pos.x = x; pos.y = y;}
     void move(int keyCode);
-
-
+    void draw();
 
 
 };
-
 //class Player{
     //Point pos;
     //int boxSize;

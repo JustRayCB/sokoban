@@ -32,6 +32,6 @@ void Player::move(int keyCode){
         cout << "Move down" << endl;
         this->setPos(tmp.x, tmp.y + boxSize);
     }
+    this->player.setCenter(this->getPos());
 }
-
 
