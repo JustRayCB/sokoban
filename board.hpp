@@ -32,10 +32,12 @@ public:
     int getPosY(){ return posPlayerCol;}
 
     void movePlayerInBoard(int newX, int newY);
+    void movBoxInBoard(int newX, int newY, int oldX, int oldY);
 
     void resize(int &nbLine, int &nbCol);
 
     bool isWall(int line, int col){ return getElem(line, col).getName() == "wall";}
+    bool isEmpty(int line, int col){ return getElem(line, col).getName() == "empty";}
     bool isBox(int line, int col){ return getElem(line, col).getName() == "box";}
     bool isInBoard(int line, int col){ return line<static_cast<int>(gameBoard.size()) and col < static_cast<int>(gameBoard[0].size()-1);}
 
@@ -65,7 +67,7 @@ public:
     void setBoard(Board *myBoard){ board = myBoard;}
     void movePlayer(int keyCode);
     void move(int keyCode);
-    void moveBox(int keyCode);
+    void moveBox(int keyCode, int boxPosX, int boxPosY);
 
 };
 

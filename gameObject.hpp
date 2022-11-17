@@ -17,15 +17,22 @@ class GameObject{
 public:
     //GameObject(GameObjectType object, std::string name): object{object}, name{name}{}
     GameObject()=default;
-    GameObject(const GameObject &other): player(other.player), name(other.name){}
-    GameObject &operator=(const GameObject other){ player = other.player; name = other.name; return *this;}
+    GameObject(const GameObject &other): player(other.player), wall(other.wall), box(other.box), name(other.name){}
+    GameObject &operator=(const GameObject other){ 
+        player = other.player; 
+        wall = other.wall; 
+        box = other.box;
+        name = other.name;
+        return *this;
+    }
     void push(const Player &myPlayer){ player = myPlayer; name = "player";}
     void push(const Wall &myWall){ wall = myWall; name = "wall";}
     void push(const Box &myBox){ box = myBox; name = "box";}
     void push(){ name = "empty";}
     std::string getName(){ return name;}
     Player *getPlayer(){ return &player;}
-    Wall getWall(){return wall;}
+    Wall *getWall(){return &wall;}
+    Box *getBox(){ return &box;}
 
     void draw();
 

@@ -34,7 +34,7 @@ public:
     MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
         Fl::add_timeout(1.0 / 60, Timer_CB, this);
         resizable(this);
-        loadBoard(board, "test.txt");
+        loadBoard(board, "/home/cbr/Unif2/ldp/sokoban/test.txt");
         displayBoard.setBoard(&board);
         controller.setBoard(&board);
 

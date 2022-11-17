@@ -28,10 +28,12 @@ public:
         return *this;
     }
 
-    Point getPos() const {return pos;}
+    Point getPosFltk() const {return pos;}
+    int getSize()const {return boxSize;}
 
-    //void setPos(int x, int y){ pos.x = x; pos.y = y;}
+    void setPos(int x, int y){ pos.x = x; pos.y = y;}
     void draw();
+    Rectangle &getRectangle(){ return box;}
 
 
 };

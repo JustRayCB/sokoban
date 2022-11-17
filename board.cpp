@@ -14,9 +14,7 @@
 #include "box.hpp"
 
 void Board::configBoard(int &line, int &col, char &symbol, int size){
-    //Start board at 50,50
-    //int yGrid = size*(line+1);
-    //int xGrid = size*(col+1);
+    //Start board at 200,200
     std::cout << "here :" << size << std::endl;
     int yGrid = 200+(line*size);
     int xGrid = 200+(col*size);
@@ -57,6 +55,12 @@ void Board::movePlayerInBoard(int newX, int newY){
     posPlayerCol = newY; posPlayerLine = newX;
     
 }
+
+void Board::movBoxInBoard(int newX, int newY, int oldX, int oldY){
+    gameBoard[newX][newY] = gameBoard[oldX][oldY];
+}
+
+
 void loadBoard(Board &board, std::string file){
     std::ifstream myFile (file);
     int idx = 0;
@@ -113,6 +117,41 @@ void DisplayBoard::draw(){
         //rows++;
     }
 }
+
+
+void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){ 
+    int oldX = boxPosX, oldY = boxPosY;
+    std::cout << "Pos box before when moving: " << boxPosX << "," << boxPosY << std::endl;
+    Box *tmp = board->getElem(boxPosX, boxPosY).getBox();
+    Point BoxPos = tmp->getPosFltk();
+    int boxSize = tmp->getSize();
+
+    if (keyCode == FL_Right or keyCode == 'd') {
+        std::cout << "Move to the  right" << std::endl;
+        //board->getElem(board->getPosX(), board->getPosY()).getPlayer().setPos(x+50, y);
+        boxPosY++;
+        tmp->setPos(BoxPos.x + boxSize, BoxPos.y);
+    }else if (keyCode == FL_Left or keyCode == 'q') {
+        boxPosY--;
+        std::cout << "Move to the  left" << std::endl;
+        tmp->setPos(BoxPos.x - boxSize, BoxPos.y);
+    }else if (keyCode == FL_Up or keyCode == 'z') {
+        boxPosX--;
+        std::cout << "Move up" << std::endl;
+        tmp->setPos(BoxPos.x, BoxPos.y - boxSize);
+    }else if (keyCode == FL_Down or keyCode == 's') {
+        boxPosX++;
+        std::cout << "Move down" << std::endl;
+        tmp->setPos(BoxPos.x, BoxPos.y + boxSize);
+    }
+    std::cout << "Pos box after when moving: " << boxPosX << "," << boxPosY << std::endl;
+    std::cout << "---------------------------------------------------" << std::endl;
+    tmp->getRectangle().setCenter(tmp->getPosFltk());
+    board->movBoxInBoard(boxPosX, boxPosY, oldX, oldY);
+
+}
+
+
 void Controll::movePlayer(int keyCode){
     int newX = board->getPosX(), newY = board->getPosY();
     std::cout << "Pos player before when moving: " << newX << "," << newY << std::endl;
@@ -121,7 +160,6 @@ void Controll::movePlayer(int keyCode){
     int boxSize = tmp->getSize();
     if (keyCode == FL_Right or keyCode == 'd') {
         std::cout << "Move to the  right" << std::endl;
-        //board->getElem(board->getPosX(), board->getPosY()).getPlayer().setPos(x+50, y);
         newY++;
         tmp->setPos(PlayerPos.x + boxSize, PlayerPos.y);
     }else if (keyCode == FL_Left or keyCode == 'q') {
@@ -148,30 +186,56 @@ void Controll::movePlayer(int keyCode){
 void Controll::move(int keyCode){
     int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
     if (keyCode == FL_Right or keyCode == 'd') {
-        if (board->isInBoard(xPlayerVector, yPlayerVector+1) and not board->isWall(xPlayerVector, yPlayerVector+1)) {
-            this->movePlayer(keyCode);
+        if (board->isInBoard(xPlayerVector, yPlayerVector+1) and not board->isWall(xPlayerVector, yPlayerVector+1)){
+            if (board->isBox(xPlayerVector, yPlayerVector+1) and board->isInBoard(xPlayerVector, yPlayerVector+2)  and board->isEmpty(xPlayerVector, yPlayerVector+2)) {
+                this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
+                this->movePlayer(keyCode);
+            }
+            else if (not board->isBox(xPlayerVector, yPlayerVector+1)) {
+                this->movePlayer(keyCode);
+            }
         }else {
         std::cout << "You shall not pass" << std::endl;
         }
 
     }else if (keyCode == FL_Left or keyCode == 'q') {
-        if (board->isInBoard(xPlayerVector, yPlayerVector-1) and not board->isWall(xPlayerVector, yPlayerVector-1)) {
-            this->movePlayer(keyCode);
+        if (board->isInBoard(xPlayerVector, yPlayerVector-1) and not board->isWall(xPlayerVector, yPlayerVector-1)){
+            if (board->isBox(xPlayerVector, yPlayerVector-1) and board->isInBoard(xPlayerVector, yPlayerVector-2) and board->isEmpty(xPlayerVector, yPlayerVector-2)) {
+                this->moveBox(keyCode, xPlayerVector, yPlayerVector-1);
+                this->movePlayer(keyCode);
+            }
+            else if (not board->isBox(xPlayerVector, yPlayerVector-1)) {
+                this->movePlayer(keyCode);
+            }
+
         }else {
         std::cout << "You shall not pass" << std::endl;
         }
 
     }else if (keyCode == FL_Up or keyCode == 'z') {
-        if (board->isInBoard(xPlayerVector-1, yPlayerVector) and not board->isWall(xPlayerVector-1, yPlayerVector)) {
-            this->movePlayer(keyCode);
+        if (board->isInBoard(xPlayerVector-1, yPlayerVector) and not board->isWall(xPlayerVector-1, yPlayerVector)){
+            if (board->isBox(xPlayerVector-1, yPlayerVector) and board->isInBoard(xPlayerVector-2, yPlayerVector) and board->isEmpty(xPlayerVector-2, yPlayerVector)) {
+                this->moveBox(keyCode, xPlayerVector-1, yPlayerVector);
+                this->movePlayer(keyCode);
+            }
+            else if (not board->isBox(xPlayerVector-1, yPlayerVector)) {
+                this->movePlayer(keyCode);
+            }
+
         }else {
         std::cout << "You shall not pass" << std::endl;
         }
 
 
     }else if (keyCode == FL_Down or keyCode == 's') {
-        if (board->isInBoard(xPlayerVector+1, yPlayerVector) and not board->isWall(xPlayerVector+1, yPlayerVector)) {
-            this->movePlayer(keyCode);
+        if (board->isInBoard(xPlayerVector+1, yPlayerVector) and not board->isWall(xPlayerVector+1, yPlayerVector)){
+            if (board->isBox(xPlayerVector+1, yPlayerVector) and board->isInBoard(xPlayerVector+2, yPlayerVector) and board->isEmpty(xPlayerVector+2, yPlayerVector)) {
+                this->moveBox(keyCode, xPlayerVector+1, yPlayerVector);
+                this->movePlayer(keyCode);
+            }
+            else if (not board->isBox(xPlayerVector+1, yPlayerVector)) {
+                this->movePlayer(keyCode);
+            }
         }else {
         std::cout << "You shall not pass" << std::endl;
         }
@@ -198,4 +262,4 @@ void Controll::move(int keyCode){
     //loadBoard(board, argv[1]);
     //std::cout << "here" << std::endl;
     //return 0;
-//}
+
