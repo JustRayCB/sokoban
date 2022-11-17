@@ -11,6 +11,7 @@
 #include "player.hpp"
 #include "rectangle.hpp"
 #include "wall.hpp"
+#include "box.hpp"
 
 void Board::configBoard(int &line, int &col, char &symbol, int size){
     //Start board at 50,50
@@ -32,6 +33,10 @@ void Board::configBoard(int &line, int &col, char &symbol, int size){
         //Wall
         Wall myWall{{xGrid, yGrid}, size};
         setWall(line, col, myWall);
+    }
+    else if (symbol == '$') {
+        Box myBox{{xGrid, yGrid}, size};
+        setBox(line, col, myBox);
     }
 }
 

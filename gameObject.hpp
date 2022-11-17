@@ -5,12 +5,12 @@
 
 #include "player.hpp"
 #include "wall.hpp"
-//#include "box.hpp"
+#include "box.hpp"
 
 class GameObject{
     Player player;
     Wall wall;
-    //Box box;
+    Box box;
     //
     std::string name = "";
 
@@ -21,7 +21,7 @@ public:
     GameObject &operator=(const GameObject other){ player = other.player; name = other.name; return *this;}
     void push(const Player &myPlayer){ player = myPlayer; name = "player";}
     void push(const Wall &myWall){ wall = myWall; name = "wall";}
-    //void push(const Box &myBox){ box = myBox; name = "box";}
+    void push(const Box &myBox){ box = myBox; name = "box";}
     void push(){ name = "empty";}
     std::string getName(){ return name;}
     Player *getPlayer(){ return &player;}

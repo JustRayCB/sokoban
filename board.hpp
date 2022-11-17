@@ -10,6 +10,7 @@
 #include "gameObject.hpp"
 #include "player.hpp"
 #include "wall.hpp"
+#include "box.hpp"
 
 class Board{
     std::vector<std::vector<GameObject>> gameBoard;
@@ -22,6 +23,7 @@ public:
     GameObject &getElem(int line, int col) { return gameBoard[line][col];}
     void setPlayer(int &line, int &col, Player &myPlayer){ getElem(line, col).push(myPlayer); posPlayerLine = line, posPlayerCol = col;}
     void setWall(int &line, int &col, Wall &myWall){ getElem(line, col).push(myWall);}
+    void setBox(int &line, int &col, Box &myBox){getElem(line, col).push(myBox);}
     void setEmpty(int line, int col){ getElem(line, col).push();} //Set the cell as empty
                                                                     
     void configBoard(int &line, int &col, char &symbol, int size);
