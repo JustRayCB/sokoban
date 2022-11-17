@@ -18,7 +18,7 @@ class Box{
 
     }
 public:
-    Box (Point center={100,100}, int boxSize=50): pos(center), boxSize(boxSize), box(center, boxSize, boxSize, FL_WHITE, FL_YELLOW){}
+    Box (Point center={100,100}, int boxSize=50): pos(center), boxSize(boxSize), box(center, boxSize, boxSize, FL_BLACK, FL_YELLOW){}
     Box(const Box  &other){
         copyFromOther(other);
     }
