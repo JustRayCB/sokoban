@@ -75,6 +75,7 @@ Do not edit!!!!
 --------------------------------------------------*/
 
 int main(int argc, char *argv[]) {
+    cout << "Yoo mon reuf" << endl;
     srand(time(0));
     MainWindow window;
     window.show(argc, argv);
