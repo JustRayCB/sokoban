@@ -74,18 +74,12 @@ Do not edit!!!!
 
 --------------------------------------------------*/
 
-//ceci est un test brbrbbrbrb
-
-//ceci aussi
 
 
 int main(int argc, char *argv[]) {
-    cout << "Yoo mon reuf haha " << endl;
     srand(time(0));
     MainWindow window;
     window.show(argc, argv);
-    //yOOO
-    //je rettest
     return Fl::run();
 }
 
