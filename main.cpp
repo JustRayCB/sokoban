@@ -83,6 +83,7 @@ int main(int argc, char *argv[]) {
     MainWindow window;
     window.show(argc, argv);
     //yOOO
+    //je rettest
     return Fl::run();
 }
 
