@@ -19,11 +19,12 @@ wall.o: wall.cpp wall.hpp rectangle.o
 box.o: box.cpp box.hpp rectangle.o
 	$(COMPILER) -c box.cpp $(FLAGS)
 	
+target.o: target.cpp target.hpp rectangle.o
+	$(COMPILER) -c target.cpp $(FLAGS)
+
 rectangle.o: rectangle.cpp rectangle.hpp 
 	$(COMPILER) -c rectangle.cpp $(FLAGS)
 
-target.o: target.cpp target.hpp
-	$(COMPILER) -c target.cpp $(FLAGS)
 
 clear:
 	rm *.o
