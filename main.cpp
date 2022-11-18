@@ -80,7 +80,7 @@ Do not edit!!!!
 
 
 int main(int argc, char *argv[]) {
-    cout << "Yoo mon reuf" << endl;
+    cout << "Yoo mon reuf haha " << endl;
     srand(time(0));
     MainWindow window;
     window.show(argc, argv);
