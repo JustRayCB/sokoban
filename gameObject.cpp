@@ -6,6 +6,7 @@
 #include "gameObject.hpp"
 #include "wall.hpp"
 #include "box.hpp"
+#include "target.hpp"
 
 
 void GameObject::draw(){
@@ -17,6 +18,8 @@ void GameObject::draw(){
             wall.draw();
         }else if(name == "box"){
             box.draw();
+        }else if(name == "target"){
+            target.draw();
         }
 }
 

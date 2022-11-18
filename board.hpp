@@ -11,6 +11,7 @@
 #include "player.hpp"
 #include "wall.hpp"
 #include "box.hpp"
+#include "target.hpp"
 
 class Board{
     std::vector<std::vector<GameObject>> gameBoard;
@@ -25,6 +26,7 @@ public:
     void setWall(int &line, int &col, Wall &myWall){ getElem(line, col).push(myWall);}
     void setBox(int &line, int &col, Box &myBox){getElem(line, col).push(myBox);}
     void setEmpty(int line, int col){ getElem(line, col).push();} //Set the cell as empty
+    void setTarget(int line, int col, Target &myTarget){getElem(line, col).push(myTarget);}
                                                                     
     void configBoard(int &line, int &col, char &symbol, int size);
     
@@ -39,6 +41,7 @@ public:
     bool isWall(int line, int col){ return getElem(line, col).getName() == "wall";}
     bool isEmpty(int line, int col){ return getElem(line, col).getName() == "empty";}
     bool isBox(int line, int col){ return getElem(line, col).getName() == "box";}
+    bool isTarget(int line, int col){ return getElem(line,col).getName() == "target";}
     bool isInBoard(int line, int col){ return line<static_cast<int>(gameBoard.size()) and col < static_cast<int>(gameBoard[0].size()-1);}
 
     std::vector<std::vector<GameObject>> &getBoard() {return gameBoard;}

@@ -12,6 +12,7 @@
 #include "rectangle.hpp"
 #include "wall.hpp"
 #include "box.hpp"
+#include "target.hpp"
 
 void Board::configBoard(int &line, int &col, char &symbol, int size){
     //Start board at 200,200
@@ -35,6 +36,10 @@ void Board::configBoard(int &line, int &col, char &symbol, int size){
     else if (symbol == '$') {
         Box myBox{{xGrid, yGrid}, size};
         setBox(line, col, myBox);
+    }
+    else if (symbol == '.'){
+        Target myTarget{{xGrid, yGrid}, size/2};
+        setTarget(line, col, myTarget);
     }
 }
 
@@ -188,6 +193,12 @@ void Controll::move(int keyCode){
     if (keyCode == FL_Right or keyCode == 'd') {
         if (board->isInBoard(xPlayerVector, yPlayerVector+1) and not board->isWall(xPlayerVector, yPlayerVector+1)){
             if (board->isBox(xPlayerVector, yPlayerVector+1) and board->isInBoard(xPlayerVector, yPlayerVector+2)  and board->isEmpty(xPlayerVector, yPlayerVector+2)) {
+                if(board->isTarget(xPlayerVector, yPlayerVector+1)){
+                    std::cout << "Je suis bien ici" << std::endl;
+                    GameObject elem = board->getElem(xPlayerVector, yPlayerVector+2);
+                    Target* t = elem.getTarget();
+                    t->setTargetColor();
+                }
                 this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
                 this->movePlayer(keyCode);
             }
