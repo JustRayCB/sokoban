@@ -192,20 +192,15 @@ void Controll::move(int keyCode){
     int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
     if (keyCode == FL_Right or keyCode == 'd') {
         if (board->isInBoard(xPlayerVector, yPlayerVector+1) and not board->isWall(xPlayerVector, yPlayerVector+1)){
-            // std::cout << "On pousse une caisse vers le haut ?" << board->isBox(xPlayerVector, yPlayerVector+1) << std::endl;
-            // std::cout << "Est-ce que la caisse qu'on pousse vers le haut est dans le plateau ?" << board->isBox(xPlayerVector, yPlayerVector+1) << std::endl;
-            // std::cout << "Est-ce que la caisse qu'on pousse vers le haut atterit sur une case vide ?" << board->isEmpty(xPlayerVector, yPlayerVector+2) << std::endl;
-            // std::cout << "Est-ce que la caisse qu'on pousse vers le haut atterit sur une cible ?" << board->isTarget(xPlayerVector, yPlayerVector+2) << std::endl;
             if (board->isBox(xPlayerVector, yPlayerVector+1) and board->isInBoard(xPlayerVector, yPlayerVector+2)  and (board->isEmpty(xPlayerVector, yPlayerVector+2) or board->isTarget(xPlayerVector, yPlayerVector+2))) {
-                // déplacement vers le haut avec box
+                // déplacement vers la droite avec box
                 if (board->isTarget(xPlayerVector, yPlayerVector+2)) {
                     // on est sur une cible
-                    std::cout << "JE SUIS ICIIIIIIIII" << std::endl;
                     Box *tmp = board->getElem(xPlayerVector, yPlayerVector+1).getBox();
                     tmp->setBoxColor();
                 }
-                    this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
-                    this->movePlayer(keyCode);
+                this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
+                this->movePlayer(keyCode);
             }
             else if (not board->isBox(xPlayerVector, yPlayerVector+1)) {
                 // déplacement vers la droite sans box
@@ -218,11 +213,18 @@ void Controll::move(int keyCode){
 
     }else if (keyCode == FL_Left or keyCode == 'q') {
         if (board->isInBoard(xPlayerVector, yPlayerVector-1) and not board->isWall(xPlayerVector, yPlayerVector-1)){
-            if (board->isBox(xPlayerVector, yPlayerVector-1) and board->isInBoard(xPlayerVector, yPlayerVector-2) and board->isEmpty(xPlayerVector, yPlayerVector-2)) {
+            if (board->isBox(xPlayerVector, yPlayerVector-1) and board->isInBoard(xPlayerVector, yPlayerVector-2)  and (board->isEmpty(xPlayerVector, yPlayerVector-2) or board->isTarget(xPlayerVector, yPlayerVector-2))) {
+                // déplacement vers la gauche avec box
+                if (board->isTarget(xPlayerVector, yPlayerVector-2)) {
+                    // on est sur une cible
+                    Box *tmp = board->getElem(xPlayerVector, yPlayerVector-1).getBox();
+                    tmp->setBoxColor();
+                }
                 this->moveBox(keyCode, xPlayerVector, yPlayerVector-1);
                 this->movePlayer(keyCode);
             }
             else if (not board->isBox(xPlayerVector, yPlayerVector-1)) {
+                // déplacement vers la gauche sans box
                 this->movePlayer(keyCode);
             }
 
@@ -232,11 +234,18 @@ void Controll::move(int keyCode){
 
     }else if (keyCode == FL_Up or keyCode == 'z') {
         if (board->isInBoard(xPlayerVector-1, yPlayerVector) and not board->isWall(xPlayerVector-1, yPlayerVector)){
-            if (board->isBox(xPlayerVector-1, yPlayerVector) and board->isInBoard(xPlayerVector-2, yPlayerVector) and board->isEmpty(xPlayerVector-2, yPlayerVector)) {
+            if (board->isBox(xPlayerVector-1, yPlayerVector) and board->isInBoard(xPlayerVector-2, yPlayerVector)  and (board->isEmpty(xPlayerVector-2, yPlayerVector) or board->isTarget(xPlayerVector-2, yPlayerVector))) {
+                // déplacement vers le haut avec box
+                if (board->isTarget(xPlayerVector-2, yPlayerVector)) {
+                    // on est sur une cible
+                    Box *tmp = board->getElem(xPlayerVector-1, yPlayerVector).getBox();
+                    tmp->setBoxColor();
+                }
                 this->moveBox(keyCode, xPlayerVector-1, yPlayerVector);
                 this->movePlayer(keyCode);
             }
             else if (not board->isBox(xPlayerVector-1, yPlayerVector)) {
+                // déplacement vers le haut sans box
                 this->movePlayer(keyCode);
             }
 
@@ -247,11 +256,18 @@ void Controll::move(int keyCode){
 
     }else if (keyCode == FL_Down or keyCode == 's') {
         if (board->isInBoard(xPlayerVector+1, yPlayerVector) and not board->isWall(xPlayerVector+1, yPlayerVector)){
-            if (board->isBox(xPlayerVector+1, yPlayerVector) and board->isInBoard(xPlayerVector+2, yPlayerVector) and board->isEmpty(xPlayerVector+2, yPlayerVector)) {
+            if (board->isBox(xPlayerVector+1, yPlayerVector) and board->isInBoard(xPlayerVector+2, yPlayerVector)  and (board->isEmpty(xPlayerVector+2, yPlayerVector) or board->isTarget(xPlayerVector+2, yPlayerVector))) {
+                // déplacement vers le bas avec box
+                if (board->isTarget(xPlayerVector+2, yPlayerVector)) {
+                    // on est sur une cible
+                    Box *tmp = board->getElem(xPlayerVector+1, yPlayerVector).getBox();
+                    tmp->setBoxColor();
+                }
                 this->moveBox(keyCode, xPlayerVector+1, yPlayerVector);
                 this->movePlayer(keyCode);
             }
             else if (not board->isBox(xPlayerVector+1, yPlayerVector)) {
+                // déplacement vers le bas sans box
                 this->movePlayer(keyCode);
             }
         }else {
