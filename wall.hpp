@@ -1,10 +1,10 @@
 #ifndef _WALL_HPP
 #define _WALL_HPP
 
-
-#include "rectangle.hpp"
 #include <FL/Enumerations.H>
 #include <FL/Fl_Window.H>
+
+#include "rectangle.hpp"
 
 class Wall{
     Point pos;
@@ -15,10 +15,10 @@ class Wall{
         pos = other.pos;
         boxSize = other.boxSize;
         wall = other.wall;
-
     }
+
 public:
-    Wall (Point center={100,100}, int boxSize=50): pos(center), boxSize(boxSize), wall(center, boxSize, boxSize, FL_WHITE, FL_BLUE){}
+    Wall (Point center={0,0}, int boxSize=50): pos(center), boxSize(boxSize), wall(center, boxSize, boxSize, FL_WHITE, FL_BLUE){}
     Wall(const Wall  &other){
         copyFromOther(other);
     }
@@ -28,9 +28,8 @@ public:
         return *this;
     }
 
-    Point getPos() const {return pos;}
+    Point getPosFltk() const {return pos;}
 
-    //void setPos(int x, int y){ pos.x = x; pos.y = y;}
     void draw();
 
 

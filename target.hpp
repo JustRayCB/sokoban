@@ -1,10 +1,10 @@
 #ifndef _TARGET_HPP
 #define _TARGET_HPP
 
-
-#include "rectangle.hpp"
 #include <FL/Enumerations.H>
 #include <FL/Fl_Window.H>
+
+#include "rectangle.hpp"
 
 class Target{
     Point pos;
@@ -15,10 +15,10 @@ class Target{
         pos = other.pos;
         boxSize = other.boxSize;
         target = other.target;
-
     }
+
 public:
-    Target (Point center={100,100}, int boxSize=10): pos(center), boxSize(boxSize), target(center, boxSize, boxSize, FL_BLACK, FL_RED){}
+    Target (Point center={0,0}, int boxSize=10): pos(center), boxSize(boxSize), target(center, boxSize, boxSize, FL_BLACK, FL_RED){}
     Target(const Target  &other){
         copyFromOther(other);
     }

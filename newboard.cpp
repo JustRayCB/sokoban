@@ -1,0 +1,154 @@
+#include <FL/Enumerations.H>
+#include <fstream>
+#include <vector>
+#include <variant>
+#include <iostream>
+#include <string>
+
+
+#include "board.hpp"
+#include "gameObject.hpp"
+#include "rectangle.hpp"
+
+
+using namespace std;
+
+
+Board::Board(const int nbLine, const int nbCol):
+    gameBoard(nbLine, std::vector<GameObject>(nbCol)){
+}
+
+
+Board::Board(const Board &other){
+    copyFromOther(other);
+}
+
+
+Board& Board::operator=(const Board &other){
+    copyFromOther(other);
+    return *this;
+}
+
+
+GameObject& Board::getElem(const int line, const int col){
+    return gameBoard.at(line).at(col);
+}
+
+
+int Board::getPosX() const{
+    return posPlayerLine;
+}
+
+
+int Board::getPosY() const{
+    return posPlayerCol;
+}
+
+
+std::vector<std::vector<GameObject>>& Board::getBoard(){
+    return gameBoard;
+}
+
+
+void Board::setObject(const int &line, const int &col, GameObject &object){
+    getElem(line, col) = object;
+}
+
+
+void Board::setEmpty(const int line, const int col){
+    getElem(line, col).setName("empty");
+}
+
+
+void Board::setPosPlayer(const int &x, const int &y){
+    posPlayerLine = x;
+    posPlayerCol = y;
+}
+
+
+void Board::resize(const int &nbLine, const int &nbCol){
+    gameBoard.resize(nbLine, std::vector<GameObject>(nbCol));
+}
+
+
+void Board::configBoard(const int &line, const int &col, const char &symbol, const int size){
+    //we start to display the board at 200,200
+    
+    int xGridFltk = 200+(col*size); 
+    int yGridFltk = 200+(line*size); 
+
+    if (symbol == '@') {
+        //Player
+        GameObject player{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_GREEN, "player"};
+        setObject(line, col, player);
+    }else if (symbol == ' ') {
+        //Nothing
+        setEmpty(line, col);
+    }else if (symbol == '#') {
+        //Wall
+        GameObject wall{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_BLUE, "wall"};
+        setObject(line, col, wall);
+    }else if (symbol == '.') {
+        //Target
+        GameObject target{{xGridFltk, yGridFltk}, size/2, FL_BLACK, FL_MAGENTA, "target"};
+        setObject(line, col, target);
+    }else if (symbol == '$') {
+        //Box
+        GameObject box{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_YELLOW, "box"};
+        setObject(line, col, box);
+    }
+}
+
+
+void Board::movePlayerInVector(const int newX, const int newY){
+    setObject(newX, newY, getElem(getPosX(), getPosY()));
+    setEmpty(getPosX(), getPosY());
+    setPosPlayer(newX, newY);
+}
+
+void Board::movBoxInVector(const int newX, const int newY, const int oldX, const int oldY){
+    setObject(newX, newY, getElem(oldX, oldY));
+}
+
+bool Board::isWall(const int line, const int col){ return getElem(line, col).getName() == "wall";}
+bool Board::isEmpty(const int line, const int col){ return getElem(line, col).getName() == "empty";}
+bool Board::isBox(const int line, const int col){ return getElem(line, col).getName() == "box";}
+bool Board::isTarget(const int line, const int col){ return getElem(line, col).getName() == "target";}
+bool Board::isInBoard(const int line, const int col){ 
+    return line < static_cast<int>(gameBoard.size())
+        and col < static_cast<int>(gameBoard[0].size());
+}
+
+
+void loadBoard(Board &board, std::string file){
+    std::ifstream myFile (file);
+    int idx = 0;
+    std::string lineS;
+    int line = 0, col = 0, boxSize = 70;
+    if (myFile.is_open()) {
+        while (myFile) {
+            if (!idx) {
+                //To set the size of the game board
+                std::getline( myFile, lineS, ' ');
+                int line = std::stoi(lineS);
+                lineS = myFile.get();
+                int col = std::stoi(lineS);
+                board.resize(line, col);
+                lineS = myFile.get();
+                boxSize = std::min(500/line, 500/col);
+
+            }
+            std::getline(myFile, lineS);
+            for (char &letter :  lineS) {
+                board.configBoard(line, col, letter, boxSize);
+                col++;
+            }
+            col=0;
+            line++;
+            idx++;
+        }
+    }
+}
+
+
+
