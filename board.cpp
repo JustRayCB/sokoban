@@ -192,21 +192,28 @@ void Controll::move(int keyCode){
     int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
     if (keyCode == FL_Right or keyCode == 'd') {
         if (board->isInBoard(xPlayerVector, yPlayerVector+1) and not board->isWall(xPlayerVector, yPlayerVector+1)){
-            if (board->isBox(xPlayerVector, yPlayerVector+1) and board->isInBoard(xPlayerVector, yPlayerVector+2)  and board->isEmpty(xPlayerVector, yPlayerVector+2)) {
-                if(board->isTarget(xPlayerVector, yPlayerVector+1)){
-                    std::cout << "Je suis bien ici" << std::endl;
-                    GameObject elem = board->getElem(xPlayerVector, yPlayerVector+2);
-                    Target* t = elem.getTarget();
-                    t->setTargetColor();
+            // std::cout << "On pousse une caisse vers le haut ?" << board->isBox(xPlayerVector, yPlayerVector+1) << std::endl;
+            // std::cout << "Est-ce que la caisse qu'on pousse vers le haut est dans le plateau ?" << board->isBox(xPlayerVector, yPlayerVector+1) << std::endl;
+            // std::cout << "Est-ce que la caisse qu'on pousse vers le haut atterit sur une case vide ?" << board->isEmpty(xPlayerVector, yPlayerVector+2) << std::endl;
+            // std::cout << "Est-ce que la caisse qu'on pousse vers le haut atterit sur une cible ?" << board->isTarget(xPlayerVector, yPlayerVector+2) << std::endl;
+            if (board->isBox(xPlayerVector, yPlayerVector+1) and board->isInBoard(xPlayerVector, yPlayerVector+2)  and (board->isEmpty(xPlayerVector, yPlayerVector+2) or board->isTarget(xPlayerVector, yPlayerVector+2))) {
+                // déplacement vers le haut avec box
+                if (board->isTarget(xPlayerVector, yPlayerVector+2)) {
+                    // on est sur une cible
+                    std::cout << "JE SUIS ICIIIIIIIII" << std::endl;
+                    Box *tmp = board->getElem(xPlayerVector, yPlayerVector+1).getBox();
+                    tmp->setBoxColor();
                 }
-                this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
-                this->movePlayer(keyCode);
+                    this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
+                    this->movePlayer(keyCode);
             }
             else if (not board->isBox(xPlayerVector, yPlayerVector+1)) {
+                // déplacement vers la droite sans box
                 this->movePlayer(keyCode);
             }
         }else {
-        std::cout << "You shall not pass" << std::endl;
+            // déplacement vers la droite impossible
+            std::cout << "You shall not pass" << std::endl;
         }
 
     }else if (keyCode == FL_Left or keyCode == 'q') {

@@ -35,6 +35,8 @@ public:
     void draw();
     Rectangle &getRectangle(){ return box;}
 
+    void setBoxColor() {box.setFillColor(FL_MAGENTA);}
+
 
 };
 
