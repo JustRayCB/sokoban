@@ -76,90 +76,44 @@ void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
 
 
 void Controll::move(int keyCode){
-    int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
-    if (keyCode == FL_Right or keyCode == 'd') {
-        if (board->isInBoard(xPlayerVector, yPlayerVector+1) and not board->isWall(xPlayerVector, yPlayerVector+1)){
-            if (board->isBox(xPlayerVector, yPlayerVector+1) and board->isInBoard(xPlayerVector, yPlayerVector+2)  and (board->isEmpty(xPlayerVector, yPlayerVector+2) or board->isTarget(xPlayerVector, yPlayerVector+2))) {
-                // déplacement vers la droite avec box
-                if (board->isTarget(xPlayerVector, yPlayerVector+2)) {
-                    // on est sur une cible
-                    GameObject *tmp = &board->getElem(xPlayerVector, yPlayerVector+1);
-                    tmp->setColor(FL_MAGENTA);
-                }
-                this->moveBox(keyCode, xPlayerVector, yPlayerVector+1);
-                this->movePlayer(keyCode);
-            }
-            else if (not board->isBox(xPlayerVector, yPlayerVector+1)) {
-                // déplacement vers la droite sans box
-                this->movePlayer(keyCode);
-            }
-        }else {
-            // déplacement vers la droite impossible
-            std::cout << "You shall not pass" << std::endl;
-        }
-
+    /*
+     * z -> deltaX = -1, deltaY = 0
+     * q -> deltaX = 0, deltaY = -1 
+     * s -> deltaX = +1, deltaY = 0
+     * d -> deltaX = 0, deltaY = +1
+     */
+    int deltaX = 0, deltaY = 0;
+    if (keyCode == FL_Up or keyCode == 'z') {
+        deltaX--;
     }else if (keyCode == FL_Left or keyCode == 'q') {
-        if (board->isInBoard(xPlayerVector, yPlayerVector-1) and not board->isWall(xPlayerVector, yPlayerVector-1)){
-            if (board->isBox(xPlayerVector, yPlayerVector-1) and board->isInBoard(xPlayerVector, yPlayerVector-2)  and (board->isEmpty(xPlayerVector, yPlayerVector-2) or board->isTarget(xPlayerVector, yPlayerVector-2))) {
-                // déplacement vers la gauche avec box
-                if (board->isTarget(xPlayerVector, yPlayerVector-2)) {
-                    // on est sur une cible
-                       GameObject *tmp = &board->getElem(xPlayerVector, yPlayerVector-1);
-                    tmp->setColor(FL_MAGENTA);
-                }
-                this->moveBox(keyCode, xPlayerVector, yPlayerVector-1);
-                this->movePlayer(keyCode);
-            }
-            else if (not board->isBox(xPlayerVector, yPlayerVector-1)) {
-                // déplacement vers la gauche sans box
-                this->movePlayer(keyCode);
-            }
-
-        }else {
-        std::cout << "You shall not pass" << std::endl;
-        }
-
-    }else if (keyCode == FL_Up or keyCode == 'z') {
-        if (board->isInBoard(xPlayerVector-1, yPlayerVector) and not board->isWall(xPlayerVector-1, yPlayerVector)){
-            if (board->isBox(xPlayerVector-1, yPlayerVector) and board->isInBoard(xPlayerVector-2, yPlayerVector)  and (board->isEmpty(xPlayerVector-2, yPlayerVector) or board->isTarget(xPlayerVector-2, yPlayerVector))) {
-                // déplacement vers le haut avec box
-                if (board->isTarget(xPlayerVector-2, yPlayerVector)) {
-                    // on est sur une cible
-                    GameObject *tmp = &board->getElem(xPlayerVector-1, yPlayerVector);
-                    tmp->setColor(FL_MAGENTA);
-                }
-                this->moveBox(keyCode, xPlayerVector-1, yPlayerVector);
-                this->movePlayer(keyCode);
-            }
-            else if (not board->isBox(xPlayerVector-1, yPlayerVector)) {
-                // déplacement vers le haut sans box
-                this->movePlayer(keyCode);
-            }
-
-        }else {
-        std::cout << "You shall not pass" << std::endl;
-        }
-
-
+        deltaY--;
     }else if (keyCode == FL_Down or keyCode == 's') {
-        if (board->isInBoard(xPlayerVector+1, yPlayerVector) and not board->isWall(xPlayerVector+1, yPlayerVector)){
-            if (board->isBox(xPlayerVector+1, yPlayerVector) and board->isInBoard(xPlayerVector+2, yPlayerVector)  and (board->isEmpty(xPlayerVector+2, yPlayerVector) or board->isTarget(xPlayerVector+2, yPlayerVector))) {
-                // déplacement vers le bas avec box
-                if (board->isTarget(xPlayerVector+2, yPlayerVector)) {
-                    // on est sur une cible
-                    GameObject *tmp = &board->getElem(xPlayerVector+1, yPlayerVector);
-                    tmp->setColor(FL_MAGENTA);
-                }
-                this->moveBox(keyCode, xPlayerVector+1, yPlayerVector);
-                this->movePlayer(keyCode);
-            }
-            else if (not board->isBox(xPlayerVector+1, yPlayerVector)) {
-                // déplacement vers le bas sans box
-                this->movePlayer(keyCode);
-            }
-        }else {
-        std::cout << "You shall not pass" << std::endl;
-        }
+        deltaX++;
+    }else if (keyCode == FL_Right or keyCode == 'd') {
+        deltaY++;
     }
+    int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
+    if (board->isInBoard(xPlayerVector+deltaX, yPlayerVector+deltaY) and not board->isWall(xPlayerVector+deltaX, yPlayerVector+deltaY)){
+        if (board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY) and board->isInBoard(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)  
+                and (board->isEmpty(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY) 
+                    or board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY))) {
+            // déplacement vers la droite avec box
+            if (board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)) {
+                // on est sur une cible
+                GameObject *tmp = &board->getElem(xPlayerVector+deltaX, yPlayerVector+deltaY);
+                tmp->setColor(FL_MAGENTA);
+            }
+            this->moveBox(keyCode, xPlayerVector+deltaX, yPlayerVector+deltaY);
+            this->movePlayer(keyCode);
+        }
+        else if (not board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
+            // déplacement vers la droite sans box
+            this->movePlayer(keyCode);
+        }
+    }else {
+        // déplacement vers la droite impossible
+        std::cout << "You shall not pass" << std::endl;
+    }
+
 
 }
