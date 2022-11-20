@@ -101,28 +101,6 @@ void loadBoard(Board &board, std::string file){
 }
 
 
-void DisplayBoard::draw(){
-    //int rows = 0, col = 0;
-    for (auto &line : board->getBoard()) {
-        for (auto &row : line) {
-            //if (row.getName() == "player") {
-                //std::cout << "Player pos in game: ";
-                //row.getPlayer()->getRectangle().getCenter().printPoint();
-                //std::cout << "Player pos in vector :" << rows << "," << col << std::endl;
-            //}else if (row.getName()=="wall") {
-                //std::cout << "Wall pos in game: ";
-                //row.getWall().getPos().printPoint();
-                //std::cout << "Wall pos in vector :" << rows << "," << col << std::endl;
-                ////row.getWall().
-
-            //}
-        row.draw();
-        //col++;
-        }
-        //rows++;
-    }
-}
-
 
 void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){ 
     int oldX = boxPosX, oldY = boxPosY;

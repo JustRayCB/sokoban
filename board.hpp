@@ -8,73 +8,77 @@
 #include <vector>
 
 #include "gameObject.hpp"
-#include "player.hpp"
-#include "wall.hpp"
-#include "box.hpp"
-#include "target.hpp"
 
 class Board{
     std::vector<std::vector<GameObject>> gameBoard;
     int posPlayerLine, posPlayerCol;
+
+    void copyFromOther(const Board &other){
+        posPlayerLine = other.posPlayerLine;
+        posPlayerCol = other.posPlayerCol;
+        gameBoard = other.gameBoard;
+    }
+
 public:
-    Board(int nbLine, int nbCol): gameBoard(nbLine, std::vector<GameObject>(nbCol)){}
+    Board(const int nbLine, const int nbCol);
     Board()=default;
-    Board(const Board &other): gameBoard(other.gameBoard), posPlayerLine(other.posPlayerLine), posPlayerCol(other.posPlayerCol){}
-
-    GameObject &getElem(int line, int col) { return gameBoard[line][col];}
-    void setPlayer(int &line, int &col, Player &myPlayer){ getElem(line, col).push(myPlayer); posPlayerLine = line, posPlayerCol = col;}
-    void setWall(int &line, int &col, Wall &myWall){ getElem(line, col).push(myWall);}
-    void setBox(int &line, int &col, Box &myBox){getElem(line, col).push(myBox);}
-    void setEmpty(int line, int col){ getElem(line, col).push();} //Set the cell as empty
-    void setTarget(int line, int col, Target &myTarget){getElem(line, col).push(myTarget);}
-                                                                    
-    void configBoard(int &line, int &col, char &symbol, int size);
-    
-    int getPosX(){ return posPlayerLine;}
-    int getPosY(){ return posPlayerCol;}
-
-    void movePlayerInBoard(int newX, int newY);
-    void movBoxInBoard(int newX, int newY, int oldX, int oldY);
-
-    void resize(int &nbLine, int &nbCol);
-
-    bool isWall(int line, int col){ return getElem(line, col).getName() == "wall";}
-    bool isEmpty(int line, int col){ return getElem(line, col).getName() == "empty";}
-    bool isBox(int line, int col){ return getElem(line, col).getName() == "box";}
-    bool isTarget(int line, int col){ return getElem(line,col).getName() == "target";}
-    bool isInBoard(int line, int col){ return line<static_cast<int>(gameBoard.size()) and col < static_cast<int>(gameBoard[0].size()-1);}
-
-    std::vector<std::vector<GameObject>> &getBoard() {return gameBoard;}
-
+    Board(const Board &other);
     Board &operator=(const Board& other);
+
+    GameObject &getElem(const int line, const int col);
+    std::vector<std::vector<GameObject>> &getBoard();
+    int getPosX() const;
+    int getPosY() const;
+
+    void setEmpty(const int line, const int col); //Set the cell as empty
+    void setObject(const int &line, const int &col, GameObject &object);
+    void setPosPlayer(const int &line, const int &col);
+
+
+    void resize(const int &nbLine, const int &nbCol);
+                                                                    
+    void configBoard(const int &line, const int &col, const char &symbol, const int size);
+
+    void movePlayerInVector(const int newX, const int newY);
+    void movBoxInVector(const int newX, const int newY, const int oldX, const int oldY);
+
+    bool isWall(const int line, const int col);
+    bool isEmpty(const int line, const int col);
+    bool isBox(const int line, const int col);
+    bool isTarget(const int line, const int col);
+    bool isInBoard(const int line, const int col);
+    //bool isInBoard(int line, int col);//{ return line<static_cast<int>(gameBoard.size()) and col < static_cast<int>(gameBoard[0].size()-1);}
+
+
     void draw();
 
     
-
-};
-
-class DisplayBoard{
-    Board *board = nullptr;
-public:
-    DisplayBoard(Board &board): board(&board){}
-    DisplayBoard()=default;
-    void setBoard(Board *myBoard){ board = myBoard;}
-    void draw();
-};
-
-
-class Controll{
-    Board *board = nullptr;
-
-public:
-    void setBoard(Board *myBoard){ board = myBoard;}
-    void movePlayer(int keyCode);
-    void move(int keyCode);
-    void moveBox(int keyCode, int boxPosX, int boxPosY);
 
 };
 
 void loadBoard(Board &board, std::string file);
+
+//class DisplayBoard{
+    //Board *board = nullptr;
+//public:
+    //DisplayBoard(Board &board): board(&board){}
+    //DisplayBoard()=default;
+    //void setBoard(Board *myBoard){ board = myBoard;}
+    //void draw();
+//};
+
+
+//class Controll{
+    //Board *board = nullptr;
+
+//public:
+    //void setBoard(Board *myBoard){ board = myBoard;}
+    //void movePlayer(int keyCode);
+    //void move(int keyCode);
+    //void moveBox(int keyCode, int boxPosX, int boxPosY);
+
+//};
+
 
 #endif
 

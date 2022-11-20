@@ -1,29 +1,57 @@
-#include <fstream>
 #include <iostream>
 #include <string>
+#include <Fl/Enumerations.H>
 
-#include "player.hpp"
 #include "gameObject.hpp"
-#include "wall.hpp"
-#include "box.hpp"
-#include "target.hpp"
+#include "rectangle.hpp"
 
 
-void GameObject::draw(){
-        if (name == "player") {
-            //std::cout << name <<  "on pos : " << player.getPos().x << ", " << player.getPos().y <<std::endl;
-            player.draw();
-        }else if(name == "wall"){
-            //std::cout << name <<  "on pos : " << wall.getPos().x << ", " << wall.getPos().y <<std::endl;
-            wall.draw();
-        }else if(name == "box"){
-            box.draw();
-        }else if(name == "target"){
-            target.draw();
-        }
+GameObject::GameObject(const Point point, const int boxSize, const Fl_Color frameColor, const Fl_Color fillColor, const std::string name):
+    pos(point), boxSize(boxSize), myRectangle(point, boxSize, boxSize, frameColor, fillColor), name(name){
 }
 
 
+GameObject::GameObject(const GameObject &other){
+    copyFromOther(other);
+}
+
+GameObject& GameObject::operator=(const GameObject &other){
+    this->copyFromOther(other);
+    return *this;
+}
+
+Point GameObject::getPosFltk() const{
+    return pos;
+}
+
+int GameObject::getSize() const{
+    return boxSize;
+}
+
+Rectangle& GameObject::getRectangle(){
+    return myRectangle;
+}
+
+std::string GameObject::getName() const{
+    return name;
+}
+
+void GameObject::setPos(int x, int y){
+    pos.x = x; pos.y = y;
+}
+
+void GameObject::setName(std::string newName){
+    name = newName;
+}
+
+void GameObject::setColor(Fl_Color newFillColor){
+    getRectangle().setFillColor(newFillColor);
+}
+
+
+void GameObject::draw(){
+    getRectangle().draw();
+}
 
 
 
