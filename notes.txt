@@ -8,3 +8,10 @@
 4] Ajouter les différentes interactions caisse/joueur, caisse/murs et caisse/caisse.
 
 5] Ajouter la détection d'objectifs atteints.
+
+
+---------------------------------
+
+Pour les targets : 
+
+- Faire un vecteur de tuples avec position et booléen, dans board.
