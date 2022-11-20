@@ -8,10 +8,6 @@
 #include <vector>
 
 #include "gameObject.hpp"
-#include "player.hpp"
-#include "wall.hpp"
-#include "box.hpp"
-#include "target.hpp"
 
 class Board{
     std::vector<std::vector<GameObject>> gameBoard;

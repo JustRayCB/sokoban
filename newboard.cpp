@@ -56,6 +56,8 @@ void Board::setObject(const int &line, const int &col, GameObject &object){
 
 
 void Board::setEmpty(const int line, const int col){
+    GameObject empty{};
+    setObject(line, col, empty);
     getElem(line, col).setName("empty");
 }
 
@@ -81,6 +83,7 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         //Player
         GameObject player{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_GREEN, "player"};
         setObject(line, col, player);
+        setPosPlayer(line, col);
     }else if (symbol == ' ') {
         //Nothing
         setEmpty(line, col);

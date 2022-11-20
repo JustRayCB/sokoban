@@ -14,8 +14,9 @@
 #include <vector>
 #include <memory.h>
 
-#include "player.hpp"
 #include "board.hpp"
+#include "display.hpp"
+#include "controller.hpp"
 
 using namespace std;
 
@@ -27,22 +28,27 @@ class MainWindow : public Fl_Window {
     //Player player{{500, 500}};    
     //shared_ptr<Board> board;
     Board board;
-    DisplayBoard displayBoard;
+    DisplayBoard display;
     Controll controller;
+    //DisplayBoard displayBoard;
+    //Controll controller;
 
 public:
     MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
         Fl::add_timeout(1.0 / 60, Timer_CB, this);
         resizable(this);
-        loadBoard(board, "test.txt");
-        displayBoard.setBoard(&board);
+        loadBoard(board, "/home/cbr/Unif2/ldp/sokoban/test.txt");
+        display.setBoard(&board);
         controller.setBoard(&board);
+        //displayBoard.setBoard(&board);
+        //controller.setBoard(&board);
 
     }
     void draw() override {
         Fl_Window::draw();
-        displayBoard.draw();
+        //displayBoard.draw();
         //board.draw();
+        display.draw();
     }
     int handle(int event) override {
         switch (event) {
@@ -53,9 +59,10 @@ public:
                 //canvas.keyPressed(Fl::event_key());
                 //return 1;
             case FL_KEYDOWN:
+                controller.move(Fl::event_key());
                 ////keyPressed(Fl::event_key());
                 ////player.move(Fl::event_key());
-                controller.move(Fl::event_key());
+                //controller.move(Fl::event_key());
         }
         return 0;
     }
@@ -82,4 +89,5 @@ int main(int argc, char *argv[]) {
     window.show(argc, argv);
     return Fl::run();
 }
+
 

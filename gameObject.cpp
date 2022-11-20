@@ -6,7 +6,7 @@
 #include "rectangle.hpp"
 
 
-GameObject::GameObject(Point point, int boxSize, Fl_Color frameColor, Fl_Color fillColor, std::string name):
+GameObject::GameObject(const Point point, const int boxSize, const Fl_Color frameColor, const Fl_Color fillColor, const std::string name):
     pos(point), boxSize(boxSize), myRectangle(point, boxSize, boxSize, frameColor, fillColor), name(name){
 }
 
@@ -36,7 +36,7 @@ std::string GameObject::getName() const{
     return name;
 }
 
-void GameObject::setPos(int &x, int &y){
+void GameObject::setPos(int x, int y){
     pos.x = x; pos.y = y;
 }
 

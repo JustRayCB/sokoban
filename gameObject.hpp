@@ -21,7 +21,8 @@ class GameObject{
 
 public:
     
-    GameObject(Point point, int boxSize, Fl_Color frameColor, Fl_Color fillColor, std::string name);
+    GameObject(const Point point, const int boxSize, const Fl_Color frameColor, const Fl_Color fillColor, const std::string name);
+    GameObject()=default;
     GameObject(const GameObject &other);
 
     GameObject &operator=(const GameObject &other);
@@ -31,7 +32,7 @@ public:
     Rectangle &getRectangle() ;
     std::string getName() const;
 
-    void setPos(int &x, int &y);
+    void setPos(int x, int y);
     void setName(std::string newName);
     void setColor(Fl_Color newFillColor);
 
