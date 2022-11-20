@@ -13,62 +13,33 @@ void Controll::setBoard(Board *myBoard){
 
 void Controll::movePlayer(int keyCode){
     int newX = board->getPosX(), newY = board->getPosY();
-    std::cout << "Pos player before when moving: " << newX << "," << newY << std::endl;
     GameObject *tmp = &board->getElem(newX, newY);
-    Point PlayerPos = tmp->getPosFltk();
-    int boxSize = tmp->getSize();
-    if (keyCode == FL_Right or keyCode == 'd') {
-        std::cout << "Move to the  right" << std::endl;
-        newY++;
-        tmp->setPos(PlayerPos.x + boxSize, PlayerPos.y);
-    }else if (keyCode == FL_Left or keyCode == 'q') {
-        newY--;
-        std::cout << "Move to the  left" << std::endl;
-        tmp->setPos(PlayerPos.x - boxSize, PlayerPos.y);
-    }else if (keyCode == FL_Up or keyCode == 'z') {
-        newX--;
-        std::cout << "Move up" << std::endl;
-        tmp->setPos(PlayerPos.x, PlayerPos.y - boxSize);
-    }else if (keyCode == FL_Down or keyCode == 's') {
-        newX++;
-        std::cout << "Move down" << std::endl;
-        tmp->setPos(PlayerPos.x, PlayerPos.y + boxSize);
-    }
-    std::cout << "Pos player after when moving: " << newX << "," << newY << std::endl;
-    std::cout << "---------------------------------------------------" << std::endl;
+    const Point playerPosFltk = tmp->getPosFltk();
+    const int boxSize = tmp->getSize();
+    int deltaX = 0, deltaY = 0;
+    if (keyCode == FL_Up or keyCode == 'z') {newX--; deltaY-=boxSize;}
+    else if (keyCode == FL_Left or keyCode == 'q') {newY--; deltaX-=boxSize;}
+    else if (keyCode == FL_Down or keyCode == 's') {newX++; deltaY+=boxSize;}
+    else if (keyCode == FL_Right or keyCode == 'd') {newY++; deltaX+=boxSize;}
+
+    tmp->setPos(playerPosFltk.x + deltaX, playerPosFltk.y+deltaY);
     tmp->getRectangle().setCenter(tmp->getPosFltk());
     board->movePlayerInVector(newX, newY);
-    
 }
 
 
 void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
-    int oldX = boxPosX, oldY = boxPosY;
-    std::cout << "Pos box before when moving: " << boxPosX << "," << boxPosY << std::endl;
-    //Box *tmp = board->getElem(boxPosX, boxPosY).getBox();
+    const int oldX = boxPosX, oldY = boxPosY;
     GameObject *tmp = &board->getElem(boxPosX, boxPosY);
-    Point BoxPos = tmp->getPosFltk();
-    int boxSize = tmp->getSize();
+    const Point boxPosFltk = tmp->getPosFltk();
+    const int boxSize = tmp->getSize();
+    int deltaX = 0, deltaY = 0;
+    if (keyCode == FL_Up or keyCode == 'z') {boxPosX--; deltaY-=boxSize;}
+    else if (keyCode == FL_Left or keyCode == 'q') {boxPosY--; deltaX-=boxSize;}
+    else if (keyCode == FL_Down or keyCode == 's') {boxPosX++; deltaY+=boxSize;}
+    else if (keyCode == FL_Right or keyCode == 'd') {boxPosY++; deltaX+=boxSize;}
 
-    if (keyCode == FL_Right or keyCode == 'd') {
-        std::cout << "Move to the  right" << std::endl;
-        boxPosY++;
-        tmp->setPos(BoxPos.x + boxSize, BoxPos.y);
-    }else if (keyCode == FL_Left or keyCode == 'q') {
-        boxPosY--;
-        std::cout << "Move to the  left" << std::endl;
-        tmp->setPos(BoxPos.x - boxSize, BoxPos.y);
-    }else if (keyCode == FL_Up or keyCode == 'z') {
-        boxPosX--;
-        std::cout << "Move up" << std::endl;
-        tmp->setPos(BoxPos.x, BoxPos.y - boxSize);
-    }else if (keyCode == FL_Down or keyCode == 's') {
-        boxPosX++;
-        std::cout << "Move down" << std::endl;
-        tmp->setPos(BoxPos.x, BoxPos.y + boxSize);
-    }
-    std::cout << "Pos box after when moving: " << boxPosX << "," << boxPosY << std::endl;
-    std::cout << "---------------------------------------------------" << std::endl;
+    tmp->setPos(boxPosFltk.x+deltaX, boxPosFltk.y+deltaY);
     tmp->getRectangle().setCenter(tmp->getPosFltk());
     board->movBoxInVector(boxPosX, boxPosY, oldX, oldY);
 }
