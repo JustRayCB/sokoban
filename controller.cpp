@@ -100,8 +100,7 @@ void Controll::move(int keyCode){
             // déplacement vers la droite avec box
             if (board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)) {
                 // on est sur une cible
-                GameObject *tmp = &board->getElem(xPlayerVector+deltaX, yPlayerVector+deltaY);
-                tmp->setColor(FL_MAGENTA);
+                board->getElem(xPlayerVector+deltaX, yPlayerVector+deltaY).setColor(FL_MAGENTA);
             }
             this->moveBox(keyCode, xPlayerVector+deltaX, yPlayerVector+deltaY);
             this->movePlayer(keyCode);
