@@ -54,15 +54,12 @@ void Controll::move(int keyCode){
      * d -> deltaX = 0, deltaY = +1
      */
     int deltaX = 0, deltaY = 0;
-    if (keyCode == FL_Up or keyCode == 'z') {
-        deltaX--;
-    }else if (keyCode == FL_Left or keyCode == 'q') {
-        deltaY--;
-    }else if (keyCode == FL_Down or keyCode == 's') {
-        deltaX++;
-    }else if (keyCode == FL_Right or keyCode == 'd') {
-        deltaY++;
-    }
+
+    if (keyCode == FL_Up or keyCode == 'z') {deltaX--;}
+    else if (keyCode == FL_Left or keyCode == 'q') {deltaY--;}
+    else if (keyCode == FL_Down or keyCode == 's') {deltaX++;}
+    else if (keyCode == FL_Right or keyCode == 'd') {deltaY++;}
+
     int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
     int boxSize = board->getElem(xPlayerVector, yPlayerVector).getSize();
     if (board->isInBoard(xPlayerVector+deltaX, yPlayerVector+deltaY) and not board->isWall(xPlayerVector+deltaX, yPlayerVector+deltaY)){
@@ -83,6 +80,7 @@ void Controll::move(int keyCode){
                 // on est sur une cible
                 board->setOnTarget(Point{xPlayerVector+deltaX, yPlayerVector+deltaY});
             }
+            this->movePlayer(keyCode);
             if (board->wasOnTarget({xPlayerVector, yPlayerVector})) {
                 //si on était sur une cible
                 GameObject target{{200+yPlayerVector*boxSize, 200+xPlayerVector*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
