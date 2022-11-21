@@ -13,7 +13,8 @@
 class Board{
     std::vector<std::vector<GameObject>> gameBoard;
     int posPlayerLine, posPlayerCol;
-    std::vector<std::tuple<Point, bool>> targetPos;
+    std::vector<std::tuple<Point, bool, bool>> targetPos;
+    int totalTargets = 0;
 
     void copyFromOther(const Board &other){
         posPlayerLine = other.posPlayerLine;
@@ -54,39 +55,59 @@ public:
 
     void draw();
 
-    void displayTargetsPosition(){
-        for (auto& [pos, b] : targetPos) {
+    void displayTargets(){
+        for (auto& [pos, b1, b2] : targetPos) {
             pos.printPoint();
+            std::cout << "J:" << b1 << " | " << "B: " << b2 << std::endl;
         }
     };
 
-    void displayTargetsBool(){
-        for (auto& [pos, b] : targetPos) {
-            std::cout << b << std::endl;
-        }
-    };
-
-    void setOnTarget(const Point& pos) {
-        for (std::tuple<Point, bool> &tup : targetPos) {
+    void setOnTarget(const Point& pos, bool isBox) {
+        for (std::tuple<Point, bool, bool> &tup : targetPos) {
             if (std::get<0>(tup) == pos) {
-                std::get<1>(tup) = true;
+                if (isBox) {
+                    std::get<2>(tup) = true;
+                }else{
+                    std::get<1>(tup) = true;
+                }
                 break;
             }
         }
     };
 
 
-    bool wasOnTarget(const Point &pos) {
-        for (std::tuple<Point, bool> &tup : targetPos) {
-            if (std::get<0>(tup) == pos and std::get<1>(tup) == true){
+    bool wasOnTarget(const Point &pos, bool isBox) {
+        for (std::tuple<Point, bool, bool> &tup : targetPos) {
+            if (std::get<0>(tup) == pos and (std::get<1>(tup) or std::get<2>(tup))){
                 // alors on était sur un cible mais nous ne le serons plus
+                if (isBox) {
+                    std::get<2>(tup) = false;
+                } else {
                 std::get<1>(tup) = false;
+                }
                 return true;
             }
         }
         return false;
     };
+
+    std::vector<std::tuple<Point, bool, bool>> getTargets() {
+        return targetPos;
+    };
     
+    int getTargetsCount() {
+        int count = 0;
+        for (std::tuple<Point, bool, bool> &tup : targetPos) {
+            if (std::get<2>(tup)) {
+                count++;
+            }
+        }
+        return count;   
+    };
+
+    int getTotalTargets() {return totalTargets;};
+    void incrementTotalTargets() {totalTargets++;};
+
 
 };
 

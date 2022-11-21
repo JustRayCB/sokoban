@@ -15,7 +15,7 @@
 
 using namespace std;
 
-void Point::printPoint(){ cout << "(" << x << "," << y << ")" << endl;}
+void Point::printPoint(){ cout << "(" << x << "," << y << ")";}
 
 Rectangle::Rectangle(Point center, int w, int h, Fl_Color frameColor,
                      Fl_Color fillColor)

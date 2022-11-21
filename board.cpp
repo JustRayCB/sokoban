@@ -94,7 +94,8 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         //Target
         GameObject target{{xGridFltk, yGridFltk}, size/2, FL_BLACK, FL_MAGENTA, "target"};
         setObject(line, col, target);
-        targetPos.push_back(make_tuple(Point{line, col}, false));
+        targetPos.push_back(make_tuple(Point{line, col}, false, false));
+        incrementTotalTargets();
     }else if (symbol == '$') {
         //Box
         GameObject box{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_YELLOW, "box"};
