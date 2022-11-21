@@ -48,6 +48,11 @@ void GameObject::setColor(Fl_Color newFillColor){
     getRectangle().setFillColor(newFillColor);
 }
 
+void GameObject::setSize(int size) {
+    boxSize = size;
+    getRectangle().setSize(size);
+}
+
 
 void GameObject::draw(){
     getRectangle().draw();

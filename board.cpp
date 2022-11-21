@@ -4,6 +4,7 @@
 #include <variant>
 #include <iostream>
 #include <string>
+#include <tuple>
 
 
 #include "board.hpp"
@@ -56,8 +57,6 @@ void Board::setObject(const int &line, const int &col, GameObject &object){
 
 
 void Board::setEmpty(const int line, const int col){
-    GameObject empty{};
-    setObject(line, col, empty);
     getElem(line, col).setName("empty");
 }
 
@@ -95,6 +94,7 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         //Target
         GameObject target{{xGridFltk, yGridFltk}, size/2, FL_BLACK, FL_MAGENTA, "target"};
         setObject(line, col, target);
+        targetPos.push_back(make_tuple(Point{line, col}, false));
     }else if (symbol == '$') {
         //Box
         GameObject box{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_YELLOW, "box"};

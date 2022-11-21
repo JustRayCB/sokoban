@@ -68,7 +68,7 @@ void Controll::move(int keyCode){
         if (board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY) and board->isInBoard(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)  
                 and (board->isEmpty(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY) 
                     or board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY))) {
-            // déplacement vers la droite avec box
+            // déplacement avec box
             if (board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)) {
                 // on est sur une cible
                 board->getElem(xPlayerVector+deltaX, yPlayerVector+deltaY).setColor(FL_MAGENTA);
@@ -77,13 +77,34 @@ void Controll::move(int keyCode){
             this->movePlayer(keyCode);
         }
         else if (not board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
-            // déplacement vers la droite sans box
+            // déplacement sans box
+            if (board->isTarget(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
+                // on est sur une cible
+                board->setOnTarget(Point{xPlayerVector+deltaX, yPlayerVector+deltaY});
+            }
+            std::cout << "Avant :" <<"(" << xPlayerVector << "," << yPlayerVector << ")" << std::endl;
+            GameObject *tmp = &board->getElem(xPlayerVector, yPlayerVector);
+            std::cout << "avant 2: "<<  "(" << tmp->getPosFltk().x << "," << tmp->getPosFltk().y << ")" << std::endl;
             this->movePlayer(keyCode);
+            std::cout << "avant 3: "<<  "(" << tmp->getPosFltk().x << "," << tmp->getPosFltk().y << ")" << std::endl;
+            if (board->wasOnTarget({xPlayerVector, yPlayerVector})) {
+                //si on était sur une cible
+                std::cout << "TRUE" << std::endl;
+                
+                std::cout << "après 2: "<<  "(" << tmp->getPosFltk().x << "," << tmp->getPosFltk().y << ")" << std::endl;
+                tmp->setColor(FL_MAGENTA);
+                tmp->setName("target");
+                tmp->setSize(tmp->getSize() / 2);
+
+                // board->setObject(xPlayerVector, yPlayerVector, tmp);
+            }
         }
     }else {
-        // déplacement vers la droite impossible
+        // déplacement impossible
         std::cout << "You shall not pass" << std::endl;
     }
+    board->displayTargetsPosition();
+    board->displayTargetsBool();
 
 
 }

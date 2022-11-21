@@ -6,12 +6,14 @@
 #include <string>
 #include <memory.h>
 #include <vector>
+#include <tuple>
 
 #include "gameObject.hpp"
 
 class Board{
     std::vector<std::vector<GameObject>> gameBoard;
     int posPlayerLine, posPlayerCol;
+    std::vector<std::tuple<Point, bool>> targetPos;
 
     void copyFromOther(const Board &other){
         posPlayerLine = other.posPlayerLine;
@@ -52,6 +54,38 @@ public:
 
     void draw();
 
+    void displayTargetsPosition(){
+        for (auto& [pos, b] : targetPos) {
+            pos.printPoint();
+        }
+    };
+
+    void displayTargetsBool(){
+        for (auto& [pos, b] : targetPos) {
+            std::cout << b << std::endl;
+        }
+    };
+
+    void setOnTarget(const Point& pos) {
+        for (std::tuple<Point, bool> &tup : targetPos) {
+            if (std::get<0>(tup) == pos) {
+                std::get<1>(tup) = true;
+                break;
+            }
+        }
+    };
+
+
+    bool wasOnTarget(const Point &pos) {
+        for (std::tuple<Point, bool> &tup : targetPos) {
+            if (std::get<0>(tup) == pos and std::get<1>(tup) == true){
+                // alors on était sur un cible mais nous ne le serons plus
+                std::get<1>(tup) = false;
+                return true;
+            }
+        }
+        return false;
+    };
     
 
 };

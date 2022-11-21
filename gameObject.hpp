@@ -35,6 +35,7 @@ public:
     void setPos(int x, int y);
     void setName(std::string newName);
     void setColor(Fl_Color newFillColor);
+    void setSize(int size);
 
     void draw();
 };

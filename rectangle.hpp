@@ -17,6 +17,10 @@
 struct Point {
     int x, y;
     void printPoint();
+
+    bool operator==(const Point &other) {
+        return (other.x == x and other.y == y);
+    };
 };
 
 class Rectangle {
@@ -47,6 +51,7 @@ public:
     Point getCenter() const { return center; }
     void setCenter(int &x, int &y){ center.x = x; center.y = y;}
     void setCenter(Point newCenter){ center = newCenter;}
+    void setSize(int size){w = size; h = size;}
 };
 
 #endif
