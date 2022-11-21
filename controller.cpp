@@ -64,6 +64,7 @@ void Controll::move(int keyCode){
         deltaY++;
     }
     int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
+    int boxSize = board->getElem(xPlayerVector, yPlayerVector).getSize();
     if (board->isInBoard(xPlayerVector+deltaX, yPlayerVector+deltaY) and not board->isWall(xPlayerVector+deltaX, yPlayerVector+deltaY)){
         if (board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY) and board->isInBoard(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)  
                 and (board->isEmpty(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY) 
@@ -82,21 +83,10 @@ void Controll::move(int keyCode){
                 // on est sur une cible
                 board->setOnTarget(Point{xPlayerVector+deltaX, yPlayerVector+deltaY});
             }
-            std::cout << "Avant :" <<"(" << xPlayerVector << "," << yPlayerVector << ")" << std::endl;
-            GameObject *tmp = &board->getElem(xPlayerVector, yPlayerVector);
-            std::cout << "avant 2: "<<  "(" << tmp->getPosFltk().x << "," << tmp->getPosFltk().y << ")" << std::endl;
-            this->movePlayer(keyCode);
-            std::cout << "avant 3: "<<  "(" << tmp->getPosFltk().x << "," << tmp->getPosFltk().y << ")" << std::endl;
             if (board->wasOnTarget({xPlayerVector, yPlayerVector})) {
                 //si on était sur une cible
-                std::cout << "TRUE" << std::endl;
-                
-                std::cout << "après 2: "<<  "(" << tmp->getPosFltk().x << "," << tmp->getPosFltk().y << ")" << std::endl;
-                tmp->setColor(FL_MAGENTA);
-                tmp->setName("target");
-                tmp->setSize(tmp->getSize() / 2);
-
-                // board->setObject(xPlayerVector, yPlayerVector, tmp);
+                GameObject target{{200+yPlayerVector*boxSize, 200+xPlayerVector*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+                board->setObject(xPlayerVector, yPlayerVector, target);
             }
         }
     }else {
