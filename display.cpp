@@ -66,12 +66,12 @@ void DisplayBoard::draw(){
     }
     int c = board->getTargetsCount();
 
-    Text text{std::to_string(c), {100, 100}, 90, FL_GREEN};
+    Text text{std::to_string(c), {100, 100}, 20, FL_BLACK};
 
     if (c == board->getTotalTargets()){
         text.setString("You won !!");
     } else {
-        Text text{std::to_string(c), {100, 100}, 90, FL_GREEN};
+        text.setString("targets: "+std::to_string(c)+"/4");
     }
     
     text.draw();
