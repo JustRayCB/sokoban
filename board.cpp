@@ -123,6 +123,45 @@ bool Board::isInBoard(const int line, const int col){
         and col < static_cast<int>(gameBoard[0].size());
 }
 
+void Board::setOnTarget(const Point &position, bool isBox) {
+    for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+        if (pos == position) {
+            if (isBox) {boolBox = true;}
+            else {boolPlayer = true;}
+            break;
+        }
+    }
+}
+
+bool Board::wasOnTarget(const Point &position, bool isBox) {
+    for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+        if (position == pos and (boolPlayer or boolBox)) {
+            if (isBox) {boolBox = false;}
+            else {boolPlayer = false;}
+            return true;
+        }
+    }
+    return false;
+}
+
+int Board::getTargetsCount() {
+    int count = 0;
+    for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+        if (boolBox) {count++;}
+    }
+    return count;
+}
+
+bool Board::isGameOver() {
+    if (static_cast<size_t>(getTargetsCount()) == targetPos.size())
+        return true;
+    return false;
+}
+
+int Board::getTotalTargets() {return totalTargets;}
+void Board::incrementTotalTargets() {totalTargets++;}
+int Board::getStepCount() {return stepCount;}
+void Board::incrementStepCount() {stepCount++;}
 
 void loadBoard(Board &board, std::string file){
     std::ifstream myFile (file);

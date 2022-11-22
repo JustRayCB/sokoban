@@ -65,16 +65,20 @@ void DisplayBoard::draw(){
         }
     }
     int c = board->getTargetsCount();
+    int stepCount = board->getStepCount();
 
-    Text text{std::to_string(c), {100, 100}, 20, FL_BLACK};
+    Text text1{std::to_string(c), {800, 200}, 20, FL_BLACK};
+    Text text2{std::to_string(stepCount), {800, 400}, 20, FL_BLACK};
 
+    text2.setString("steps: "+std::to_string(stepCount));
     if (c == board->getTotalTargets()){
-        text.setString("You won !!");
+        text1.setString("You won !!");
     } else {
-        text.setString("targets: "+std::to_string(c)+"/4");
+        text1.setString("targets: "+std::to_string(c)+"/4");
     }
     
-    text.draw();
+    text1.draw();
+    text2.draw();
 }
 
 

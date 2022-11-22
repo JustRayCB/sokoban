@@ -59,6 +59,7 @@ void Controll::move(int keyCode){
     else if (keyCode == FL_Left or keyCode == 'q') {deltaY--;}
     else if (keyCode == FL_Down or keyCode == 's') {deltaX++;}
     else if (keyCode == FL_Right or keyCode == 'd') {deltaY++;}
+    else {return;}
 
     int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
     int boxSize = board->getElem(xPlayerVector, yPlayerVector).getSize();
@@ -69,7 +70,6 @@ void Controll::move(int keyCode){
             // déplacement avec box
             if (board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)) {
                 // on est sur une cible
-                std::cout << "IF B ARRIVE CIBLE" << std::endl;
                 board->getElem(xPlayerVector+deltaX, yPlayerVector+deltaY).setColor(FL_MAGENTA);
                 board->setOnTarget({xPlayerVector+2*deltaX, yPlayerVector+2*deltaY}, true);
             }
@@ -77,35 +77,32 @@ void Controll::move(int keyCode){
             this->movePlayer(keyCode);
             if (board->wasOnTarget({xPlayerVector+deltaX, yPlayerVector+deltaY}, true)) {
                 //si une box était sur une cible
-                std::cout << "IF B QUITTE CIBLE" << std::endl;
                 board->getElem(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY).setColor(FL_YELLOW);
                 board->setOnTarget({xPlayerVector+deltaX, yPlayerVector+deltaY}, false);
             } else if (board->wasOnTarget({xPlayerVector, yPlayerVector}, false)) {
-                std::cout << "On pousse une caisse et on arrive sur une cible" << std::endl;
                 GameObject target{{200+yPlayerVector*boxSize, 200+xPlayerVector*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
                 board->setObject(xPlayerVector, yPlayerVector, target);
             }
+            board->incrementStepCount();
         }
         else if (not board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
             // déplacement sans box
             if (board->isTarget(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
                 // on arrive sur une cible
-                std::cout << "IF J ARRIVE CIBLE" << std::endl;
                 board->setOnTarget(Point{xPlayerVector+deltaX, yPlayerVector+deltaY}, false);
             }
             this->movePlayer(keyCode);
             if (board->wasOnTarget({xPlayerVector, yPlayerVector}, false)) {
                 //si on était sur une cible
-                std::cout << "IF J QUITTE CIBLE" << std::endl;
                 GameObject target{{200+yPlayerVector*boxSize, 200+xPlayerVector*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
                 board->setObject(xPlayerVector, yPlayerVector, target);
             }
+            board->incrementStepCount();
         }
     }else {
         // déplacement impossible
         std::cout << "You shall not pass" << std::endl;
     }
-    board->displayTargets();
 
 
 }

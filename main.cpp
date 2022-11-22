@@ -59,7 +59,12 @@ public:
                 //canvas.keyPressed(Fl::event_key());
                 //return 1;
             case FL_KEYDOWN:
-                controller.move(Fl::event_key());
+                if (! board.isGameOver()){
+                    controller.move(Fl::event_key());    
+                }
+                else {
+                    return 1;
+                }
                 ////keyPressed(Fl::event_key());
                 ////player.move(Fl::event_key());
                 //controller.move(Fl::event_key());

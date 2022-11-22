@@ -15,6 +15,7 @@ class Board{
     int posPlayerLine, posPlayerCol;
     std::vector<std::tuple<Point, bool, bool>> targetPos;
     int totalTargets = 0;
+    int stepCount = 0;
 
     void copyFromOther(const Board &other){
         posPlayerLine = other.posPlayerLine;
@@ -55,84 +56,27 @@ public:
 
     void draw();
 
-    void displayTargets(){
-        for (auto& [pos, b1, b2] : targetPos) {
-            pos.printPoint();
-            std::cout << "J:" << b1 << " | " << "B: " << b2 << std::endl;
-        }
-    };
-
-    void setOnTarget(const Point& pos, bool isBox) {
-        for (std::tuple<Point, bool, bool> &tup : targetPos) {
-            if (std::get<0>(tup) == pos) {
-                if (isBox) {
-                    std::get<2>(tup) = true;
-                }else{
-                    std::get<1>(tup) = true;
-                }
-                break;
-            }
-        }
-    };
+    void setOnTarget(const Point& position, bool isBox);
 
 
-    bool wasOnTarget(const Point &pos, bool isBox) {
-        for (std::tuple<Point, bool, bool> &tup : targetPos) {
-            if (std::get<0>(tup) == pos and (std::get<1>(tup) or std::get<2>(tup))){
-                // alors on était sur un cible mais nous ne le serons plus
-                if (isBox) {
-                    std::get<2>(tup) = false;
-                } else {
-                std::get<1>(tup) = false;
-                }
-                return true;
-            }
-        }
-        return false;
-    };
+    bool wasOnTarget(const Point &position, bool isBox);
 
-    std::vector<std::tuple<Point, bool, bool>> getTargets() {
-        return targetPos;
-    };
     
-    int getTargetsCount() {
-        int count = 0;
-        for (std::tuple<Point, bool, bool> &tup : targetPos) {
-            if (std::get<2>(tup)) {
-                count++;
-            }
-        }
-        return count;   
-    };
+    int getTargetsCount();
+    bool isGameOver();
 
-    int getTotalTargets() {return totalTargets;};
-    void incrementTotalTargets() {totalTargets++;};
+    int getTotalTargets();
+    void incrementTotalTargets();
+
+    int getStepCount();
+    void incrementStepCount();
+
+
 
 
 };
 
 void loadBoard(Board &board, std::string file);
-
-//class DisplayBoard{
-    //Board *board = nullptr;
-//public:
-    //DisplayBoard(Board &board): board(&board){}
-    //DisplayBoard()=default;
-    //void setBoard(Board *myBoard){ board = myBoard;}
-    //void draw();
-//};
-
-
-//class Controll{
-    //Board *board = nullptr;
-
-//public:
-    //void setBoard(Board *myBoard){ board = myBoard;}
-    //void movePlayer(int keyCode);
-    //void move(int keyCode);
-    //void moveBox(int keyCode, int boxPosX, int boxPosY);
-
-//};
 
 
 #endif
