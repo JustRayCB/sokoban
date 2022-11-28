@@ -61,41 +61,43 @@ void Controll::move(int keyCode){
     else if (keyCode == FL_Right or keyCode == 'd') {deltaY++;}
     else {return;}
 
-    int xPlayerVector = board->getPosX(), yPlayerVector = board->getPosY();
-    int boxSize = board->getElem(xPlayerVector, yPlayerVector).getSize();
-    if (board->isInBoard(xPlayerVector+deltaX, yPlayerVector+deltaY) and not board->isWall(xPlayerVector+deltaX, yPlayerVector+deltaY)){
-        if (board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY) and board->isInBoard(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)  
-                and (board->isEmpty(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY) 
-                    or board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY))) {
+    int xIdx = board->getPosX(), yIdx = board->getPosY();
+    int boxSize = board->getElem(xIdx, yIdx).getSize();
+    bool isPlayerMovable = board->isInBoard(xIdx+deltaX, yIdx+deltaY) 
+                        and not board->isWall(xIdx+deltaX, yIdx+deltaY);
+    if (isPlayerMovable){
+        if (board->isBox(xIdx+deltaX, yIdx+deltaY) and board->isInBoard(xIdx+2*deltaX, yIdx+2*deltaY)  
+                and (board->isEmpty(xIdx+2*deltaX, yIdx+2*deltaY) 
+                    or board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY))) {
             // déplacement avec box
-            if (board->isTarget(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY)) {
+            if (board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
                 // on est sur une cible
-                board->getElem(xPlayerVector+deltaX, yPlayerVector+deltaY).setColor(FL_MAGENTA);
-                board->setOnTarget({xPlayerVector+2*deltaX, yPlayerVector+2*deltaY}, true);
+                board->getElem(xIdx+deltaX, yIdx+deltaY).setColor(FL_MAGENTA);
+                board->setOnTarget({xIdx+2*deltaX, yIdx+2*deltaY}, true);
             }
-            this->moveBox(keyCode, xPlayerVector+deltaX, yPlayerVector+deltaY);
+            this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
             this->movePlayer(keyCode);
-            if (board->wasOnTarget({xPlayerVector+deltaX, yPlayerVector+deltaY}, true)) {
+            if (board->wasOnTarget({xIdx+deltaX, yIdx+deltaY}, true)) {
                 //si une box était sur une cible
-                board->getElem(xPlayerVector+2*deltaX, yPlayerVector+2*deltaY).setColor(FL_YELLOW);
-                board->setOnTarget({xPlayerVector+deltaX, yPlayerVector+deltaY}, false);
-            } else if (board->wasOnTarget({xPlayerVector, yPlayerVector}, false)) {
-                GameObject target{{200+yPlayerVector*boxSize, 200+xPlayerVector*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xPlayerVector, yPlayerVector, target);
+                board->getElem(xIdx+2*deltaX, yIdx+2*deltaY).setColor(FL_YELLOW);
+                board->setOnTarget({xIdx+deltaX, yIdx+deltaY}, false);
+            } else if (board->wasOnTarget({xIdx, yIdx}, false)) {
+                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+                board->setObject(xIdx, yIdx, target);
             }
             board->incrementStepCount();
         }
-        else if (not board->isBox(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
+        else if (not board->isBox(xIdx+deltaX, yIdx+deltaY)) {
             // déplacement sans box
-            if (board->isTarget(xPlayerVector+deltaX, yPlayerVector+deltaY)) {
+            if (board->isTarget(xIdx+deltaX, yIdx+deltaY)) {
                 // on arrive sur une cible
-                board->setOnTarget(Point{xPlayerVector+deltaX, yPlayerVector+deltaY}, false);
+                board->setOnTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
             }
             this->movePlayer(keyCode);
-            if (board->wasOnTarget({xPlayerVector, yPlayerVector}, false)) {
+            if (board->wasOnTarget({xIdx, yIdx}, false)) {
                 //si on était sur une cible
-                GameObject target{{200+yPlayerVector*boxSize, 200+xPlayerVector*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xPlayerVector, yPlayerVector, target);
+                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+                board->setObject(xIdx, yIdx, target);
             }
             board->incrementStepCount();
         }
@@ -103,6 +105,4 @@ void Controll::move(int keyCode){
         // déplacement impossible
         std::cout << "You shall not pass" << std::endl;
     }
-
-
 }
