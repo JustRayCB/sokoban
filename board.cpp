@@ -185,7 +185,7 @@ void loadBoard(Board &board, std::string file){
                 int nbCol = std::stoi(tempCol);
                 //int bestScore = std::stoi(tempBestScore);
                 //board.setBestScore(bestScore);
-                boxSize = std::min(600/nbLine, 600/nbCol);
+                boxSize = 600/nbLine;
                 board.resize(nbLine, nbCol);
 
             }

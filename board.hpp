@@ -22,6 +22,9 @@ class Board{
         posPlayerLine = other.posPlayerLine;
         posPlayerCol = other.posPlayerCol;
         gameBoard = other.gameBoard;
+        totalTargets = other.totalTargets;
+        targetPos = other.targetPos;
+        stepCount = other.stepCount;
     }
 
 public:
