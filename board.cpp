@@ -1,5 +1,8 @@
 #include <FL/Enumerations.H>
+#include <algorithm>
+#include <cstring>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <variant>
 #include <iostream>
@@ -172,13 +175,18 @@ void loadBoard(Board &board, std::string file){
         while (myFile) {
             if (!idx) {
                 //To set the size of the game board
-                std::getline( myFile, lineS, ' ');
-                int line = std::stoi(lineS);
-                lineS = myFile.get();
-                int col = std::stoi(lineS);
-                board.resize(line, col);
-                lineS = myFile.get();
-                boxSize = std::min(500/line, 500/col);
+                std::getline(myFile, lineS);
+                stringstream temp(lineS);
+                string tempLine, tempCol;// tempBestScore;
+                getline(temp, tempLine, ' ');
+                getline(temp, tempCol, ' ');
+                //getline(temp, tempBestScore, ' ');
+                int nbLine = std::stoi(tempLine);
+                int nbCol = std::stoi(tempCol);
+                //int bestScore = std::stoi(tempBestScore);
+                //board.setBestScore(bestScore);
+                boxSize = std::min(600/nbLine, 600/nbCol);
+                board.resize(nbLine, nbCol);
 
             }
             std::getline(myFile, lineS);
@@ -187,8 +195,7 @@ void loadBoard(Board &board, std::string file){
                 col++;
             }
             col=0;
-            line++;
-            idx++;
+            line++;idx++;
         }
     }
 }

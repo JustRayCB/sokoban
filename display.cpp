@@ -67,8 +67,9 @@ void DisplayBoard::draw(){
     int c = board->getTargetsCount();
     int stepCount = board->getStepCount();
 
-    Text text1{std::to_string(c), {800, 200}, 20, FL_BLACK};
-    Text text2{std::to_string(stepCount), {800, 400}, 20, FL_BLACK};
+    Text text1{std::to_string(c), {830, 200}, 20, FL_BLACK};
+    Text text2{std::to_string(stepCount), {830, 400}, 20, FL_BLACK};
+    //display aussi best score -> Faire une fonctione pour afficher tt les text
 
     text2.setString("steps: "+std::to_string(stepCount));
     if (c == board->getTotalTargets()){

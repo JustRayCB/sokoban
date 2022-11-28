@@ -16,6 +16,7 @@ class Board{
     std::vector<std::tuple<Point, bool, bool>> targetPos;
     int totalTargets = 0;
     int stepCount = 0;
+    //int bestScore;
 
     void copyFromOther(const Board &other){
         posPlayerLine = other.posPlayerLine;
@@ -33,10 +34,14 @@ public:
     std::vector<std::vector<GameObject>> &getBoard();
     int getPosX() const;
     int getPosY() const;
+    int getTargetsCount();
+    int getTotalTargets();
+    int getStepCount();
 
     void setEmpty(const int line, const int col); //Set the cell as empty
     void setObject(const int &line, const int &col, GameObject &object);
     void setPosPlayer(const int &line, const int &col);
+    void setOnTarget(const Point& position, bool isBox);
 
 
     void resize(const int &nbLine, const int &nbCol);
@@ -51,28 +56,14 @@ public:
     bool isBox(const int line, const int col);
     bool isTarget(const int line, const int col);
     bool isInBoard(const int line, const int col);
-    //bool isInBoard(int line, int col);//{ return line<static_cast<int>(gameBoard.size()) and col < static_cast<int>(gameBoard[0].size()-1);}
-
+    bool isGameOver();
+    bool wasOnTarget(const Point &position, bool isBox);
 
     void draw();
 
-    void setOnTarget(const Point& position, bool isBox);
-
-
-    bool wasOnTarget(const Point &position, bool isBox);
-
-    
-    int getTargetsCount();
-    bool isGameOver();
-
-    int getTotalTargets();
     void incrementTotalTargets();
 
-    int getStepCount();
     void incrementStepCount();
-
-
-
 
 };
 

@@ -22,16 +22,11 @@ using namespace std;
 
 
 class MainWindow : public Fl_Window {
-    //const int windowWidth = 1000;
-    //const int windowHeight = 975;
-    //const double refreshPerSecond = 60;
-    //Player player{{500, 500}};    
-    //shared_ptr<Board> board;
     Board board;
     DisplayBoard display;
     Controll controller;
-    //DisplayBoard displayBoard;
-    //Controll controller;
+    int stopMove = 0;
+    //Il faut un endroit ou stocker les niveaux et savoir au quel niveau on est
 
 public:
     MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
@@ -40,14 +35,9 @@ public:
         loadBoard(board, "test.txt");
         display.setBoard(&board);
         controller.setBoard(&board);
-        //displayBoard.setBoard(&board);
-        //controller.setBoard(&board);
-
     }
     void draw() override {
         Fl_Window::draw();
-        //displayBoard.draw();
-        //board.draw();
         display.draw();
     }
     int handle(int event) override {
@@ -59,15 +49,20 @@ public:
                 //canvas.keyPressed(Fl::event_key());
                 //return 1;
             case FL_KEYDOWN:
-                if (! board.isGameOver()){
-                    controller.move(Fl::event_key());    
+                if (!stopMove) {
+                    if (! board.isGameOver()){
+                        controller.move(Fl::event_key());    
+                    }
+                    else {
+                        // J'ai mis !stopMove pcq sinn il rentre tjrs là
+                        // et la condition !board.isGameOver() est toujous
+                        // évaluée Save best Score
+                        // if bestScore > stepCount{
+                        //  saveBestScore();
+                        //}
+                        return 1;
+                    }
                 }
-                else {
-                    return 1;
-                }
-                ////keyPressed(Fl::event_key());
-                ////player.move(Fl::event_key());
-                //controller.move(Fl::event_key());
         }
         return 0;
     }
