@@ -14,4 +14,13 @@
 
 Pour les targets : 
 
-- Faire un vecteur de tuples avec position et booléen, dans board.
+- Faire un vecteur de tuples avec position et booléen, dans board. Done
+- Refactor :
+   * fichier texte.cpp
+   * fonction move
+- Dimensions +9 fichier txt.
+- Générer d'autres niveaux et faire un dossier levels.
+- Ajouter des boutons pour passer les niveaux.
+- Utiliser des smart pointers où c'est possible.
+- Best score dans le fichier txt et l'afficher.
+$ Penser à un menu principal.
