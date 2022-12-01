@@ -75,7 +75,7 @@ void DisplayBoard::draw(){
     if (c == board->getTotalTargets()){
         text1.setString("You won !!");
     } else {
-        text1.setString("targets: "+std::to_string(c)+"/4");
+        text1.setString("targets: "+std::to_string(c)+"/"+std::to_string(board->getTotalTargets()));
     }
     
     text1.draw();

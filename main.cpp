@@ -47,6 +47,7 @@ public:
 
         choice->add("lvl1");
         choice->add("lvl2");
+        choice->add("lvl3");
         choice->value(0);
     }
     void draw() override {
