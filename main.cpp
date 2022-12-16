@@ -8,6 +8,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 #include <FL/fl_types.h>
+#include <FL/Fl_Button.H>
 #include <fstream>
 #include <math.h>
 #include <memory>
@@ -46,6 +47,7 @@ class MainWindow : public Fl_Window {
     int stopMove = 0;
     std::string currentFile;
     Fl_Choice *choice;
+    Fl_Button *reset;
     //Il faut un endroit ou stocker les niveaux et savoir au quel niveau on est
 
 public:
@@ -57,6 +59,7 @@ public:
         display.setBoard(&board);
         controller.setBoard(&board);
         choice = new Fl_Choice(210,120,100,30,"Levels");
+        reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
         configChoice(choice);
     }
     void draw() override {
@@ -84,7 +87,11 @@ public:
                     stopMove = 0;
                 
                 }
-
+                if (Fl::event_x() <= reset->x()+reset->w() and Fl::event_x() >=reset->x() 
+                        and Fl::event_y() <= reset->y()+reset->h() and Fl::event_y() >=reset->y()) {
+                    board.setBestScore(0);
+                    writeBestScore();
+                }
                 return 1;
 
             }
