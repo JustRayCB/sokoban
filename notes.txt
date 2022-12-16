@@ -1,11 +1,11 @@
-1] Créer une grille modulable par rapport à ses dimensions
+1] Créer une grille modulable par rapport à ses dimensions DONE
 
 2] Implémenter les différents objets (murs)
 
 3] Ajouter un personnage qui se déplace dans la grille et qui collisionne
-   avec les murs
+   avec les murs DONE
 
-4] Ajouter les différentes interactions caisse/joueur, caisse/murs et caisse/caisse.
+4] Ajouter les différentes interactions caisse/joueur, caisse/murs et caisse/caisse. DONE
 
 5] Ajouter la détection d'objectifs atteints.
 

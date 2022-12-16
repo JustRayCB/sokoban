@@ -53,6 +53,13 @@ std::vector<std::vector<GameObject>>& Board::getBoard(){
     return gameBoard;
 }
 
+int Board::getTotalTargets() {return totalTargets;}
+void Board::incrementTotalTargets() {totalTargets++;}
+int Board::getStepCount() {return stepCount;}
+void Board::incrementStepCount() {stepCount++;}
+int Board::getBestScore() {return bestScore;}
+int Board::getNbCol(){return gameBoard.at(0).size();}
+int Board::getNbLine(){return gameBoard.size();}
 
 void Board::setObject(const int &line, const int &col, GameObject &object){
     getElem(line, col) = object;
@@ -67,6 +74,10 @@ void Board::setEmpty(const int line, const int col){
 void Board::setPosPlayer(const int &x, const int &y){
     posPlayerLine = x;
     posPlayerCol = y;
+}
+
+void Board::setBestScore(const int &score){
+    bestScore = score;
 }
 
 
@@ -161,10 +172,6 @@ bool Board::isGameOver() {
     return false;
 }
 
-int Board::getTotalTargets() {return totalTargets;}
-void Board::incrementTotalTargets() {totalTargets++;}
-int Board::getStepCount() {return stepCount;}
-void Board::incrementStepCount() {stepCount++;}
 
 void loadBoard(Board &board, std::string file){
     std::ifstream myFile (file);
@@ -177,14 +184,14 @@ void loadBoard(Board &board, std::string file){
                 //To set the size of the game board
                 std::getline(myFile, lineS);
                 stringstream temp(lineS);
-                string tempLine, tempCol;// tempBestScore;
+                string tempLine, tempCol, tempBestScore;
                 getline(temp, tempLine, ' ');
                 getline(temp, tempCol, ' ');
-                //getline(temp, tempBestScore, ' ');
+                getline(temp, tempBestScore, ' ');
                 int nbLine = std::stoi(tempLine);
                 int nbCol = std::stoi(tempCol);
-                //int bestScore = std::stoi(tempBestScore);
-                //board.setBestScore(bestScore);
+                int bestScore = std::stoi(tempBestScore);
+                board.setBestScore(bestScore);
                 boxSize = 600/nbLine;
                 board.resize(nbLine, nbCol);
 
