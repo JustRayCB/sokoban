@@ -24,5 +24,4 @@ rectangle.o: rectangle.cpp rectangle.hpp
 clean:
 	rm *.o
 	rm main
-	ls
 

@@ -184,14 +184,17 @@ void loadBoard(Board &board, std::string file){
                 //To set the size of the game board
                 std::getline(myFile, lineS);
                 stringstream temp(lineS);
-                string tempLine, tempCol, tempBestScore;
+                string tempLine, tempCol, tempBestScore, tempLimit;
                 getline(temp, tempLine, ' ');
                 getline(temp, tempCol, ' ');
                 getline(temp, tempBestScore, ' ');
+                //getline(temp, tempLimit, ' ');
                 int nbLine = std::stoi(tempLine);
                 int nbCol = std::stoi(tempCol);
                 int bestScore = std::stoi(tempBestScore);
+                int limit = std::stoi(tempLimit);
                 board.setBestScore(bestScore);
+                //board.setLimit(limit);
                 boxSize = 600/nbLine;
                 board.resize(nbLine, nbCol);
 
