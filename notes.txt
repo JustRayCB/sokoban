@@ -9,7 +9,7 @@
 
 5] Ajouter la détection d'objectifs atteints.
 
-
+6]
 ---------------------------------
 
 Pour les targets : 
