@@ -39,6 +39,8 @@ void configChoice(Fl_Choice *choice){
     choice->value(0);
 
 }
+void
+updateWelcomeMessageCB(void *data); 
 
 class MainWindow : public Fl_Window {
     Board board;
@@ -48,6 +50,8 @@ class MainWindow : public Fl_Window {
     std::string currentFile;
     Fl_Choice *choice;
     Fl_Button *reset;
+    bool showMessage = true;
+    Fl_Box *box;
     //Il faut un endroit ou stocker les niveaux et savoir au quel niveau on est
 
 public:
@@ -60,17 +64,28 @@ public:
         controller.setBoard(&board);
         choice = new Fl_Choice(210,120,100,30,"Levels");
         reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
+        choice->hide(); reset->hide();
         configChoice(choice);
+        box = new Fl_Box(350,250,300,300,"Bienvenue !\n Jeu Sokoban, Créé par \nHugo Callens et \nRayan Contuliano Bravo");
+        box->labelsize(26);
+        box->labelfont(FL_BOLD+FL_ITALIC);
+        box->labeltype(FL_SHADOW_LABEL);
+        Fl::add_timeout(3.0, updateWelcomeMessageCB, this);
+    }
+    void updateWelcomeMessage() {
+        showMessage = false;
+        box->hide();
     }
     void draw() override {
         Fl_Window::draw();
-        display.draw();
-        Fl_Widget *ptr = choice;
-        ptr->draw();
-    }
-    void callHandle(int event){
-        choice->handle(event);
-        
+        if (showMessage) {
+            box->show();
+        }
+        else {
+            display.draw();
+            choice->show();
+            reset->show();
+        }
     }
     int handle(int event) override {
         switch (event) {
@@ -131,6 +146,8 @@ public:
     ~MainWindow(){
         std::cout << "Destroying " << std::endl;
         delete choice;
+        delete box;
+        delete reset;
     }
 
     void writeBestScore(){
@@ -156,6 +173,11 @@ public:
         writeFile.close();
     }
 };
+
+void updateWelcomeMessageCB(void *data) {
+    MainWindow *window = static_cast<MainWindow*>(data);
+    window->updateWelcomeMessage();
+}
 
 /*--------------------------------------------------
 

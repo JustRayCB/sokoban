@@ -18,9 +18,9 @@ Pour les targets :
 - Refactor :
    * fichier texte.cpp
    * fonction move
-- Dimensions +9 fichier txt.
+- Dimensions +9 fichier txt. DONE
 - Générer d'autres niveaux et faire un dossier levels.
 - Ajouter des boutons pour passer les niveaux.
 - Utiliser des smart pointers où c'est possible.
-- Best score dans le fichier txt et l'afficher.
+- Best score dans le fichier txt et l'afficher. DONE
 $ Penser à un menu principal.
