@@ -49,6 +49,7 @@ public:
     void setObject(const int &line, const int &col, GameObject &object);
     void setPosPlayer(const int &line, const int &col);
     void setOnTarget(const Point& position, bool isBox);
+    void removeFromTarget(const Point& position, bool isBox);
     void setBestScore(const int &score);
 
 
@@ -66,12 +67,20 @@ public:
     bool isInBoard(const int line, const int col);
     bool isGameOver();
     bool wasOnTarget(const Point &position, bool isBox);
+    bool isOnTarget(const Point &position);
 
     void draw();
 
     void incrementTotalTargets();
 
     void incrementStepCount();
+
+    // void displayTargets() {
+    //     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+    //         std::cout << "Box at pos : (" << pos.x << "," << pos.y << ") --> " << boolPlayer << " | " << boolBox << std::endl;
+    //     }
+    // }
+
 
 };
 

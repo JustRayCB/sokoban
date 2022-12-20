@@ -147,11 +147,19 @@ void Board::setOnTarget(const Point &position, bool isBox) {
     }
 }
 
-bool Board::wasOnTarget(const Point &position, bool isBox) {
+void Board::removeFromTarget(const Point &position, bool isBox){
     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
-        if (position == pos and (boolPlayer or boolBox)) {
-            if (isBox) {boolBox = false;}
+        if (pos == position){
+            if (isBox){boolBox = false;}
             else {boolPlayer = false;}
+            break;
+        }
+    }
+}
+
+bool Board::isOnTarget(const Point &position) {
+    for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+        if (position == pos) {
             return true;
         }
     }
