@@ -45,6 +45,101 @@ void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
 }
 
 
+void Controll::emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+}
+
+void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+    std::cout << "Case: \t1" << std::endl;
+    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
+    board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+}
+
+void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
+    std::cout << "Case:\t2" << std::endl;
+    board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
+    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
+    board->removeFromTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+}
+
+void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+    std::cout << "Case:\t3" << std::endl;
+    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
+    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
+    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+}
+
+void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    std::cout << "Case:\t4" << std::endl;
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+    // on redessine la cible
+    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+    board->setObject(position.x, position.y, target);
+}
+
+void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    std::cout << "Case:\t5" << std::endl;
+    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
+    board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+    // on redessine la cible
+    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+    board->setObject(position.x, position.y, target);
+}
+
+void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    std::cout << "Case:\t6" << std::endl;
+    board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
+    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    board->removeFromTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+    // on redessine la cible
+    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+    board->setObject(position.x, position.y, target);
+}
+
+void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    std::cout << "Case:\t7" << std::endl;
+    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
+    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    this->movePlayer(keyCode);
+    // on redessine la cible
+    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+    board->setObject(position.x, position.y, target);
+}
+
+void Controll::emptyPlayerToEmpty(int keyCode){
+    this->movePlayer(keyCode);
+}
+void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    this->movePlayer(keyCode);
+}
+void Controll::targetPlayerToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    this->movePlayer(keyCode);
+    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+    board->setObject(position.x, position.y, target);
+}
+void Controll::targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    this->movePlayer(keyCode);
+    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
+    board->setObject(position.x, position.y, target);
+}
+
+
     
 
 
@@ -76,111 +171,56 @@ void Controll::move(int keyCode){
         if (isBoxMovable) {
             // déplacement avec box
 
+            // joueur sur vide, box sur vide, vers vide
+            if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
+                emptyPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode);
+            }
             // joueur sur vide, box sur vide, vers cible
-            if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
-                std::cout << "Case: \t1" << std::endl;
-                board->setOnTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, true);
-                std::cout << "J'ajoute une boite (" << xIdx+2*deltaX << "," << yIdx+2*deltaY << ") sur une cible" << std::endl;
-                board->getElem(xIdx+deltaX, yIdx+deltaY).setColor(FL_MAGENTA);
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
+            else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
+                emptyPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
             // joueur sur vide, box sur cible, vers vide
             } 
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
-                std::cout << "Case:\t2" << std::endl;
-                board->getElem(xIdx+deltaX, yIdx+deltaY).setColor(FL_YELLOW);
-                board->setOnTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, false);
-                board->removeFromTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, false);
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
+                emptyPlayerTargetBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode);
             }
             // joueur sur vide, box sur cible, vers cible
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
-                std::cout << "Case:\t3" << std::endl;
-                board->setOnTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, true);
-                board->removeFromTarget(Point{xIdx+deltaX, yIdx+deltaY}, true);
-                board->setOnTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
+                emptyPlayerTargetBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
             }
             // joueur sur cible, box sur vide, vers vide
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
-                std::cout << "Case:\t4" << std::endl;
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
-                // on redessine la cible
-                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xIdx, yIdx, target);
+                targetPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur cible, box sur vide, vers cible
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
-                std::cout << "Case:\t5" << std::endl;
-                board->removeFromTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
-                board->setOnTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, true);
-                board->getElem(xIdx+deltaX, yIdx+deltaY).setColor(FL_MAGENTA);
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
-                // on redessine la cible
-                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xIdx, yIdx, target);
+                targetPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur cible, box sur cible, vers vide
             else if (board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
-                std::cout << "Case:\t6" << std::endl;
-                board->getElem(xIdx+deltaX, yIdx+deltaY).setColor(FL_YELLOW);
-                board->setOnTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
-                board->removeFromTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, false);
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
-                // on redessine la cible
-                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xIdx, yIdx, target);
+                targetPlayerTargetBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur cible, box sur cible, vers cible
             else if (board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
-                std::cout << "Case:\t7" << std::endl;
-                board->setOnTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
-                board->setOnTarget(Point{xIdx+2*deltaX, yIdx+2*deltaY}, true);
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
-                // on redessine la cible
-                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xIdx, yIdx, target);
+                targetPlayerTargetBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             } 
-            // joueur sur vide, box sur vide, vers vide
-            else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
-                this->moveBox(keyCode, xIdx+deltaX, yIdx+deltaY);
-                this->movePlayer(keyCode);
-            }
             board->incrementStepCount();
         }
         else if (not board->isBox(xIdx+deltaX, yIdx+deltaY)) {
-            std::cout << "IM HERE" << std::endl;
-            std::cout << "board->isOnTarget({xIdx, yIdx}) = " << board->isOnTarget({xIdx, yIdx}) << std::endl;
-            std::cout << "board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) = " << board->isOnTarget({xIdx, yIdx}) << std::endl;
-
-
+            // joueur sur vide, vers vide
+            if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
+                emptyPlayerToEmpty(keyCode);
+            }
             // joueur sur vide, vers cible
-            if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                board->setOnTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
-                this->movePlayer(keyCode);
+            else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
+                emptyPlayerToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
             }
             // joueur sur cible, vers vide
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                this->movePlayer(keyCode);
-                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xIdx, yIdx, target);
+                targetPlayerToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur cible, vers cible
             else if (board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                board->setOnTarget(Point{xIdx+deltaX, yIdx+deltaY}, false);
-                this->movePlayer(keyCode);
-                GameObject target{{200+yIdx*boxSize, 200+xIdx*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-                board->setObject(xIdx, yIdx, target);
-            }
-            // joueur sur vide, vers vide
-            else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                this->movePlayer(keyCode);
+                targetPlayerToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             board->incrementStepCount();
         }
