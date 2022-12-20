@@ -1,5 +1,5 @@
 COMPILER = g++
-FLAGS = -O2 -std=c++20 -Wall -Wextra -pedantic `fltk-config --ldflags` -g
+FLAGS = -std=c++20 -Wall -Wextra -pedantic `fltk-config --ldflags` -g
 #-fsanitize=undefined,leak,address -g 
 main: main.cpp display.o controller.o rectangle.o gameObject.o board.o 
 	$(COMPILER) -o main main.cpp display.o rectangle.o gameObject.o board.o controller.o $(FLAGS)

@@ -39,8 +39,7 @@ void configChoice(Fl_Choice *choice){
     choice->value(0);
 
 }
-void
-updateWelcomeMessageCB(void *data); 
+void updateWelcomeMessageCB(void *data); 
 
 class MainWindow : public Fl_Window {
     Board board;
@@ -66,7 +65,9 @@ public:
         reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
         choice->hide(); reset->hide();
         configChoice(choice);
-        box = new Fl_Box(350,250,300,300,"Bienvenue !\n Jeu Sokoban, Créé par \nHugo Callens et \nRayan Contuliano Bravo");
+        box = new Fl_Box(350,250,300,300,"Bienvenue !\n"
+                "Jeu Sokoban, Créé par \nHugo Callens et"
+                "\nRayan Contuliano Bravo");
         box->labelsize(26);
         box->labelfont(FL_BOLD+FL_ITALIC);
         box->labeltype(FL_SHADOW_LABEL);
@@ -87,20 +88,24 @@ public:
             reset->show();
         }
     }
+
+    void handleChoice(){
+        choice->handle(Fl::event_button());
+        currentFile =   "lvls/lvl"+std::to_string(choice->value()+1)+".txt";
+        Board nboard;
+        loadBoard(nboard, currentFile);
+        board = nboard;
+        stopMove = 0;
+
+    }
     int handle(int event) override {
         switch (event) {
             case FL_PUSH:{
 
                 if (Fl::event_x() <= choice->x()+choice->w() and Fl::event_x() >=choice->x() 
                         and Fl::event_y() <= choice->y()+choice->h() and Fl::event_y() >=choice->y()) {
-                    choice->handle(Fl::event_button());
-                    std::string fileName =  "lvls/lvl"+std::to_string(choice->value()+1)+".txt";
-                    currentFile =fileName;
-                    Board nboard;
-                    loadBoard(nboard, fileName);
-                    board = nboard;
-                    stopMove = 0;
                 
+                    handleChoice();
                 }
                 if (Fl::event_x() <= reset->x()+reset->w() and Fl::event_x() >=reset->x() 
                         and Fl::event_y() <= reset->y()+reset->h() and Fl::event_y() >=reset->y()) {
@@ -160,10 +165,8 @@ public:
             }
             myFile.close();
         }
-        std::cout << allLines.at(0) << std::endl;
-        allLines[0] = std::to_string(board.getNbLine()) + " " + std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore());
-        std::cout << "Got modified " << std::endl;
-        std::cout << allLines.at(0) << std::endl;
+        allLines[0] = std::to_string(board.getNbLine()) + " " + 
+            std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore());
         std::ofstream writeFile(currentFile);
         if (writeFile.is_open()) {
             for (auto &str : allLines) {
