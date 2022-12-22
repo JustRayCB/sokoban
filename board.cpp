@@ -148,8 +148,11 @@ void Board::setOnTarget(const Point &position, bool isBox) {
 }
 
 void Board::removeFromTarget(const Point &position, bool isBox){
+    std::cout << "Entering" << std::endl;
     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+        std::cout << "(" << pos.x << "," << pos.y << ")" << " ?= " << "(" << position.x << "," << position.y << ")" <<std::endl;
         if (pos == position){
+            std::cout << "Pos : (" << pos.x << "," << pos.y << ")" << std::endl;
             if (isBox){boolBox = false;}
             else {boolPlayer = false;}
             break;

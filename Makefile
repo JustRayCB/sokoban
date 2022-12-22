@@ -1,12 +1,9 @@
 COMPILER = g++
-<<<<<<< HEAD
 FLAGS = -std=c++20 -Wall -Wextra -pedantic `fltk-config --ldflags` -g
-=======
 FLAGS = -O2 -std=c++20 -Wall -Wextra -pedantic `fltk-config --ldflags` -g
 #FLAGS += $(shell fltk-config --cxxflags)
 #FLAGS  += $(shell fltk-config --ldflags)
 
->>>>>>> 5eaaf3b (Create subfunctions for possible moves)
 #-fsanitize=undefined,leak,address -g 
 main: main.cpp display.o controller.o rectangle.o gameObject.o board.o 
 	$(COMPILER) -o main main.cpp display.o rectangle.o gameObject.o board.o controller.o $(FLAGS)

@@ -62,15 +62,15 @@ void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, in
     std::cout << "Case:\t2" << std::endl;
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
-    board->removeFromTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
+    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
 }
 
 void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     std::cout << "Case:\t3" << std::endl;
-    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
+    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
@@ -78,6 +78,7 @@ void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, i
 
 void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     std::cout << "Case:\t4" << std::endl;
+    board->removeFromTarget(Point{position.x, position.y}, false);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
     // on redessine la cible
@@ -87,7 +88,7 @@ void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, in
 
 void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     std::cout << "Case:\t5" << std::endl;
-    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, false);
+    board->removeFromTarget(Point{position.x, position.y}, false);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
@@ -101,7 +102,8 @@ void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, i
     std::cout << "Case:\t6" << std::endl;
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
-    board->removeFromTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
+    board->removeFromTarget(Point{position.x, position.y}, false);
+    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
     // on redessine la cible
@@ -111,6 +113,8 @@ void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, i
 
 void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     std::cout << "Case:\t7" << std::endl;
+    board->removeFromTarget(Point{position.x, position.y}, false);
+    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
@@ -128,11 +132,13 @@ void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY
     this->movePlayer(keyCode);
 }
 void Controll::targetPlayerToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    board->removeFromTarget(Point{position.x, position.y}, false);
     this->movePlayer(keyCode);
     GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
     board->setObject(position.x, position.y, target);
 }
 void Controll::targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    board->removeFromTarget(Point{position.x, position.y}, false);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     this->movePlayer(keyCode);
     GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
@@ -228,4 +234,5 @@ void Controll::move(int keyCode){
         // déplacement impossible
         std::cout << "You shall not pass" << std::endl;
     }
+    board->displayTargets();
 }
