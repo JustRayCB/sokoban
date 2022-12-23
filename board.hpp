@@ -75,11 +75,11 @@ public:
 
     void incrementStepCount();
 
-    void displayTargets() {
-        for (auto& [pos, boolPlayer, boolBox] : targetPos) {
-            std::cout << "Box at pos : (" << pos.x << "," << pos.y << ") --> " << boolPlayer << " | " << boolBox << std::endl;
-        }
-    }
+    // void displayTargets() {
+    //     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+    //         std::cout << "Box at pos : (" << pos.x << "," << pos.y << ") --> " << boolPlayer << " | " << boolBox << std::endl;
+    //     }
+    // }
 
 
 };

@@ -234,5 +234,4 @@ void Controll::move(int keyCode){
         // déplacement impossible
         std::cout << "You shall not pass" << std::endl;
     }
-    board->displayTargets();
 }

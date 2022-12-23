@@ -9,6 +9,7 @@
 #include <FL/fl_draw.H>
 #include <FL/fl_types.h>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Input.H>
 #include <fstream>
 #include <math.h>
 #include <memory>
@@ -39,7 +40,27 @@ void configChoice(Fl_Choice *choice){
     choice->value(0);
 
 }
-void updateWelcomeMessageCB(void *data); 
+void updateWelcomeMessageCB(void *data);
+
+// class LevelEditorWindow : public Fl_Window {
+//     public:
+//         LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor") {
+//             std::cout << "Welcome" << std::endl;
+//         }
+// };
+
+void generateButtonEditor(){
+    Fl_Window* editor = new Fl_Window (000,000,1000,975,"Editor");
+    Fl_Input* colInput = new Fl_Input (150, 10, 50, 20, "Number of columns: ");
+    Fl_Input* lineInput = new Fl_Input (150, 30, 50, 20, "Number of lines: ");
+    editor->show();
+    colInput->show();
+    lineInput->show();
+
+    if (colInput->value() != "" and lineInput->value() != "") {
+        std::cout << "HIIII" << std::endl;
+    }
+}
 
 class MainWindow : public Fl_Window {
     Board board;
@@ -49,6 +70,7 @@ class MainWindow : public Fl_Window {
     std::string currentFile;
     Fl_Choice *choice;
     Fl_Button *reset;
+    Fl_Button *lvlEditor;
     bool showMessage = true;
     Fl_Box *box;
     //Il faut un endroit ou stocker les niveaux et savoir au quel niveau on est
@@ -63,7 +85,8 @@ public:
         controller.setBoard(&board);
         choice = new Fl_Choice(210,120,100,30,"Levels");
         reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
-        choice->hide(); reset->hide();
+        lvlEditor = new Fl_Button(165, 60, 150, 30, "Create New Level");
+        choice->hide(); reset->hide(); lvlEditor->hide();
         configChoice(choice);
         box = new Fl_Box(350,250,300,300,"Bienvenue !\n"
                 "Jeu Sokoban, Créé par \nHugo Callens et"
@@ -71,7 +94,7 @@ public:
         box->labelsize(26);
         box->labelfont(FL_BOLD+FL_ITALIC);
         box->labeltype(FL_SHADOW_LABEL);
-        Fl::add_timeout(3.0, updateWelcomeMessageCB, this);
+        Fl::add_timeout(1.0, updateWelcomeMessageCB, this);
     }
     void updateWelcomeMessage() {
         showMessage = false;
@@ -86,6 +109,7 @@ public:
             display.draw();
             choice->show();
             reset->show();
+            lvlEditor->show();
         }
     }
 
@@ -111,6 +135,12 @@ public:
                         and Fl::event_y() <= reset->y()+reset->h() and Fl::event_y() >=reset->y()) {
                     board.setBestScore(0);
                     writeBestScore();
+                }
+                if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
+                        and Fl::event_y() <= lvlEditor->y()+lvlEditor->h() and Fl::event_y() >=lvlEditor->y()) {
+                    std::cout << "On lvlEditor" << std::endl;
+                    generateButtonEditor();
+                    this->hide();
                 }
                 return 1;
 
