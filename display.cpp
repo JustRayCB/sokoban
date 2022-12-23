@@ -70,19 +70,26 @@ void DisplayBoard::draw(){
     Text text1{std::to_string(c), {830, 200}, 20, FL_BLACK};
     Text text2{std::to_string(stepCount), {830, 400}, 20, FL_BLACK};
     Text text3{std::to_string(board->getBestScore()), {830, 600}, 20, FL_BLACK};
-    //display aussi best score -> Faire une fonctione pour afficher tt les text
+    Text text4{std::to_string(board->getLimit()), {830, 800}, 20, FL_BLACK};
 
     text2.setString("steps: "+std::to_string(stepCount));
     text3.setString("Best score: " + std::to_string(board->getBestScore()));
+    text4.setString("Limit: " + std::to_string(board->getLimit()));
     if (c == board->getTotalTargets()){
         text1.setString("You won !!");
-    } else {
+    } 
+    else if (board->getStepCount()==board->getLimit() and not board->isGameOver()) {
+        text1.setString("You Loose !!");
+    
+    }
+    else {
         text1.setString("targets: "+std::to_string(c)+"/"+std::to_string(board->getTotalTargets()));
     }
     
     text1.draw();
     text2.draw();
     text3.draw();
+    text4.draw();
 }
 
 

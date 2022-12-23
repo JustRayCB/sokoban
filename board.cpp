@@ -60,6 +60,7 @@ void Board::incrementStepCount() {stepCount++;}
 int Board::getBestScore() {return bestScore;}
 int Board::getNbCol(){return gameBoard.at(0).size();}
 int Board::getNbLine(){return gameBoard.size();}
+int Board::getLimit(){return limit;}
 
 void Board::setObject(const int &line, const int &col, GameObject &object){
     getElem(line, col) = object;
@@ -80,6 +81,7 @@ void Board::setBestScore(const int &score){
     bestScore = score;
 }
 
+void Board::setLimit(const int &newLimit){ limit = newLimit; }
 
 void Board::resize(const int &nbLine, const int &nbCol){
     gameBoard.resize(nbLine, std::vector<GameObject>(nbCol));
@@ -199,13 +201,13 @@ void loadBoard(Board &board, std::string file){
                 getline(temp, tempLine, ' ');
                 getline(temp, tempCol, ' ');
                 getline(temp, tempBestScore, ' ');
-                //getline(temp, tempLimit, ' ');
+                getline(temp, tempLimit, ' ');
                 int nbLine = std::stoi(tempLine);
                 int nbCol = std::stoi(tempCol);
                 int bestScore = std::stoi(tempBestScore);
-                //int limit = std::stoi(tempLimit);
+                int limit = std::stoi(tempLimit);
                 board.setBestScore(bestScore);
-                //board.setLimit(limit);
+                board.setLimit(limit);
                 boxSize = 600/nbLine;
                 board.resize(nbLine, nbCol);
 

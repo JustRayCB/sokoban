@@ -17,6 +17,7 @@ class Board{
     int totalTargets = 0;
     int stepCount = 0;
     int bestScore = 0;
+    int limit = 0;
 
     void copyFromOther(const Board &other){
         posPlayerLine = other.posPlayerLine;
@@ -44,6 +45,7 @@ public:
     int getBestScore();
     int getNbLine();
     int getNbCol();
+    int getLimit();
 
     void setEmpty(const int line, const int col); //Set the cell as empty
     void setObject(const int &line, const int &col, GameObject &object);
@@ -51,6 +53,7 @@ public:
     void setOnTarget(const Point& position, bool isBox);
     void removeFromTarget(const Point& position, bool isBox);
     void setBestScore(const int &score);
+    void setLimit(const int &limit);
 
 
     void resize(const int &nbLine, const int &nbCol);
