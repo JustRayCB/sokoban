@@ -146,7 +146,7 @@ public:
                     resetBoard();
                 }
                 if (!stopMove) {
-                    if (! board.isGameOver() and not(board.getLimit() == board.getStepCount())){
+                    if (! board.isGameOver() and not(board.getLimit() == board.getStepCount())){ //if limit != 0
                         controller.move(Fl::event_key());    
                         if (board.isGameOver()) { newBestScore(); }
                     }
@@ -178,7 +178,8 @@ public:
             myFile.close();
         }
         allLines[0] = std::to_string(board.getNbLine()) + " " + 
-            std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore());
+            std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore())
+            + std::to_string(board.getLimit());
         std::ofstream writeFile(currentFile);
         if (writeFile.is_open()) {
             for (auto &str : allLines) { writeFile << str << std::endl; }

@@ -4,8 +4,8 @@ FLAGS = -std=c++20 -Wall -Wextra -pedantic `fltk-config --ldflags` -g
 #FLAGS  += $(shell fltk-config --ldflags)
 
 #-fsanitize=undefined,leak,address -g 
-main: main.cpp display.o controller.o rectangle.o gameObject.o board.o  levelEditor.o
-	$(COMPILER) -o main main.cpp display.o rectangle.o gameObject.o board.o controller.o levelEditor.o $(FLAGS)
+main: main.cpp display.o controller.o rectangle.o gameObject.o board.o  levelEditor.o text.o
+	$(COMPILER) -o main main.cpp display.o rectangle.o gameObject.o board.o controller.o levelEditor.o text.o $(FLAGS)
 
 display.o: display.cpp display.hpp board.o
 	$(COMPILER) -c display.cpp  $(FLAGS)
@@ -25,6 +25,9 @@ rectangle.o: rectangle.cpp rectangle.hpp
 
 levelEditor.o: levelEditor.cpp levelEditor.hpp
 	$(COMPILER) -c levelEditor.cpp $(FLAGS)
+
+text.o: text.cpp text.hpp
+	$(COMPILER) -c text.cpp $(FLAGS)
 
 clean:
 	rm *.o

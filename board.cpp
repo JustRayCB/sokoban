@@ -205,7 +205,7 @@ void loadBoard(Board &board, std::string file){
                 int nbLine = std::stoi(tempLine);
                 int nbCol = std::stoi(tempCol);
                 int bestScore = std::stoi(tempBestScore);
-                int limit = std::stoi(tempLimit);
+                int limit = std::stoi(tempLimit); //if error set limit = 0
                 board.setBestScore(bestScore);
                 board.setLimit(limit);
                 boxSize = 600/nbLine;
