@@ -26,6 +26,7 @@
 #include "board.hpp"
 #include "display.hpp"
 #include "controller.hpp"
+#include "levelEditor.hpp"
 
 
 void configChoice(Fl_Choice *choice){
@@ -42,25 +43,7 @@ void configChoice(Fl_Choice *choice){
 }
 void updateWelcomeMessageCB(void *data);
 
-// class LevelEditorWindow : public Fl_Window {
-//     public:
-//         LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor") {
-//             std::cout << "Welcome" << std::endl;
-//         }
-// };
 
-void generateButtonEditor(){
-    Fl_Window* editor = new Fl_Window (000,000,1000,975,"Editor");
-    Fl_Input* colInput = new Fl_Input (150, 10, 50, 20, "Number of columns: ");
-    Fl_Input* lineInput = new Fl_Input (150, 30, 50, 20, "Number of lines: ");
-    editor->show();
-    colInput->show();
-    lineInput->show();
-
-    if (colInput->value() != "" and lineInput->value() != "") {
-        std::cout << "HIIII" << std::endl;
-    }
-}
 
 class MainWindow : public Fl_Window {
     Board board;

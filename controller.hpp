@@ -28,7 +28,7 @@ public:
     //Possible moves without a box
     void emptyPlayerToEmpty(int keyCode);
     void emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
-    void targetPlayerToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void targetPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     
 
