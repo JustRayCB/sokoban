@@ -71,11 +71,4 @@ LevelEditorWindow::LevelEditorWindow() : Fl_Window(1000, 975, "Editor"){
     //     }
     //     return 0;
     // }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 77966dc (New LevelEditorWindow)
-
-void generateButtonEditor();
 #endif
