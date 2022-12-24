@@ -18,6 +18,7 @@
 #include <Fl/Fl_Choice.H>
 #include <memory.h>
 
+
 class LevelEditorWindow : public Fl_Window {
 private:
     Fl_Button* submitButton;
@@ -29,14 +30,27 @@ private:
  public:
     //LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor");
     LevelEditorWindow();
-    ~LevelEditorWindow(){
-        std::cout << "Destroying LevelEditorWindow" << std::endl;
-        delete submitButton;
-        delete lineInput;
-        delete colInput;
-    }
+    virtual ~LevelEditorWindow() {};
 };
 
+void LevelEditorWindow::bouton_callback(){
+    printf("%s", colInput->value());
+    printf("%s", lineInput->value());
+}
+
+void LevelEditorWindow::static_bouton_callback(Fl_Widget* w, void* ptr){
+    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
+    me->bouton_callback();
+}
+
+LevelEditorWindow::LevelEditorWindow() : Fl_Window(1000, 975, "Editor"){
+    submitButton = new Fl_Button(150, 50, 50, 20, "Submit");
+    lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
+    colInput = new Fl_Input(150, 10, 50, 20, "Number of columns: ");
+    submitButton->callback(static_bouton_callback, this);
+    end();
+    show();
+}
     // int handle(int event) override {
     //     switch(event) {
     //         case FL_PUSH:{
@@ -57,8 +71,11 @@ private:
     //     }
     //     return 0;
     // }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 77966dc (New LevelEditorWindow)
 
 void generateButtonEditor();
 #endif
