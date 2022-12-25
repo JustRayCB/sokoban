@@ -179,7 +179,7 @@ public:
             myFile.close();
         }
         allLines[0] = std::to_string(board.getNbLine()) + " " + 
-            std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore())
+            std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore()) + " "
             + std::to_string(board.getLimit());
         std::ofstream writeFile(currentFile);
         if (writeFile.is_open()) {
