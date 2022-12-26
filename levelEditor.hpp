@@ -41,6 +41,7 @@ private:
     virtual ~LevelEditorWindow() {};
     void setCanva(Canvas canva);
     void draw() override; 
+    int handle(int event) override;
 };
 
 //void LevelEditorWindow::bouton_callback(){
