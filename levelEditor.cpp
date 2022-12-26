@@ -8,9 +8,11 @@ void generateButtonEditor(){
 }
 
 void LevelEditorWindow::bouton_callback(){
-    std::cout << "Hi" << std::endl;
-    std::cout << "Number of lines: " << lineInput->value() << std::endl;
-    std::cout << "Number of columns: " << colInput->value() << std::endl;
+    int test1 = atoi(lineInput->value());
+    int test2 = atoi(colInput->value());
+    Canvas newCanvas = Canvas(atoi(colInput->value()), atoi(lineInput->value()));
+    this->setCanva(newCanvas);
+    this->redraw();
 }
 
 void LevelEditorWindow::static_bouton_callback(Fl_Widget* w, void* ptr){
@@ -25,4 +27,13 @@ LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level E
     submitButton->callback(static_bouton_callback, this);
     end();
     show();
+}
+
+void LevelEditorWindow::setCanva(Canvas canva){
+    canvas = canva;
+}
+
+void LevelEditorWindow::draw() {
+    Fl_Window::draw();
+    canvas.draw();
 }

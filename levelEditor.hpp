@@ -24,6 +24,7 @@
 #include <Fl/Fl_Choice.H>
 #include <memory.h>
 
+#include "grid.hpp"
 
 class LevelEditorWindow : public Fl_Window {
 private:
@@ -32,11 +33,14 @@ private:
     Fl_Input* colInput;
     void bouton_callback();
     static void static_bouton_callback(Fl_Widget* w, void* ptr);
+    Canvas canvas;
 
  public:
     //LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor");
     LevelEditorWindow();
     virtual ~LevelEditorWindow() {};
+    void setCanva(Canvas canva);
+    void draw() override; 
 };
 
 //void LevelEditorWindow::bouton_callback(){
