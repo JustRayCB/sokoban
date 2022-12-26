@@ -10,6 +10,8 @@ void generateButtonEditor(){
 void LevelEditorWindow::bouton_callback(){
     int test1 = atoi(lineInput->value());
     int test2 = atoi(colInput->value());
+    std::cout << "line :" << test1 << std::endl;
+    std::cout << "col :" << test2 << std::endl;
     Canvas newCanvas = Canvas(atoi(colInput->value()), atoi(lineInput->value()));
     this->setCanva(newCanvas);
     this->redraw();
@@ -44,7 +46,22 @@ int LevelEditorWindow::handle(int event) {
             canvas.mouseMove(Point{Fl::event_x(), Fl::event_y()});
             return 1;
         case FL_PUSH:
-            canvas.mouseClick(Point{Fl::event_x(), Fl::event_y()});
+            if (Fl::event_x() <= lineInput->x()+lineInput->w() and Fl::event_x() >=lineInput->x() 
+                        and Fl::event_y() <= lineInput->y()+lineInput->h() and Fl::event_y() >=lineInput->y()) {
+                lineInput->handle(event);
+                
+            }
+            else if (Fl::event_x() <= submitButton->x()+submitButton->w() and Fl::event_x() >=submitButton->x() 
+                        and Fl::event_y() <= submitButton->y()+submitButton->h() and Fl::event_y() >=submitButton->y()) {
+                submitButton->do_callback();
+            }
+            else if (Fl::event_x() <= colInput->x()+colInput->w() and Fl::event_x() >=colInput->x() 
+                        and Fl::event_y() <= colInput->y()+colInput->h() and Fl::event_y() >=colInput->y()) {
+                colInput->handle(event);
+            }
+            else{
+                canvas.mouseClick(Point{Fl::event_x(), Fl::event_y()});
+            }
             return 1;
     }
     return 0;
