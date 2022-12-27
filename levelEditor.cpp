@@ -98,17 +98,17 @@ bool LevelEditorWindow::checkWallAllAround() {
             return false;
         }
     } 
-    for (int i=canvas.getCells().size()-1; i >= canvas.getCells().size()-canvas.getNumberOfColumns() ; i--) {
+    for (int i=canvas.getCells().size()-1; i >= static_cast<int>(canvas.getCells().size()-canvas.getNumberOfColumns()) ; i--) {
         if (not (canvas.getCells()[i].getCurrent() == 1)) {
             return false;
         }
     }
-    for (int i=canvas.getNumberOfLines()-1; i<=canvas.getCells().size(); i+=canvas.getNumberOfColumns()) {
+    for (int i=canvas.getNumberOfLines()-1; i<=static_cast<int>(canvas.getCells().size()); i+=canvas.getNumberOfColumns()) {
         if (not (canvas.getCells()[i].getCurrent() == 1)) {
             return false;
         }
     }
-    for (int i=0; i<=canvas.getCells().size()-canvas.getNumberOfLines()+1; i+=canvas.getNumberOfColumns()) {
+    for (int i=0; i<=static_cast<int>(canvas.getCells().size()-canvas.getNumberOfLines()+1); i+=canvas.getNumberOfColumns()) {
         if (not (canvas.getCells()[i].getCurrent() == 1)) {
             return false;
         }
@@ -118,7 +118,7 @@ bool LevelEditorWindow::checkWallAllAround() {
 
 bool LevelEditorWindow::onlyOnePlayer() {
     int count = 0;
-    for (int i=0; i <= canvas.getCells().size();i++){
+    for (int i=0; i <= static_cast<int>(canvas.getCells().size());i++){
         if (canvas.getCells()[i].getCurrent() == 3) {
             count++;
         }
