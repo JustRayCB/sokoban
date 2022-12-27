@@ -17,7 +17,6 @@
 
 class Cell {
   Rectangle r;
-  bool isWall = false;
   int current = 0;
  public:
   Cell(Point center, int w, int h);
@@ -30,7 +29,7 @@ class Cell {
 class Canvas {
     int nbLine = 10;
     int nbCol = 10;
-    std::vector<Cell> cells;
+    std::vector<std::vector<Cell>> cells;
  public:
   Canvas(int nbLine=10, int nbCol=10);
   void draw();
@@ -43,7 +42,7 @@ class Canvas {
   void setNumberOfColumns(int colNumber);
   int getNumberOfLines();
   int getNumberOfColumns();
-  std::vector<Cell> getCells();
+  std::vector<std::vector<Cell>> getCells();
 
 };
 

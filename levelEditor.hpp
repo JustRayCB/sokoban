@@ -23,6 +23,7 @@
 #include <vector>
 #include <Fl/Fl_Choice.H>
 #include <memory.h>
+#include <fstream>
 
 #include "grid.hpp"
 
@@ -32,6 +33,7 @@ private:
     Fl_Button* addButton;
     Fl_Input* lineInput;
     Fl_Input* colInput;
+    Fl_Input* levelName;
     void bouton_callback();
     void adding_bouton_callback();
     static void static_bouton_callback(Fl_Widget* w, void* ptr);
@@ -48,7 +50,11 @@ private:
 
     bool isGridValid();
     bool onlyOnePlayer();
-    bool checkWallAllAround();
+    bool evenBoxAndTargets();
+
+    void addLevelToLevels();
+    void convertCanvaToTextFile();
+    // bool checkWallAllAround();
 };
 
 //void LevelEditorWindow::bouton_callback(){

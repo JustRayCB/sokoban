@@ -45,23 +45,39 @@ int Cell::getCurrent() {
 
 Canvas::Canvas(int nbColone, int nbLigne) {
     int size = std::min(500/nbColone, 500/nbLigne);
-    for(int i=0; i < nbLigne; i++){
-        for(int j=0; j < nbColone; j++){
-            cells.push_back(Cell{Point{(size/2)+i*size, (200+size/2)+j*size}, size, size});
+    std::cout << "lignes= " << nbLigne << " colonnes= " << nbColone << std::endl;
+    std::cout << "test" << std::endl;
+    for(int i=0; i < nbLigne-1; i++){
+        std::vector<Cell> innerVec;
+        for(int j=0; j < nbColone-1; j++){
+            std::cout << j << std::endl;
+            innerVec.push_back(Cell{Point{(size/2)+i*size, (200+size/2)+j*size}, size, size});
         }
+        cells.push_back(innerVec);
     }
+    std::cout << "testfini" << std::endl;
 }
 
 void Canvas::draw() {
     for (auto &c:cells) {
-        c.draw();
+        for (auto &cc:c) {
+            cc.draw();
+        }
     }
 }
 void Canvas::mouseMove(Point mouseLoc) {
-  for (auto &c:cells) c.mouseMove(mouseLoc);
+  for (auto &c:cells) {
+    for (auto &cc:c) {
+        cc.mouseMove(mouseLoc);
+    }
+  }
 }
 void Canvas::mouseClick(Point mouseLoc) {
-  for (auto &c:cells) c.mouseClick(mouseLoc);
+  for (auto &c:cells) {
+    for (auto &cc:c) {
+        cc.mouseClick(mouseLoc);
+    }
+  }
 }
 void Canvas::setNumberOfColumns(int colNumber){
     nbCol = colNumber;
@@ -76,6 +92,6 @@ int Canvas::getNumberOfLines(){
     return nbLine;
 }
 
-std::vector<Cell> Canvas::getCells() {
+std::vector<std::vector<Cell>> Canvas::getCells() {
     return cells;
 }
