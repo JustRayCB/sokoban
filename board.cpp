@@ -135,8 +135,10 @@ bool Board::isEmpty(const int line, const int col){ return getElem(line, col).ge
 bool Board::isBox(const int line, const int col){ return getElem(line, col).getName() == "box";}
 bool Board::isTarget(const int line, const int col){ return getElem(line, col).getName() == "target";}
 bool Board::isInBoard(const int line, const int col){ 
-    return line < static_cast<int>(gameBoard.size())
-        and col < static_cast<int>(gameBoard[0].size());
+    bool res =  (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
+        (col < static_cast<int>(gameBoard[0].size()) and 0 <= col);
+    std::cout << res <<  " for : " << line << ", " << col << ")" << std::endl;
+    return res;
 }
 
 void Board::setOnTarget(const Point &position, bool isBox) {
