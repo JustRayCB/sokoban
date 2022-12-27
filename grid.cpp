@@ -18,19 +18,29 @@ void Cell::mouseMove(Point mouseLoc) {
     }
 }
 
-void Cell::mouseClick(Point mouseLoc) {
-  if (r.contains(mouseLoc)) {
-      if (current == 0) {
-          r.setFillColor(FL_WHITE);
-          current++;
-      } else if (current == 1) {
-          r.setFillColor(FL_YELLOW);
-          current++;
-      } else if (current == 2) {
-          r.setFillColor(FL_BLUE);
-          current -= 2;
-      }
-  }
+void Cell::mouseClick(Point mouseLoc) { 
+    if (r.contains(mouseLoc)) {
+        if (current == 0) {
+            r.setFillColor(FL_BLUE);
+            current++;
+        } else if (current == 1) {
+            r.setFillColor(FL_YELLOW);
+            current++;
+        } else if (current == 2) {
+            r.setFillColor(FL_GREEN);
+            current++;
+        } else if (current == 3) {
+            r.setFillColor(FL_MAGENTA);
+            current++;
+        } else if (current == 4) {
+            r.setFillColor(FL_WHITE);
+            current -= 4;
+        }
+    }
+}
+
+int Cell::getCurrent() {
+    return current;
 }
 
 Canvas::Canvas(int nbColone, int nbLigne) {
@@ -64,4 +74,8 @@ int Canvas::getNumberOfColumns(){
 }
 int Canvas::getNumberOfLines(){
     return nbLine;
+}
+
+std::vector<Cell> Canvas::getCells() {
+    return cells;
 }

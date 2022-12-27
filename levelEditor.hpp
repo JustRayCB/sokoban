@@ -29,10 +29,13 @@
 class LevelEditorWindow : public Fl_Window {
 private:
     Fl_Button* submitButton;
+    Fl_Button* addButton;
     Fl_Input* lineInput;
     Fl_Input* colInput;
     void bouton_callback();
+    void adding_bouton_callback();
     static void static_bouton_callback(Fl_Widget* w, void* ptr);
+    static void static_addingbouton_callback(Fl_Widget* w, void* ptr);
     Canvas canvas;
 
  public:
@@ -42,6 +45,10 @@ private:
     void setCanva(Canvas canva);
     void draw() override; 
     int handle(int event) override;
+
+    bool isGridValid();
+    bool onlyOnePlayer();
+    bool checkWallAllAround();
 };
 
 //void LevelEditorWindow::bouton_callback(){
