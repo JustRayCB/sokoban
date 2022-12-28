@@ -189,6 +189,7 @@ bool Board::isGameOver() {
 
 
 void loadBoard(Board &board, std::string file){
+    std::cout << "HERE" << std::endl;
     std::ifstream myFile (file);
     int idx = 0;
     std::string lineS;
@@ -215,8 +216,16 @@ void loadBoard(Board &board, std::string file){
 
             }
             std::getline(myFile, lineS);
-            for (char &letter :  lineS) {
-                board.configBoard(line, col, letter, boxSize);
+            // for (char &letter :  lineS) {
+            //     std::cout << letter << std::endl;
+            //     board.configBoard(line, col, letter, boxSize);
+            //     col++;
+            // }
+            std::cout << lineS << "size=" << lineS.size() << std::endl;
+            for(int i=0; i<lineS.size(); i++) {
+                std::cout << i << std::endl;
+                std::cout << lineS[i] << std::endl;
+                board.configBoard(line, col, lineS[i], boxSize);
                 col++;
             }
             col=0;

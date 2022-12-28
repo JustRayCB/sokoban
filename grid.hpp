@@ -31,7 +31,7 @@ class Canvas {
     int nbCol = 10;
     std::vector<std::vector<Cell>> cells;
  public:
-  Canvas(int nbLine=10, int nbCol=10);
+  Canvas(int nbCol=10, int nbLine=10);
   void draw();
   void mouseMove(Point mouseLoc);
   void mouseClick(Point mouseLoc);
