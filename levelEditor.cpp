@@ -9,7 +9,7 @@ void generateButtonEditor(){
 
 void LevelEditorWindow::bouton_callback(){
     if ((atoi(lineInput->value()) > 2) and ((atoi(colInput->value()) > 2))) {
-        Canvas newCanvas = Canvas(atoi(lineInput->value()), atoi(colInput->value()));
+        Canvas newCanvas = Canvas(atoi(colInput->value()),atoi(lineInput->value()));
         newCanvas.setNumberOfColumns(atoi(colInput->value()));
         newCanvas.setNumberOfLines(atoi(lineInput->value()));
         this->setCanva(newCanvas);
@@ -128,9 +128,15 @@ int LevelEditorWindow::handle(int event) {
 // }
 
 bool LevelEditorWindow::onlyOnePlayer() {
+    std::cout << "ENTERING ONLYONEPLAYER" << std::endl;
+    std::cout << "lineInput: " << canvas.getNumberOfLines() << std::endl;
+    std::cout << "colInput: " << canvas.getNumberOfColumns() << std::endl;
+    std::cout << "lineCells: " << canvas.getCells().size() << std::endl;
+    std::cout << "colCells: " << canvas.getCells()[0].size() << std::endl; 
     int count = 0;
     for (int i=0; i < canvas.getNumberOfLines();i++){
         for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
+            std::cout << "i=" << i << " j=" << j << std::endl;
             if (canvas.getCells()[i][j].getCurrent() == 3) {
                 count++;
             }
@@ -176,13 +182,16 @@ bool LevelEditorWindow::isGridValid() {
 }
 
 void LevelEditorWindow::convertCanvaToTextFile() {
-
+    std::cout << "ENTERING CONVERT" << std::endl;
     std::ifstream allRead("lvls/all.txt");
+    std::cout << "READED ALL.TXT" << std::endl;
     std::string line;
     int counter = 0;
-
-    while(std::getline(allRead, line))
+    std::cout << "ENTERING WHILE LOOP" << std::endl;
+    while(std::getline(allRead, line)) {
+        std::cout << counter << std::endl;
         counter++;
+    }
     
     std::string directory = "lvls/";
     std::string filingName = "lvl";
@@ -191,18 +200,18 @@ void LevelEditorWindow::convertCanvaToTextFile() {
     directory += ".txt";
     std::cout << directory << std::endl;
     std::ofstream fw(directory, std::ofstream::out);
-    fw << canvas.getNumberOfColumns() << " " << canvas.getNumberOfLines() << " 0 " << movesLimit->value() << "\n";
+    fw << canvas.getNumberOfLines() << " " << canvas.getNumberOfColumns() << " 0 " << movesLimit->value() << "\n";
     for (int i=0; i < canvas.getNumberOfLines();i++) {
         for (int j=0; j < canvas.getNumberOfColumns();j++) {
-            if (canvas.getCells()[j][i].getCurrent() == 0) {
+            if (canvas.getCells()[i][j].getCurrent() == 0) {
                 fw << " ";
-            } else if (canvas.getCells()[j][i].getCurrent() == 1) {
+            } else if (canvas.getCells()[i][j].getCurrent() == 1) {
                 fw << "#";
-            } else if (canvas.getCells()[j][i].getCurrent() == 2) {
+            } else if (canvas.getCells()[i][j].getCurrent() == 2) {
                 fw << "$";
-            } else if (canvas.getCells()[j][i].getCurrent() == 3) {
+            } else if (canvas.getCells()[i][j].getCurrent() == 3) {
                 fw << "@";
-            } else if (canvas.getCells()[j][i].getCurrent() == 4) {
+            } else if (canvas.getCells()[i][j].getCurrent() == 4) {
                 fw << ".";
             }
         }
