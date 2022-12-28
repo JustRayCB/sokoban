@@ -2,6 +2,7 @@
 #define _CONTROLLER_HPP
 
 #include "board.hpp"
+#include <string>
 
 class Controll{
     Board *board = nullptr;
@@ -13,6 +14,8 @@ public:
     void moveBox(int keyCode, int boxPosX, int boxPosY);
     void move(int keyCode);
 
+    void setDeltas(int &keycode, int &xVector, int &yVector, int &deltaX, 
+        int &deltaY, const int &boxSize, std::string &move);
     void boxTargetToEmpty(GameObject &box);
 
     //Possible moves with a box

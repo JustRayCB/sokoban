@@ -10,38 +10,44 @@ void Controll::setBoard(Board *myBoard){
     board = myBoard;
 }
 
+void Controll::setDeltas(int &keyCode, int &xVector, int &yVector, int &deltaX, 
+        int &deltaY, const int &boxSize, std::string &move){
+    if (keyCode == FL_Up or keyCode == 'z') {xVector--; deltaY-=boxSize; move = "up";}
+    else if (keyCode == FL_Left or keyCode == 'q') {yVector--; deltaX-=boxSize; move = "left";}
+    else if (keyCode == FL_Down or keyCode == 's') {xVector++; deltaY+=boxSize; move = "down";}
+    else if (keyCode == FL_Right or keyCode == 'd') {yVector++; deltaX+=boxSize; move = "right";}
+
+}
 
 void Controll::movePlayer(int keyCode){
     int newX = board->getPosX(), newY = board->getPosY();
     GameObject *tmp = &board->getElem(newX, newY);
-    const Point playerPosFltk = tmp->getPosFltk();
     const int boxSize = tmp->getSize();
-    int deltaX = 0, deltaY = 0;
-    if (keyCode == FL_Up or keyCode == 'z') {newX--; deltaY-=boxSize;}
-    else if (keyCode == FL_Left or keyCode == 'q') {newY--; deltaX-=boxSize;}
-    else if (keyCode == FL_Down or keyCode == 's') {newX++; deltaY+=boxSize;}
-    else if (keyCode == FL_Right or keyCode == 'd') {newY++; deltaX+=boxSize;}
+    int deltaX = 0, deltaY = 0; std::string move = "";
+    setDeltas(keyCode, newX, newY, deltaX, deltaY, boxSize, move);
 
-    tmp->setPos(playerPosFltk.x + deltaX, playerPosFltk.y+deltaY);
-    tmp->getRectangle().setCenter(tmp->getPosFltk());
     board->movePlayerInVector(newX, newY);
+    tmp = &board->getElem(newX, newY);
+    tmp->setMove(move);
+    tmp->addAnimation();
+
 }
 
 
 void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
     const int oldX = boxPosX, oldY = boxPosY;
     GameObject *tmp = &board->getElem(boxPosX, boxPosY);
-    const Point boxPosFltk = tmp->getPosFltk();
+    //const Point boxPosFltk = tmp->getPosFltk();
     const int boxSize = tmp->getSize();
-    int deltaX = 0, deltaY = 0;
-    if (keyCode == FL_Up or keyCode == 'z') {boxPosX--; deltaY-=boxSize;}
-    else if (keyCode == FL_Left or keyCode == 'q') {boxPosY--; deltaX-=boxSize;}
-    else if (keyCode == FL_Down or keyCode == 's') {boxPosX++; deltaY+=boxSize;}
-    else if (keyCode == FL_Right or keyCode == 'd') {boxPosY++; deltaX+=boxSize;}
+    int deltaX = 0, deltaY = 0; std::string move = "";
+    setDeltas(keyCode, boxPosX, boxPosY, deltaX, deltaY, boxSize, move);
 
-    tmp->setPos(boxPosFltk.x+deltaX, boxPosFltk.y+deltaY);
-    tmp->getRectangle().setCenter(tmp->getPosFltk());
+    //tmp->setPosFltk(boxPosFltk.x+deltaX, boxPosFltk.y+deltaY);
     board->movBoxInVector(boxPosX, boxPosY, oldX, oldY);
+    tmp = &board->getElem(boxPosX, boxPosY);
+    tmp->setMove(move);
+    tmp->addAnimation();
+
 }
 
 
@@ -51,7 +57,6 @@ void Controll::emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int
 }
 
 void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
-    std::cout << "Case: \t1" << std::endl;
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
@@ -59,7 +64,6 @@ void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, in
 }
 
 void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
-    std::cout << "Case:\t2" << std::endl;
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
@@ -68,7 +72,6 @@ void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, in
 }
 
 void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
-    std::cout << "Case:\t3" << std::endl;
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
@@ -77,7 +80,6 @@ void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, i
 }
 
 void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
-    std::cout << "Case:\t4" << std::endl;
     board->removeFromTarget(Point{position.x, position.y}, false);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
@@ -87,7 +89,6 @@ void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, in
 }
 
 void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
-    std::cout << "Case:\t5" << std::endl;
     board->removeFromTarget(Point{position.x, position.y}, false);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
@@ -99,7 +100,6 @@ void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, i
 }
 
 void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
-    std::cout << "Case:\t6" << std::endl;
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     board->removeFromTarget(Point{position.x, position.y}, false);
@@ -112,7 +112,6 @@ void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, i
 }
 
 void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
-    std::cout << "Case:\t7" << std::endl;
     board->removeFromTarget(Point{position.x, position.y}, false);
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);

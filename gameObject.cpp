@@ -73,6 +73,7 @@ void GameObject::setMove(std::string newMove){
 
 void GameObject::addAnimation(){
     if (not animation) {
+        std::cout << "Animation to : " << name << std::endl;
         animation = new Animation(this, move);
     }
 }

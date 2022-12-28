@@ -137,7 +137,6 @@ bool Board::isTarget(const int line, const int col){ return getElem(line, col).g
 bool Board::isInBoard(const int line, const int col){ 
     bool res =  (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
         (col < static_cast<int>(gameBoard[0].size()) and 0 <= col);
-    std::cout << res <<  " for : " << line << ", " << col << ")" << std::endl;
     return res;
 }
 
@@ -152,11 +151,8 @@ void Board::setOnTarget(const Point &position, bool isBox) {
 }
 
 void Board::removeFromTarget(const Point &position, bool isBox){
-    std::cout << "Entering" << std::endl;
     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
-        std::cout << "(" << pos.x << "," << pos.y << ")" << " ?= " << "(" << position.x << "," << position.y << ")" <<std::endl;
         if (pos == position){
-            std::cout << "Pos : (" << pos.x << "," << pos.y << ")" << std::endl;
             if (isBox){boolBox = false;}
             else {boolPlayer = false;}
             break;
@@ -189,7 +185,6 @@ bool Board::isGameOver() {
 
 
 void loadBoard(Board &board, std::string file){
-    std::cout << "HERE" << std::endl;
     std::ifstream myFile (file);
     int idx = 0;
     std::string lineS;
@@ -216,18 +211,10 @@ void loadBoard(Board &board, std::string file){
 
             }
             std::getline(myFile, lineS);
-            // for (char &letter :  lineS) {
-            //     std::cout << letter << std::endl;
-            //     board.configBoard(line, col, letter, boxSize);
-            //     col++;
-            // }
-            std::cout << lineS << "size=" << lineS.size() << std::endl;
-            for(int i=0; i<lineS.size(); i++) {
-                std::cout << i << std::endl;
-                std::cout << lineS[i] << std::endl;
-                board.configBoard(line, col, lineS[i], boxSize);
-                col++;
-            }
+             for (char &letter :  lineS) {
+                 board.configBoard(line, col, letter, boxSize);
+                 col++;
+             }
             col=0;
             line++;idx++;
         }
