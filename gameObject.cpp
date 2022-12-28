@@ -42,6 +42,7 @@ std::string GameObject::whichMove() const{
 
 void GameObject::setPosFltk(int x, int y){
     pos.x = x; pos.y = y;
+    myRectangle.setCenter(pos);
 }
 
 void GameObject::setPosAfterMove(){
@@ -73,7 +74,6 @@ void GameObject::setMove(std::string newMove){
 
 void GameObject::addAnimation(){
     if (not animation) {
-        std::cout << "Animation to : " << name << std::endl;
         animation = new Animation(this, move);
     }
 }

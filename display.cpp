@@ -4,6 +4,7 @@
 
 #include "board.hpp"
 #include "display.hpp"
+#include "gameObject.hpp"
 #include "text.hpp"
 
 DisplayBoard::DisplayBoard(Board &board): board(&board){
@@ -33,7 +34,7 @@ void DisplayBoard::draw(){
         status.setString("You won !!");
         //if limit != 0
         Text remain{std::to_string(board->getLimit()-board->getStepCount()) + 
-                " steps remainings", {840, 300}};
+                " steps remainings", {850, 300}};
         remain.draw();
     } 
     else if (board->getStepCount()==board->getLimit() and not board->isGameOver()) {
