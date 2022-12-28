@@ -45,17 +45,14 @@ int Cell::getCurrent() {
 
 Canvas::Canvas(int nbColone, int nbLigne) {
     int size = std::min(500/nbColone, 500/nbLigne);
-    std::cout << "lignes= " << nbLigne << " colonnes= " << nbColone << std::endl;
-    std::cout << "test" << std::endl;
-    for(int i=0; i < nbLigne-1; i++){
+    for(int i=0; i < nbLigne; i++){
         std::vector<Cell> innerVec;
-        for(int j=0; j < nbColone-1; j++){
+        for(int j=0; j < nbColone; j++){
             std::cout << j << std::endl;
             innerVec.push_back(Cell{Point{(size/2)+i*size, (200+size/2)+j*size}, size, size});
         }
         cells.push_back(innerVec);
     }
-    std::cout << "testfini" << std::endl;
 }
 
 void Canvas::draw() {

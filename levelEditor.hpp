@@ -34,6 +34,7 @@ private:
     Fl_Input* lineInput;
     Fl_Input* colInput;
     Fl_Input* levelName;
+    Fl_Input* movesLimit;
     void bouton_callback();
     void adding_bouton_callback();
     static void static_bouton_callback(Fl_Widget* w, void* ptr);

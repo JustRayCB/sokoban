@@ -22,7 +22,7 @@ void LevelEditorWindow::bouton_callback(){
 void LevelEditorWindow::adding_bouton_callback(){
     if (isGridValid() and evenBoxAndTargets()) {
         std::cout << "GOOD GRID" << std::endl;
-
+        convertCanvaToTextFile();
     } else {
         std::cout << "BAD GRID" << std::endl;
     }
@@ -38,11 +38,12 @@ void LevelEditorWindow::static_addingbouton_callback(Fl_Widget* w, void* ptr){
 }
 
 LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor"){
-    submitButton = new Fl_Button(150, 70, 50, 20, "Submit");
+    submitButton = new Fl_Button(150, 90, 50, 20, "Submit");
     addButton = new Fl_Button(300, 20, 100, 30, "Add Level");
     lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
     colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
     levelName = new Fl_Input(150, 10, 100, 20, "Name of level: ");
+    movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
     submitButton->callback(static_bouton_callback, this);
     addButton->callback(static_addingbouton_callback, this);
     end();
@@ -82,9 +83,13 @@ int LevelEditorWindow::handle(int event) {
                         and Fl::event_y() <= addButton->y()+addButton->h() and Fl::event_y() >=addButton->y()) {
                 addButton->do_callback();
             }
-            if (Fl::event_x() <= levelName->x()+levelName->w() and Fl::event_x() >=levelName->x() 
+            else if (Fl::event_x() <= levelName->x()+levelName->w() and Fl::event_x() >=levelName->x() 
                         and Fl::event_y() <= levelName->y()+levelName->h() and Fl::event_y() >=levelName->y()) {
                 levelName->handle(event);   
+            }
+            else if (Fl::event_x() <= movesLimit->x()+movesLimit->w() and Fl::event_x() >=movesLimit->x() 
+                        and Fl::event_y() <= movesLimit->y()+movesLimit->h() and Fl::event_y() >=movesLimit->y()) {
+                movesLimit->handle(event);   
             }
             else{
                 canvas.mouseClick(Point{Fl::event_x(), Fl::event_y()});
@@ -123,10 +128,9 @@ int LevelEditorWindow::handle(int event) {
 // }
 
 bool LevelEditorWindow::onlyOnePlayer() {
-    std::cout << "HEY" << std::endl;
     int count = 0;
-    for (int i=0; i <= canvas.getNumberOfLines();i++){
-        for (int j = 0; j <= canvas.getNumberOfColumns(); j++) {
+    for (int i=0; i < canvas.getNumberOfLines();i++){
+        for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
             if (canvas.getCells()[i][j].getCurrent() == 3) {
                 count++;
             }
@@ -146,8 +150,8 @@ bool LevelEditorWindow::onlyOnePlayer() {
 bool LevelEditorWindow::evenBoxAndTargets() {
     int countBox = 0;
     int countTargets = 0;
-    for (int i=0; i <= canvas.getNumberOfLines();i++) {
-        for (int j=0; j <= canvas.getNumberOfColumns();j++){
+    for (int i=0; i < canvas.getNumberOfLines();i++) {
+        for (int j=0; j < canvas.getNumberOfColumns();j++){
             if (canvas.getCells()[i][j].getCurrent() == 4) {
                 countTargets++;
             }
@@ -171,29 +175,44 @@ bool LevelEditorWindow::isGridValid() {
     return false;
 }
 
-// void LevelEditorWindow::convertCanvaToTextFile() {
-//     std::string directory = "lvls\"";
-//     directory += levelName->value();
-//     directory += ".txt";
-//     std::ofstream fw(directory, std::ofstream::out);
-//     for (int i=0; i <= canvas.getNumberOfLines();i++) {
-//         for (int j=0; j <= canvas.getNumberOfColumns();j++) {
-//             if (canvas.getCells()[i][j].getCurrent() == 0) {
-//                 fw << " ";
-//             } else if (canvas.getCells()[i][j].getCurrent() == 1) {
-//                 fw << "#";
-//             } else if (canvas.getCells()[i][j].getCurrent() == 2) {
-//                 fw << "$";
-//             } else if (canvas.getCells()[i][j].getCurrent() == 3) {
-//                 fw << "@";
-//             } else if (canvas.getCells()[i][j].getCurrent() == 4) {
-//                 fw << ".";
-//             }
-//             if 
-//         }
-//     }
-// }
+void LevelEditorWindow::convertCanvaToTextFile() {
 
-// void LevelEditorWindow::addLevelToLevels() {
+    std::ifstream allRead("lvls/all.txt");
+    std::string line;
+    int counter = 0;
 
-// }
+    while(std::getline(allRead, line))
+        counter++;
+    
+    std::string directory = "lvls/";
+    std::string filingName = "lvl";
+    filingName += std::to_string(counter+1);
+    directory += filingName;
+    directory += ".txt";
+    std::cout << directory << std::endl;
+    std::ofstream fw(directory, std::ofstream::out);
+    fw << canvas.getNumberOfColumns() << " " << canvas.getNumberOfLines() << " 0 " << movesLimit->value() << "\n";
+    for (int i=0; i < canvas.getNumberOfLines();i++) {
+        for (int j=0; j < canvas.getNumberOfColumns();j++) {
+            if (canvas.getCells()[j][i].getCurrent() == 0) {
+                fw << " ";
+            } else if (canvas.getCells()[j][i].getCurrent() == 1) {
+                fw << "#";
+            } else if (canvas.getCells()[j][i].getCurrent() == 2) {
+                fw << "$";
+            } else if (canvas.getCells()[j][i].getCurrent() == 3) {
+                fw << "@";
+            } else if (canvas.getCells()[j][i].getCurrent() == 4) {
+                fw << ".";
+            }
+        }
+        fw << "\n";
+    }
+    std::ofstream allWrite("lvls/all.txt", std::ofstream::app);
+    allWrite << filingName << "\n";
+    std::cout << "ADDING FILE AS: " << filingName << std::endl;
+}
+
+void LevelEditorWindow::addLevelToLevels() {
+
+}
