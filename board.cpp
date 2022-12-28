@@ -92,7 +92,7 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
     //we start to display the board at 200,200
     
     int xGridFltk = 200+(col*size); 
-    int yGridFltk = 200+(line*size); 
+    int yGridFltk = 250+(line*size); 
 
     if (symbol == '@') {
         //Player
