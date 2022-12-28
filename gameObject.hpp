@@ -6,17 +6,25 @@
 
 #include "rectangle.hpp"
 
+class Animation;
+
 class GameObject{
     Point pos;
     int boxSize = 20;
     Rectangle myRectangle;
     std::string name = "";
+    std::string move = "";
+    Animation *animation = nullptr;
+
     
     void copyFromOther(const GameObject &other){
         pos = other.pos;
         boxSize = other.boxSize;
         myRectangle = other.myRectangle;
         name = other.name;
+        move = other.move;
+        animation = other.animation;
+
     }
 
 public:
@@ -31,49 +39,45 @@ public:
     int getSize() const;
     Rectangle &getRectangle() ;
     std::string getName() const;
+    std::string whichMove() const;
 
-    void setPos(int x, int y);
+    void setPosFltk(int x, int y);
+    void setPosAfterMove();
     void setName(std::string newName);
     void setColor(Fl_Color newFillColor);
     void setSize(int size);
+    void setMove(std::string newMove);
+    void addAnimation();
+
+    bool isComplete();
 
     void draw();
+    void drawWithoutAnimation();
 };
 
-//class GameObject{
-    //Player player;
-    //Wall wall;
-    //Box box;
-    //Target target;
-    //std::string name = "";
 
-//public:
-    ////GameObject(GameObjectType object, std::string name): object{object}, name{name}{}
-    //GameObject()=default;
-    //GameObject(const GameObject &other): player(other.player), wall(other.wall), box(other.box), target(other.target), name(other.name){}
-    //GameObject &operator=(const GameObject other){ 
-        //player = other.player; 
-        //wall = other.wall; 
-        //box = other.box;
-        //target = other.target;
-        //name = other.name;
-        //return *this;
-    //}
-    //void push(const Player &myPlayer){ player = myPlayer; name = "player";}
-    //void push(const Wall &myWall){ wall = myWall; name = "wall";}
-    //void push(const Box &myBox){ box = myBox; name = "box";}
-    //void push(const Target &myTarget){ target=myTarget; name="target";}
-    //void push(){ name = "empty";}
-    //std::string getName(){ return name;}
-    //Player *getPlayer(){ return &player;}
-    //Wall *getWall(){return &wall;}
-    //Box *getBox(){ return &box;}
-    //Target *getTarget(){return &target;}
+struct Translation {
+  Translation(Point p) {
+    fl_push_matrix();
+    fl_translate(p.x, p.y);
+  }
+  ~Translation() { fl_pop_matrix(); }
+};
 
-    //void draw();
 
-//};
+class Animation {
+ private:
+  const int     duration     = 10;
+  int           time{0};
+  GameObject *c;
+  std::string move = "";
 
+ public:
+  Animation(GameObject *cellToAnimate, std::string move) : c{cellToAnimate}, move{move} {}
+  void draw();
+  bool isComplete();
+  Point currentTranslation();
+};
 
 
 #endif
