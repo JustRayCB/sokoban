@@ -1,5 +1,6 @@
 #include <FL/Enumerations.H>
 #include <algorithm>
+#include <cstddef>
 #include <cstring>
 #include <fstream>
 #include <sstream>
@@ -92,7 +93,7 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
     //we start to display the board at 200,200
     
     int xGridFltk = 200+(col*size); 
-    int yGridFltk = 250+(line*size); 
+    int yGridFltk = 200+(line*size); 
 
     if (symbol == '@') {
         //Player
@@ -130,15 +131,16 @@ void Board::movBoxInVector(const int newX, const int newY, const int oldX, const
     setObject(newX, newY, getElem(oldX, oldY));
 }
 
-bool Board::isWall(const int line, const int col){ return getElem(line, col).getName() == "wall";}
-bool Board::isEmpty(const int line, const int col){ return getElem(line, col).getName() == "empty";}
-bool Board::isBox(const int line, const int col){ return getElem(line, col).getName() == "box";}
-bool Board::isTarget(const int line, const int col){ return getElem(line, col).getName() == "target";}
+bool Board::isWall(const int line, const int col){ return getElem(line, col).isWall();}
+bool Board::isEmpty(const int line, const int col){ return getElem(line, col).isEmpty();}
+bool Board::isBox(const int line, const int col){ return getElem(line, col).isBox();}
+bool Board::isTarget(const int line, const int col){ return getElem(line, col).isTarget();}
 bool Board::isInBoard(const int line, const int col){ 
     bool res =  (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
         (col < static_cast<int>(gameBoard[0].size()) and 0 <= col);
     return res;
 }
+bool Board::isLimitReached(){ return limit == stepCount; }
 
 void Board::setOnTarget(const Point &position, bool isBox) {
     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
@@ -169,7 +171,7 @@ bool Board::isOnTarget(const Point &position) {
     return false;
 }
 
-int Board::getTargetsCount() {
+int Board::getTargetsCount() const{
     int count = 0;
     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
         if (boolBox) {count++;}
@@ -177,9 +179,23 @@ int Board::getTargetsCount() {
     return count;
 }
 
+bool Board::hasWon() const{
+    return static_cast<size_t>(getTargetsCount()) == targetPos.size();
+}
+
 bool Board::isGameOver() {
-    if (static_cast<size_t>(getTargetsCount()) == targetPos.size())
+    if (hasWon()){
+        std::cout << "All box are on a target" << std::endl;
         return true;
+    }
+    else if (isLimitReached()){
+        std::cout << "The limit is reached\n";
+        return true;
+    }
+    else if (areBoxStuck()) {
+        std::cout << "The box are stuck, you cannot win the game anymore\n";
+        return true;
+    }
     return false;
 }
 
@@ -221,5 +237,47 @@ void loadBoard(Board &board, std::string file){
     }
 }
 
+bool Board::isBoxStuck(int &xVector, int &yVector){
+    std::vector<std::tuple<int, int>> coord = {{xVector+1, yVector}, {xVector-1, yVector},
+                                                {xVector, yVector+1},{xVector, yVector-1}};
+    bool upOk = false, downOk = false, leftOk = false, rightOk = false;    
+    GameObject *up = nullptr, *down = nullptr, *right = nullptr, *left = nullptr;
+    if (isInBoard(xVector, yVector-1)) { upOk = true; up = &getElem(xVector, yVector-1);}
+    if (isInBoard(xVector, yVector+1)) { downOk = true;  down = &getElem(xVector, yVector+1); }
+    if (isInBoard(xVector+1, yVector)) { rightOk = true; right = &getElem(xVector+1, yVector); }
+    if (isInBoard(xVector-1, yVector)) { leftOk = true; left = &getElem(xVector-1, yVector); }
+    bool onTarget = isOnTarget({xVector, yVector});
+    std::cout << "Box is on target : " << onTarget << std::endl;
+    if ((upOk and up->isWall())
+            and (rightOk and right->isWall()) and not onTarget) { return true; }    
+    else if ((upOk and up->isWall())
+            and (leftOk and left->isWall()) and not onTarget) { return true; }    
+    else if ((downOk and down->isWall())
+            and (rightOk and right->isWall()) and not onTarget) { return true; }    
+    else if ((downOk and down->isWall())
+            and (leftOk and left->isWall()) and not onTarget) { return true; }    
 
+    return false;
+}
+
+bool Board::areBoxStuck(){
+
+    int boxStuck = 0;
+    int totalBox = 0;
+
+    for (int line = 0; static_cast<std::size_t>(line) < gameBoard.size(); line++) {
+        for (int col = 0; static_cast<std::size_t>(col) < gameBoard.at(line).size(); col++) {
+            if (isBox(line, col)){
+                totalBox++;
+                if (isBoxStuck(line, col)) { boxStuck++; }
+            }
+        }
+    }
+
+    if (totalBox-boxStuck < totalTargets) {
+        return true;
+    }
+
+    return false;
+}
 

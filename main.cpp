@@ -147,9 +147,9 @@ public:
                     resetBoard();
                 }
                 if (!stopMove) {
-                    if (! board.isGameOver() and not(board.getLimit() == board.getStepCount())){ //if limit != 0
+                    if (! board.isGameOver()){ //if limit != 0
                         controller.move(Fl::event_key());    
-                        if (board.isGameOver()) { newBestScore(); }
+                        if (board.hasWon()) { newBestScore(); stopMove = 1;}
                     }
                     else { stopMove = 1; }
                 }

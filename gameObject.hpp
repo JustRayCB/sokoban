@@ -40,6 +40,11 @@ public:
     Rectangle &getRectangle() ;
     std::string getName() const;
     std::string whichMove() const;
+    bool isWall() const;
+    bool isBox() const ;
+    bool isPlayer() const;
+    bool isTarget() const;
+    bool isEmpty() const;
 
     void setPosFltk(int x, int y);
     void setPosAfterMove();
@@ -48,6 +53,7 @@ public:
     void setSize(int size);
     void setMove(std::string newMove);
     void addAnimation();
+
 
     bool isComplete();
 

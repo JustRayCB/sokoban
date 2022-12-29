@@ -40,6 +40,12 @@ std::string GameObject::whichMove() const{
     return move;
 }
 
+bool GameObject::isBox() const{ return name == "box"; }
+bool GameObject::isWall() const{ return name == "wall"; }
+bool GameObject::isPlayer() const{ return name == "player"; }
+bool GameObject::isTarget() const{ return name == "target"; }
+bool GameObject::isEmpty() const{ return name == "empty"; }
+
 void GameObject::setPosFltk(int x, int y){
     pos.x = x; pos.y = y;
     myRectangle.setCenter(pos);

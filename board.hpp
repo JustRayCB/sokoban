@@ -18,6 +18,7 @@ class Board{
     int stepCount = 0;
     int bestScore = 0;
     int limit = 0;
+    int boxStuck = 0;
 
     void copyFromOther(const Board &other){
         posPlayerLine = other.posPlayerLine;
@@ -27,6 +28,7 @@ class Board{
         targetPos = other.targetPos;
         stepCount = other.stepCount;
         bestScore = other.bestScore;
+        boxStuck = other.boxStuck;
     }
 
 public:
@@ -39,7 +41,7 @@ public:
     std::vector<std::vector<GameObject>> &getBoard();
     int getPosX() const;
     int getPosY() const;
-    int getTargetsCount();
+    int getTargetsCount() const;
     int getTotalTargets();
     int getStepCount();
     int getBestScore();
@@ -69,20 +71,17 @@ public:
     bool isTarget(const int line, const int col);
     bool isInBoard(const int line, const int col);
     bool isGameOver();
+    bool isLimitReached();
+    bool hasWon() const;
     bool wasOnTarget(const Point &position, bool isBox);
     bool isOnTarget(const Point &position);
+    bool areBoxStuck();
+    bool isBoxStuck(int &xVector, int &yVector);
 
     void draw();
 
     void incrementTotalTargets();
-
     void incrementStepCount();
-
-    // void displayTargets() {
-    //     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
-    //         std::cout << "Box at pos : (" << pos.x << "," << pos.y << ") --> " << boolPlayer << " | " << boolBox << std::endl;
-    //     }
-    // }
 
 
 };
