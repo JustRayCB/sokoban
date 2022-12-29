@@ -2,11 +2,6 @@
 #include <cstring>
 #include <iostream> // nécessaire pour std::cout
 
-void generateButtonEditor(){
-    LevelEditorWindow* editor = new LevelEditorWindow;
-    editor->show();
-}
-
 void LevelEditorWindow::bouton_callback(){
     if ((atoi(lineInput->value()) > 2) and ((atoi(colInput->value()) > 2))) {
         Canvas newCanvas = Canvas(atoi(colInput->value()),atoi(lineInput->value()));
@@ -33,19 +28,34 @@ void LevelEditorWindow::static_bouton_callback(Fl_Widget* w, void* ptr){
     me->bouton_callback();
 }
 void LevelEditorWindow::static_addingbouton_callback(Fl_Widget* w, void* ptr){
+    std::cout << "Entering static_addingbouton" << std::endl;
     LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
     me->adding_bouton_callback();
 }
+void LevelEditorWindow::static_closingButton_callback(Fl_Widget* w, void* ptr){
+    Fl_Window* firstWindow = (Fl_Window*) ptr;
+    LevelEditorWindow* secondWindow = (LevelEditorWindow*) w->window();
+    secondWindow->closeWindow(firstWindow, secondWindow);
+}
 
-LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor"){
+
+void LevelEditorWindow::closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow) {
+    secondWindow->hide();
+    firstWindow->show();
+    firstWindow->redraw();
+}
+
+LevelEditorWindow::LevelEditorWindow(Fl_Window* t) : Fl_Window(000, 000, 1000, 975, "Level Editor"){
     submitButton = new Fl_Button(150, 90, 50, 20, "Submit");
     addButton = new Fl_Button(300, 20, 100, 30, "Add Level");
+    closeButton = new Fl_Button(300, 50, 100, 30, "Return to game");
     lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
     colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
     levelName = new Fl_Input(150, 10, 100, 20, "Name of level: ");
     movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
     submitButton->callback(static_bouton_callback, this);
     addButton->callback(static_addingbouton_callback, this);
+    closeButton->callback(static_closingButton_callback, t);
     end();
     show();
 }
@@ -90,6 +100,11 @@ int LevelEditorWindow::handle(int event) {
             else if (Fl::event_x() <= movesLimit->x()+movesLimit->w() and Fl::event_x() >=movesLimit->x() 
                         and Fl::event_y() <= movesLimit->y()+movesLimit->h() and Fl::event_y() >=movesLimit->y()) {
                 movesLimit->handle(event);   
+            }
+            else if (Fl::event_x() <= closeButton->x()+closeButton->w() and Fl::event_x() >=closeButton->x() 
+                        and Fl::event_y() <= closeButton->y()+closeButton->h() and Fl::event_y() >=closeButton->y()) {
+                std::cout << "HERE" << std::endl;  
+                closeButton->do_callback();
             }
             else{
                 canvas.mouseClick(Point{Fl::event_x(), Fl::event_y()});

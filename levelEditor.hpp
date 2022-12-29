@@ -31,22 +31,25 @@ class LevelEditorWindow : public Fl_Window {
 private:
     Fl_Button* submitButton;
     Fl_Button* addButton;
+    Fl_Button* closeButton;
     Fl_Input* lineInput;
     Fl_Input* colInput;
     Fl_Input* levelName;
     Fl_Input* movesLimit;
     void bouton_callback();
     void adding_bouton_callback();
+    void closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow);
     static void static_bouton_callback(Fl_Widget* w, void* ptr);
     static void static_addingbouton_callback(Fl_Widget* w, void* ptr);
+    static void static_closingButton_callback(Fl_Widget* w, void* ptr);
     Canvas canvas;
 
  public:
     //LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor");
-    LevelEditorWindow();
+    LevelEditorWindow(Fl_Window* t);
     virtual ~LevelEditorWindow() {};
     void setCanva(Canvas canva);
-    void draw() override; 
+    void draw() override;
     int handle(int event) override;
 
     bool isGridValid();

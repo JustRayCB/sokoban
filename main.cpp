@@ -135,9 +135,9 @@ public:
                 if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
                         and Fl::event_y() <= lvlEditor->y()+lvlEditor->h() and Fl::event_y() >=lvlEditor->y()) {
                     std::cout << "On lvlEditor" << std::endl;
-                    LevelEditorWindow* win = new LevelEditorWindow;
+                    LevelEditorWindow* win = new LevelEditorWindow(this);
                     win->show();
-                    //this->hide();
+                    this->hide();
                 }
                 return 1;
 
