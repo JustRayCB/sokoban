@@ -112,11 +112,20 @@ public:
         LevelEditorWindow* secondWindow = (LevelEditorWindow*) widget->window();
         secondWindow->hide();
         configChoice(firstWindow->choice);
+        std::string addedLevel = "lvls/"+static_cast<std::string>(firstWindow->choice->text(firstWindow->choice->size()-2))+".txt";
+        firstWindow->choice->value(firstWindow->choice->size()-2);
+        Board newBoard;
+        loadBoard(newBoard, addedLevel);
+        firstWindow->setBoard(newBoard);
         firstWindow->show();
     }
 
     Board getBoard() {
         return board;
+    }
+
+    void setBoard(Board newBoard) {
+        board = newBoard;
     }
 
     static void open_second_window(Fl_Widget* widget, void* data) {
