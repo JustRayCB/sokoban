@@ -22,6 +22,7 @@
 #include <vector>
 #include <Fl/Fl_Choice.H>
 #include <memory.h>
+#include <unistd.h>
 
 #include "board.hpp"
 #include "display.hpp"
@@ -56,6 +57,8 @@ class MainWindow : public Fl_Window {
     Fl_Button *lvlEditor;
     bool showMessage = true;
     Fl_Box *box;
+    // static void open_second_window(Fl_Widget* widget, void* data);
+    // static void close_second_window(Fl_Widget* widget, void* data);
     //Il faut un endroit ou stocker les niveaux et savoir au quel niveau on est
 
 public:
@@ -76,6 +79,7 @@ public:
         choice = new Fl_Choice(210,120,100,30,"Levels");
         reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
         lvlEditor = new Fl_Button(165, 60, 150, 30, "Create New Level");
+        lvlEditor->callback(open_second_window, this);
         choice->hide(); reset->hide(); lvlEditor->hide();
         configChoice(choice);
         box = new Fl_Box(350,250,300,300,"Bienvenue !\n"
@@ -101,6 +105,27 @@ public:
             reset->show();
             lvlEditor->show();
         }
+    }
+
+    static void close_second_window(Fl_Widget* widget, void* data) {
+        MainWindow* firstWindow = (MainWindow*) data;
+        LevelEditorWindow* secondWindow = (LevelEditorWindow*) widget->window();
+        secondWindow->hide();
+        configChoice(firstWindow->choice);
+        firstWindow->show();
+    }
+
+    Board getBoard() {
+        return board;
+    }
+
+    static void open_second_window(Fl_Widget* widget, void* data) {
+        MainWindow* firstWindow = (MainWindow*) data;
+        LevelEditorWindow* secondWindow = new LevelEditorWindow;
+        Fl_Button* test = secondWindow->get_closeButton();
+        test->callback(close_second_window, firstWindow);
+        secondWindow->show();
+        firstWindow->hide();
     }
 
     void handleChoice(){
@@ -135,9 +160,7 @@ public:
                 if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
                         and Fl::event_y() <= lvlEditor->y()+lvlEditor->h() and Fl::event_y() >=lvlEditor->y()) {
                     std::cout << "On lvlEditor" << std::endl;
-                    LevelEditorWindow* win = new LevelEditorWindow(this);
-                    win->show();
-                    this->hide();
+                    lvlEditor->do_callback();
                 }
                 return 1;
 

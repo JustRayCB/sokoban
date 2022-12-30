@@ -46,11 +46,13 @@ private:
 
  public:
     //LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor");
-    LevelEditorWindow(Fl_Window* t);
+    LevelEditorWindow();
     virtual ~LevelEditorWindow() {};
     void setCanva(Canvas canva);
     void draw() override;
     int handle(int event) override;
+
+    Fl_Button* get_closeButton();
 
     bool isGridValid();
     bool onlyOnePlayer();
