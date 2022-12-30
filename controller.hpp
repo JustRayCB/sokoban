@@ -19,18 +19,18 @@ public:
     void boxTargetToEmpty(GameObject &box);
 
     //Possible moves with a box
-    void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
-    void emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
-    void emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
-    void emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
+    void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     
     //Possible moves without a box
-    void emptyPlayerToEmpty(int keyCode);
-    void emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
+    void emptyPlayerToEmpty(const Point &position, int keyCode, int boxSize);
+    void emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     

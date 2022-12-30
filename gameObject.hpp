@@ -35,6 +35,9 @@ public:
 
     GameObject &operator=(const GameObject &other);
 
+    void mouseMove(Point mouseLoc);
+    void mouseClick(Point mouseLoc);
+
     Point getPosFltk() const;
     int getSize() const;
     Rectangle &getRectangle() ;

@@ -156,20 +156,27 @@ public:
     }
     int handle(int event) override {
         switch (event) {
+            case FL_MOVE:
+                board.mouseMove(Point{Fl::event_x(), Fl::event_y()});
+                this->redraw();
+                return 1;
             case FL_PUSH:{
 
                 if (Fl::event_x() <= choice->x()+choice->w() and Fl::event_x() >=choice->x() 
                         and Fl::event_y() <= choice->y()+choice->h() and Fl::event_y() >=choice->y()) {
                     handleChoice();
                 }
-                if (Fl::event_x() <= reset->x()+reset->w() and Fl::event_x() >=reset->x() 
+                else if (Fl::event_x() <= reset->x()+reset->w() and Fl::event_x() >=reset->x() 
                         and Fl::event_y() <= reset->y()+reset->h() and Fl::event_y() >=reset->y()) {
                     board.setBestScore(0); writeBestScore() ;
                 }
-                if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
+                else if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
                         and Fl::event_y() <= lvlEditor->y()+lvlEditor->h() and Fl::event_y() >=lvlEditor->y()) {
                     std::cout << "On lvlEditor" << std::endl;
                     lvlEditor->do_callback();
+                }
+                else {
+                    board.mouseClick(Point{Fl::event_x(), Fl::event_y()});
                 }
                 return 1;
 

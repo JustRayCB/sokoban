@@ -1,5 +1,6 @@
 #include <FL/Enumerations.H>
 #include <iostream>
+#include <unistd.h>
 
 #include "controller.hpp"
 #include "board.hpp"
@@ -51,32 +52,44 @@ void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
 }
 
 
-void Controll::emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
+void Controll::emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
+    // on redessine la case vide
+    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    board->setObject(position.x, position.y, empty);
 }
 
-void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
+    // on redessine la case vide
+    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    board->setObject(position.x, position.y, empty);
 }
 
-void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
+void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
+    // on redessine la case vide
+    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    board->setObject(position.x, position.y, empty);
 }
 
-void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
+    // on redessine la case vide
+    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    board->setObject(position.x, position.y, empty);
 }
 
 void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
@@ -123,12 +136,18 @@ void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, 
     board->setObject(position.x, position.y, target);
 }
 
-void Controll::emptyPlayerToEmpty(int keyCode){
+void Controll::emptyPlayerToEmpty(const Point &position, int keyCode, int boxSize){
     this->movePlayer(keyCode);
+    // on redessine la case vide
+    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    board->setObject(position.x, position.y, empty);
 }
-void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     this->movePlayer(keyCode);
+    // on redessine la case vide
+    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    board->setObject(position.x, position.y, empty);
 }
 void Controll::targetPlayerToEmpty(const Point &position, int keyCode, int boxSize){
     board->removeFromTarget(Point{position.x, position.y}, false);
@@ -178,19 +197,19 @@ void Controll::move(int keyCode){
 
             // joueur sur vide, box sur vide, vers vide
             if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
-                emptyPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode);
+                emptyPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur vide, box sur vide, vers cible
             else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
-                emptyPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
+                emptyPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             // joueur sur vide, box sur cible, vers vide
             } 
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
-                emptyPlayerTargetBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode);
+                emptyPlayerTargetBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur vide, box sur cible, vers cible
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
-                emptyPlayerTargetBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
+                emptyPlayerTargetBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur cible, box sur vide, vers vide
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
@@ -213,11 +232,11 @@ void Controll::move(int keyCode){
         else if (not board->isBox(xIdx+deltaX, yIdx+deltaY)) {
             // joueur sur vide, vers vide
             if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                emptyPlayerToEmpty(keyCode);
+                emptyPlayerToEmpty({xIdx, yIdx}, keyCode, boxSize);
             }
             // joueur sur vide, vers cible
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                emptyPlayerToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
+                emptyPlayerToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur cible, vers vide
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {

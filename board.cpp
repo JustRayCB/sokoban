@@ -23,6 +23,26 @@ Board::Board(const int nbLine, const int nbCol):
     gameBoard(nbLine, std::vector<GameObject>(nbCol)){
 }
 
+void Board::mouseMove(Point mouseLoc) {
+    for (auto &c:gameBoard) {
+        for (auto &cc:c) {
+            cc.mouseMove(mouseLoc);
+        }
+    }
+}
+
+int Board::getBoxSize() {
+    return gameBoard[0][0].getSize();
+}
+
+void Board::mouseClick(Point mouseLoc) {
+  for (auto &c:gameBoard) {
+    for (auto &cc:c) {
+        cc.mouseClick(mouseLoc);
+    }
+  }
+}
+
 
 Board::Board(const Board &other){
     copyFromOther(other);
@@ -102,7 +122,9 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         setPosPlayer(line, col);
     }else if (symbol == ' ') {
         //Nothing
-        setEmpty(line, col);
+        // setEmpty(line, col);
+        GameObject empty{{xGridFltk, yGridFltk}, size, FL_GRAY, FL_GRAY, "empty"};
+        setObject(line, col, empty);
     }else if (symbol == '#') {
         //Wall
         GameObject wall{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_BLUE, "wall"};
@@ -222,7 +244,7 @@ void loadBoard(Board &board, std::string file){
                 int limit = std::stoi(tempLimit); //if error set limit = 0
                 board.setBestScore(bestScore);
                 board.setLimit(limit);
-                boxSize = 600/nbLine;
+                boxSize = min(600/nbLine, 75);
                 board.resize(nbLine, nbCol);
 
             }

@@ -18,9 +18,10 @@ void DisplayBoard::setBoard(Board *myBoard){
 void DisplayBoard::draw(){
     for (auto &line : board->getBoard()) {
         for (auto &row : line) {
-            if (row.getName() != "empty") {
-                row.draw(); 
-            }
+            // if (row.getName() != "empty") {
+            //     row.draw(); 
+            // }
+            row.draw();
         }
     }
     int c = board->getTargetsCount();

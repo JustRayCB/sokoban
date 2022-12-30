@@ -37,6 +37,10 @@ public:
     Board(const Board &other);
     Board &operator=(const Board& other);
 
+    void mouseMove(Point mouseLoc);
+    void mouseClick(Point mouseLoc);
+    int getBoxSize();
+
     GameObject &getElem(const int line, const int col);
     std::vector<std::vector<GameObject>> &getBoard();
     int getPosX() const;

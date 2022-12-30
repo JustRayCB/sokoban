@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <Fl/Enumerations.H>
+#include <unistd.h>
 
 #include "gameObject.hpp"
 #include "rectangle.hpp"
@@ -14,6 +15,26 @@ GameObject::GameObject(const Point point, const int boxSize, const Fl_Color fram
 GameObject::GameObject(const GameObject &other){
     copyFromOther(other);
 }
+
+void GameObject::mouseMove(Point mouseLoc) {
+    if (myRectangle.contains(mouseLoc)) {
+        myRectangle.setFrameColor(FL_RED);
+    } else {
+        if (name == "empty"){
+            myRectangle.setFrameColor(FL_GRAY);
+        } else {
+            myRectangle.setFrameColor(FL_BLACK);
+        }
+    }
+}
+void GameObject::mouseClick(Point mouseLoc) { 
+    if (myRectangle.contains(mouseLoc)) {
+        int x, y;
+        x = (pos.y - 200) / boxSize;
+        y = (pos.x - 200) / boxSize;
+        std::cout << "(" << x << "," << y << ")" << "\n";
+    }
+}   
 
 GameObject& GameObject::operator=(const GameObject &other){
     this->copyFromOther(other);
