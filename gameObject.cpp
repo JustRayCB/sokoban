@@ -32,7 +32,6 @@ Point GameObject::mouseClick(Point mouseLoc) {
     p.x = -1;
     p.y = -1;
     if (myRectangle.contains(mouseLoc)) {
-        int x, y;
         if (name == "target") {
             boxSize *= 2;
         }

@@ -44,6 +44,7 @@ Point Board::mouseClick(Point mouseLoc) {
         }
     }
   } 
+  return {-1,-1};
 }
 
 
