@@ -14,6 +14,7 @@ class Board{
     std::vector<std::vector<GameObject>> gameBoard;
     int posPlayerLine, posPlayerCol;
     std::vector<std::tuple<Point, bool, bool>> targetPos;
+    std::vector<Point> tpPos;
     int totalTargets = 0;
     int stepCount = 0;
     int bestScore = 0;
@@ -26,6 +27,7 @@ class Board{
         gameBoard = other.gameBoard;
         totalTargets = other.totalTargets;
         targetPos = other.targetPos;
+        tpPos = other.tpPos;
         stepCount = other.stepCount;
         bestScore = other.bestScore;
         boxStuck = other.boxStuck;
@@ -57,10 +59,13 @@ public:
 
     void setEmpty(const int line, const int col); //Set the cell as empty
     void setTp(const int line, const int col); //Set the cell as empty
+    void setTarget(const int line, const int col); //Set the cell as empty
     void setObject(const int &line, const int &col, GameObject &object);
     void setPosPlayer(const int &line, const int &col);
     void setOnTarget(const Point& position, bool isBox);
+    void setOnTp(const Point& position, bool isBox);
     void removeFromTarget(const Point& position, bool isBox);
+    void removeFromTp(const Point& position, bool isBox);
     void setBestScore(const int &score);
     void setLimit(const int &limit);
 
@@ -82,7 +87,9 @@ public:
     bool isLimitReached();
     bool hasWon() const;
     bool wasOnTarget(const Point &position, bool isBox);
+    bool wasOnTp(const Point &position, bool isBox);
     bool isOnTarget(const Point &position);
+    bool isOnTp(const Point &position);
     bool areBoxStuck();
     bool isBoxStuck(int &xVector, int &yVector);
 
@@ -92,6 +99,7 @@ public:
     void incrementStepCount();
 
     Point searchMathTp(const Point &currentTp);
+    void replaceTp();
 
 };
 

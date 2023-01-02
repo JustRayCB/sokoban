@@ -33,8 +33,11 @@ public:
     void emptyPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void emptyPlayerToTp(const Point &position, const Point &oldPosition);
+    void tpPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
+    void tpPlayerToEmpty(int keyCode);
     void targetPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void targetPlayerToTp(const Point &newPosition, const Point &oldPosition);
     
 
 };

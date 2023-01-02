@@ -151,6 +151,13 @@ void Board::setTp(const int line, const int col){
 
 }
 
+void Board::setTarget(const int line, const int col){
+    std::cout << "Set target " << std::endl;
+    getElem(line, col).setName("target");
+    getElem(line, col).setColor(FL_MAGENTA);
+    getElem(line, col).setFrameColor(FL_BLACK);
+    getElem(line, col).setSize(getElem(line, col).getSize()/2);
+}
 void Board::setPosPlayer(const int &x, const int &y){
     posPlayerLine = x;
     posPlayerCol = y;
@@ -200,6 +207,7 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
     }else {
         GameObject tp{{xGridFltk, yGridFltk}, size, FL_BLACK, fl_rgb_color(0, 255, 255), "tp"};
         setObject(line, col, tp);
+        tpPos.push_back({line, col});
         
     }
 }
@@ -249,6 +257,15 @@ void Board::removeFromTarget(const Point &position, bool isBox){
 
 bool Board::isOnTarget(const Point &position) {
     for (auto& [pos, boolPlayer, boolBox] : targetPos) {
+        if (position == pos) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Board::isOnTp(const Point &position) {
+    for (auto &pos : tpPos) {
         if (position == pos) {
             return true;
         }
@@ -383,4 +400,11 @@ Point Board::searchMathTp(const Point &currentTp){
     }
     return {i, j};
 
+}
+
+void Board::replaceTp(){
+    for (auto tp : tpPos) {
+        setTp(tp.x, tp.y);
+    }
+    
 }
