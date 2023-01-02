@@ -36,50 +36,14 @@ int Board::getBoxSize() {
 }
 
 Point Board::mouseClick(Point mouseLoc) {
-//   for (auto &c:gameBoard) {
-//     for (auto &cc:c) {
-//         cc.mouseClick(mouseLoc);
-//     }
-//   }
-    // int coef = 1;
-    // Point p;
-    // // if (gameBoard[p.x][p.y].getName() == "target")
-    // //     coef = 2;
-    // p.x = ((mouseLoc.y-(getBoxSize()/2)) - 200) / (getBoxSize());
-    // p.y = ((mouseLoc.x-(getBoxSize()/2)) - 200) / (getBoxSize());
-    // std::cout << "x=" << mouseLoc.y << "-200=" << mouseLoc.y - 200 <<  "/" << getBoxSize() << std::endl;
-    // std::cout << "y=" << mouseLoc.x << "-200=" << mouseLoc.x - 200 <<  "/" << getBoxSize() << std::endl;
-    // std::cout << p.x << "," << p.y << std::endl;
-    // return p;
-    // std::string name = "none";
-    // for (auto &c:gameBoard) {
-    //     for (auto &cc:c) {
-    //         name = cc.mouseClick(mouseLoc);
-    //     }
-    // }
-    // std::cout << name << std::endl;
-    int x=0, y=0;
-    std::cout << mouseLoc.x << "," << mouseLoc.y << getBoxSize() <<std::endl;
-    int posX = mouseLoc.y;
-    int posY = mouseLoc.x;
-    
-    posX -= getBoxSize();
-    posY -= getBoxSize();
-    
-    while (posX >= 0) {
-        x++;
-        posX -= getBoxSize();
+  for (auto &c:gameBoard) {
+    for (auto &cc:c) {
+        Point p = cc.mouseClick(mouseLoc);
+        if (p.x != - 1) {
+            return p;
+        }
     }
-    while (posY >= 0) {
-        y++;
-        posY -= getBoxSize();
-    }
-
-    Point p;
-    p.x = x;
-    p.y = y;
-
-    return p;
+  } 
 }
 
 

@@ -27,25 +27,21 @@ void GameObject::mouseMove(Point mouseLoc) {
         }
     }
 }
-std::string GameObject::mouseClick(Point mouseLoc) { 
-    // Point p;
-    // p.x = -1;
-    // p.y = -1;
-    // if (myRectangle.contains(mouseLoc)) {
-    //     int x, y;
-    //     if (name == "target")
-    //         boxSize *= 2;
-    //     p.x = (pos.y - 200) / boxSize;
-    //     p.y = (pos.x - 200) / boxSize;
-    //     std::cout << "(" << p.x << "," << p.y << ")" << "\n";
-    // }
-    // return p;
-    if (myRectangle.contains(mouseLoc)){
-        return name;
-    } 
-    else {
-        return "none";
+Point GameObject::mouseClick(Point mouseLoc) { 
+    Point p;
+    p.x = -1;
+    p.y = -1;
+    if (myRectangle.contains(mouseLoc)) {
+        int x, y;
+        if (name == "target") {
+            boxSize *= 2;
+        }
+        p.x = (pos.y - 200) / boxSize;
+        p.y = (pos.x - 200) / boxSize;
+        std::cout << "(" << p.x << "," << p.y << ")" << "\n";
     }
+    return p;
+
 }   
 
 GameObject& GameObject::operator=(const GameObject &other){
