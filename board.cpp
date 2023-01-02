@@ -47,6 +47,47 @@ Point Board::mouseClick(Point mouseLoc) {
   return {-1,-1};
 }
 
+bool Board::isValid(int x, int y, std::vector<std::vector<bool>>&visited) {
+    // std::cout << "x>=0 : " << (x <= 0) << std::endl;
+    // std::cout << "y>=0 : " << (y <= 0) << std::endl;
+    // std::cout << "x<=gameBoard.size() : " << (x <= gameBoard.size()) << std::endl;
+    // std::cout << "y<=gameBoard[0].size() : " << (y <= gameBoard[0].size()) << std::endl;
+    // std::cout << "visited[x][y]=" << visited[x][y] << std::endl;
+    // std::cout << "gameBoard[x][y].isEmpty()=" << gameBoard[x][y].isEmpty() << std::endl;
+    // std::cout << "gameBoard[x][y].isTarget()=" << gameBoard[x][y].isTarget() << std::endl;
+
+    return x >= 0 && x < gameBoard.size() &&
+           y >= 0 && y < gameBoard[0].size() &&
+           !visited[x][y] &&
+           (gameBoard[x][y].isEmpty() or gameBoard[x][y].isTarget());
+}
+
+bool Board::findPath(Point pos, Point target, std::vector<std::vector<bool>> &visited) {
+    // std::cout << "On : (" << pos.x << ", " << pos.y << ")" << std::endl;
+    // std::cout << "Target : (" << target.x << ", " << target.y << ")" << std::endl; 
+    
+    int dx[4] = {-1, 0, 1, 0};
+    int dy[4] = {0, 1, 0, -1};
+    
+    if (pos.x == target.x && pos.y == target.y) {
+        return true;
+    }
+
+    visited[pos.x][pos.y] = true;
+
+    for (int i=0; i< 4; i++) {
+        int newX = pos.x + dx[i];
+        int newY = pos.y + dy[i];
+        // std::cout << "isValid: " << isValid(newX, newY, visited) << std::endl;
+        if (isValid(newX, newY, visited)) {
+            if (findPath(Point{newX, newY}, target, visited)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 Board::Board(const Board &other){
     copyFromOther(other);

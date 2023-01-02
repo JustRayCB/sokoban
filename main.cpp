@@ -177,7 +177,8 @@ public:
                 }
                 else {
                     Point test = board.mouseClick(Point{Fl::event_x(), Fl::event_y()});
-  
+                    std::vector<std::vector<bool>> visited(board.getBoard().size(), std::vector<bool>(board.getBoard()[0].size(), false));
+                    std::cout << board.findPath(Point{board.getPosX(), board.getPosY()}, test, visited) << std::endl; 
                 }
                 return 1;
 
