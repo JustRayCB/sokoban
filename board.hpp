@@ -56,6 +56,7 @@ public:
     int getLimit();
 
     void setEmpty(const int line, const int col); //Set the cell as empty
+    void setTp(const int line, const int col); //Set the cell as empty
     void setObject(const int &line, const int &col, GameObject &object);
     void setPosPlayer(const int &line, const int &col);
     void setOnTarget(const Point& position, bool isBox);
@@ -90,6 +91,7 @@ public:
     void incrementTotalTargets();
     void incrementStepCount();
 
+    Point searchMathTp(const Point &currentTp);
 
 };
 

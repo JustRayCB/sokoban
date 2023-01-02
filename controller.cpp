@@ -5,6 +5,7 @@
 #include "controller.hpp"
 #include "board.hpp"
 #include "gameObject.hpp"
+#include "rectangle.hpp"
 
 
 void Controll::setBoard(Board *myBoard){
@@ -37,6 +38,17 @@ void Controll::movePlayer(int keyCode){
 void Controll::tpPlayer(int x, int y){
     int oldX = board->getPosX(), oldY = board->getPosY();
     std::cout << "Old x : " << oldX << "\n Old y : " << oldY << std::endl;
+    std::cout << "new x : " << x << "\n new y : " << y << std::endl;
+
+
+    board->movePlayerInVector(x, y);
+    GameObject *tmp = &board->getElem(x, y);
+    std::cout << "Old xFLTK : " << tmp->getPosFltk().x << "\n Old yFLTK : " << tmp->getPosFltk().y << std::endl;
+    const int boxSize = tmp->getSize();
+    int newX = 200 + (x*boxSize);
+    int newY = 200 + (y*boxSize);
+    tmp->setPosFltk(newY, newX);
+    std::cout << "new xFLTK : " << tmp->getPosFltk().x << "\n new yFLTK : " << tmp->getPosFltk().y << std::endl;
     
 }
 
@@ -156,7 +168,15 @@ void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY
     board->setObject(position.x, position.y, empty);
 }
 
-void Controll::emptyPlayerToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::emptyPlayerToTp(const Point &newPosition, const Point &oldPosition){
+    Point matchTp = board->searchMathTp(newPosition);
+    std::cout << "Current tp : " << newPosition.x << ", " << newPosition.y << std::endl;
+    std::cout << "New tp : " << matchTp.x << ", " << matchTp.y << std::endl;
+    this->tpPlayer(matchTp.x, matchTp.y);
+    board->setEmpty(oldPosition.x, oldPosition.y);
+    board->setTp(newPosition.x, newPosition.y);
+    //GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
+    //board->setObject(position.x, position.y, empty);
 
 }
 
@@ -267,7 +287,7 @@ void Controll::move(int keyCode){
             //joueur sur vide, vers tp
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isTp(xIdx+deltaX, yIdx+deltaY)) {
                 std::cout << "Teleportation" << std::endl;
-                emptyPlayerToTp({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
+                emptyPlayerToTp({xIdx+deltaX, yIdx+deltaY}, {xIdx, yIdx});
             }
             //joueur sur cible, vers tp
             else if (board->isOnTarget({xIdx, yIdx}) and board->isTp(xIdx+deltaX, yIdx+deltaY)) {

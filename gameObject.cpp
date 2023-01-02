@@ -28,7 +28,7 @@ void GameObject::mouseMove(Point mouseLoc) {
     }
 }
 
-Point GameObject::fltkToVector(Point vectorPos){
+void GameObject::fltkToVector(Point &vectorPos){
     int newBoxSize = boxSize;
     if (name == "target") {
         newBoxSize *= 2;
@@ -36,6 +36,8 @@ Point GameObject::fltkToVector(Point vectorPos){
     vectorPos.x = (pos.y - 200) / newBoxSize;
     vectorPos.y = (pos.x - 200) / newBoxSize;
     std::cout << "(" << vectorPos.x << "," << vectorPos.y << ")" << "\n";
+    std::cout << "FLTKx : " << 200+vectorPos.x*newBoxSize << std::endl;
+    std::cout << "FLTKy : " << 200+vectorPos.y*newBoxSize << std::endl;
 
 }
 
@@ -44,6 +46,7 @@ Point GameObject::mouseClick(Point mouseLoc) {
     p.x = -1;
     p.y = -1;
     if (myRectangle.contains(mouseLoc)) {
+        fltkToVector(p);
     }
     return p;
 
@@ -102,6 +105,10 @@ void GameObject::setName(std::string newName){
 
 void GameObject::setColor(Fl_Color newFillColor){
     getRectangle().setFillColor(newFillColor);
+}
+
+void GameObject::setFrameColor(Fl_Color newFrameColor){
+    getRectangle().setFrameColor(newFrameColor);
 }
 
 void GameObject::setSize(int size) {

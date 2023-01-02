@@ -39,6 +39,7 @@ public:
     Point mouseClick(Point mouseLoc);
 
     Point getPosFltk() const;
+    void fltkToVector(Point &vectorPos);
     int getSize() const;
     Rectangle &getRectangle() ;
     std::string getName() const;
@@ -54,6 +55,7 @@ public:
     void setPosAfterMove();
     void setName(std::string newName);
     void setColor(Fl_Color newFillColor);
+    void setFrameColor(Fl_Color newFramColor);
     void setSize(int size);
     void setMove(std::string newMove);
     void addAnimation();

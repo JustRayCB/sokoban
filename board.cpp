@@ -135,9 +135,21 @@ void Board::setObject(const int &line, const int &col, GameObject &object){
 
 
 void Board::setEmpty(const int line, const int col){
+    std::cout << "Set empty " << std::endl;
     getElem(line, col).setName("empty");
+    getElem(line, col).setColor(FL_GRAY);
+    getElem(line, col).setFrameColor(FL_GRAY);
+    //GameObject empty{{xGridFltk, yGridFltk}, size, FL_GRAY, FL_GRAY, "empty"};
+
 }
 
+void Board::setTp(const int line, const int col){
+    std::cout << "Set tp " << std::endl;
+    getElem(line, col).setName("tp");
+    getElem(line, col).setColor(fl_rgb_color(0, 255, 255));
+    getElem(line, col).setFrameColor(FL_BLACK);
+
+}
 
 void Board::setPosPlayer(const int &x, const int &y){
     posPlayerLine = x;
@@ -354,3 +366,21 @@ bool Board::areBoxStuck(){
     return false;
 }
 
+Point Board::searchMathTp(const Point &currentTp){
+    int i = 0, j = 0;
+    for (auto &line : gameBoard) {
+        j = 0;
+        for (auto &elem : line) {
+            if (elem.isTp()){
+                std::cout << "Im a tp  : " << i << " ," <<  j  << std::endl;
+                if (currentTp.x != i and currentTp.y != j) {
+                    return {i, j};
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+    return {i, j};
+
+}
