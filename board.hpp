@@ -38,7 +38,7 @@ public:
     Board &operator=(const Board& other);
 
     void mouseMove(Point mouseLoc);
-    void mouseClick(Point mouseLoc);
+    Point mouseClick(Point mouseLoc);
     int getBoxSize();
 
     GameObject &getElem(const int line, const int col);

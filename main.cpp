@@ -176,7 +176,9 @@ public:
                     lvlEditor->do_callback();
                 }
                 else {
-                    board.mouseClick(Point{Fl::event_x(), Fl::event_y()});
+                    Point test = board.mouseClick(Point{Fl::event_x(), Fl::event_y()});
+                    std::cout << test.x << "," << test.y << std::endl;
+  
                 }
                 return 1;
 

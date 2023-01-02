@@ -36,7 +36,7 @@ public:
     GameObject &operator=(const GameObject &other);
 
     void mouseMove(Point mouseLoc);
-    void mouseClick(Point mouseLoc);
+    std::string mouseClick(Point mouseLoc);
 
     Point getPosFltk() const;
     int getSize() const;
