@@ -39,6 +39,8 @@ public:
 
     void mouseMove(Point mouseLoc);
     Point mouseClick(Point mouseLoc);
+    bool findPath(Point pos, Point target, std::vector<std::vector<bool>>&visited);
+    bool isValid(int x, int y, std::vector<std::vector<bool>>&visited);
     int getBoxSize();
 
     GameObject &getElem(const int line, const int col);
