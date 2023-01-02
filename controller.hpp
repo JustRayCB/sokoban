@@ -11,6 +11,7 @@ public:
     void setBoard(Board *myBoard);//{ board = myBoard;}
                                   
     void movePlayer(int keyCode);
+    void tpPlayer(int x, int y);
     void moveBox(int keyCode, int boxPosX, int boxPosY);
     void move(int keyCode);
 
@@ -31,6 +32,7 @@ public:
     //Possible moves without a box
     void emptyPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     

@@ -1,4 +1,5 @@
 #include <FL/Enumerations.H>
+#include <FL/fl_draw.H>
 #include <algorithm>
 #include <cstddef>
 #include <cstring>
@@ -143,6 +144,10 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         //Box
         GameObject box{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_YELLOW, "box"};
         setObject(line, col, box);
+    }else {
+        GameObject tp{{xGridFltk, yGridFltk}, size, FL_BLACK, fl_rgb_color(0, 255, 255), "tp"};
+        setObject(line, col, tp);
+        
     }
 }
 
@@ -161,6 +166,7 @@ bool Board::isWall(const int line, const int col){ return getElem(line, col).isW
 bool Board::isEmpty(const int line, const int col){ return getElem(line, col).isEmpty();}
 bool Board::isBox(const int line, const int col){ return getElem(line, col).isBox();}
 bool Board::isTarget(const int line, const int col){ return getElem(line, col).isTarget();}
+bool Board::isTp(const int line, const int col){ return getElem(line, col).isTp();}
 bool Board::isInBoard(const int line, const int col){ 
     bool res =  (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
         (col < static_cast<int>(gameBoard[0].size()) and 0 <= col);
@@ -273,7 +279,7 @@ bool Board::isBoxStuck(int &xVector, int &yVector){
     if (isInBoard(xVector+1, yVector)) { rightOk = true; right = &getElem(xVector+1, yVector); }
     if (isInBoard(xVector-1, yVector)) { leftOk = true; left = &getElem(xVector-1, yVector); }
     bool onTarget = isOnTarget({xVector, yVector});
-    std::cout << "Box is on target : " << onTarget << std::endl;
+    //std::cout << "Box is on target : " << onTarget << std::endl;
     if ((upOk and up->isWall())
             and (rightOk and right->isWall()) and not onTarget) { return true; }    
     else if ((upOk and up->isWall())

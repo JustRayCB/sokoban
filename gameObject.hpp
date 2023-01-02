@@ -48,6 +48,7 @@ public:
     bool isPlayer() const;
     bool isTarget() const;
     bool isEmpty() const;
+    bool isTp() const;
 
     void setPosFltk(int x, int y);
     void setPosAfterMove();

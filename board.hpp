@@ -73,6 +73,7 @@ public:
     bool isEmpty(const int line, const int col);
     bool isBox(const int line, const int col);
     bool isTarget(const int line, const int col);
+    bool isTp(const int line, const int col);
     bool isInBoard(const int line, const int col);
     bool isGameOver();
     bool isLimitReached();

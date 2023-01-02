@@ -27,17 +27,23 @@ void GameObject::mouseMove(Point mouseLoc) {
         }
     }
 }
+
+Point GameObject::fltkToVector(Point vectorPos){
+    int newBoxSize = boxSize;
+    if (name == "target") {
+        newBoxSize *= 2;
+    }
+    vectorPos.x = (pos.y - 200) / newBoxSize;
+    vectorPos.y = (pos.x - 200) / newBoxSize;
+    std::cout << "(" << vectorPos.x << "," << vectorPos.y << ")" << "\n";
+
+}
+
 Point GameObject::mouseClick(Point mouseLoc) { 
     Point p;
     p.x = -1;
     p.y = -1;
     if (myRectangle.contains(mouseLoc)) {
-        if (name == "target") {
-            boxSize *= 2;
-        }
-        p.x = (pos.y - 200) / boxSize;
-        p.y = (pos.x - 200) / boxSize;
-        std::cout << "(" << p.x << "," << p.y << ")" << "\n";
     }
     return p;
 
@@ -73,6 +79,7 @@ bool GameObject::isWall() const{ return name == "wall"; }
 bool GameObject::isPlayer() const{ return name == "player"; }
 bool GameObject::isTarget() const{ return name == "target"; }
 bool GameObject::isEmpty() const{ return name == "empty"; }
+bool GameObject::isTp() const{ return name == "tp"; }
 
 void GameObject::setPosFltk(int x, int y){
     pos.x = x; pos.y = y;
