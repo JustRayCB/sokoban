@@ -361,15 +361,20 @@ bool Board::isBoxStuck(int &xVector, int &yVector){
     if (isInBoard(xVector+1, yVector)) { rightOk = true; right = &getElem(xVector+1, yVector); }
     if (isInBoard(xVector-1, yVector)) { leftOk = true; left = &getElem(xVector-1, yVector); }
     bool onTarget = isOnTarget({xVector, yVector});
-    //std::cout << "Box is on target : " << onTarget << std::endl;
+    // std::cout << "Box is on target : " << onTarget << std::endl;
+    // compteur qui a la base vaut 0 puis regarde haut si mur ++
+    // droit si mur ++
+    // est ce que le compteur == 2 si oui true
+    // test mur puis box appel recursif si blocker incréement compteur
+    //
     if ((upOk and up->isWall())
-            and (rightOk and right->isWall()) and not onTarget) { return true; }    
+            and (rightOk and right->isWall())) { return true; }    
     else if ((upOk and up->isWall())
-            and (leftOk and left->isWall()) and not onTarget) { return true; }    
+            and (leftOk and left->isWall())) { return true; }    
     else if ((downOk and down->isWall())
-            and (rightOk and right->isWall()) and not onTarget) { return true; }    
+            and (rightOk and right->isWall())) { return true; }    
     else if ((downOk and down->isWall())
-            and (leftOk and left->isWall()) and not onTarget) { return true; }    
+            and (leftOk and left->isWall())) { return true; }    
 
     return false;
 }
@@ -388,7 +393,7 @@ bool Board::areBoxStuck(){
         }
     }
 
-    if (totalBox-boxStuck < totalTargets) {
+    if (totalBox == boxStuck) {
         return true;
     }
 
