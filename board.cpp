@@ -171,6 +171,7 @@ void Board::setTarget(const int line, const int col){
     getElem(line, col).setSize(getElem(line, col).getSize()/2);
 }
 void Board::setPosPlayer(const int &x, const int &y){
+    std::cout << "Newplayerpos->" << x << y << std::endl;
     posPlayerLine = x;
     posPlayerCol = y;
 }
@@ -226,6 +227,9 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
 
 
 void Board::movePlayerInVector(const int newX, const int newY){
+    std::cout << "movePLayerVector : " << newX << newY << std::endl;
+    std::cout << "movePLayerVector : " << getPosX() << getPosY() << std::endl;
+    std::cout << getElem(getPosX(), getPosX()).getName() << std::endl;
     setObject(newX, newY, getElem(getPosX(), getPosY()));
     setEmpty(getPosX(), getPosY());
     setPosPlayer(newX, newY);

@@ -3,20 +3,14 @@
 #include <iostream> // nécessaire pour std::cout
 
 bool LevelEditorWindow::onlyTwoTp() {
-    std::cout << "ENTERING ONLYTWOTP" << std::endl;
-    std::cout << "lineInput: " << canvas.getNumberOfLines() << std::endl;
-    std::cout << "colInput: " << canvas.getNumberOfColumns() << std::endl;
-    std::cout << "lineCells: " << canvas.getCells().size() << std::endl;
-    std::cout << "colCells: " << canvas.getCells()[0].size() << std::endl; 
     int count = 0;
     for (int i=0; i < canvas.getNumberOfLines();i++){
         for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
-            std::cout << "i=" << i << " j=" << j << std::endl;
             if (canvas.getCells()[i][j].getCurrent() == 5) {
                 count++;
             }
             if (count > 2) {
-                std::cout << "TOO MUCH TPS" << std::endl;
+                std::cout << "TOO MUCH TPS (2MAX)" << std::endl;
                 return false;
             }
         }
@@ -51,7 +45,6 @@ void LevelEditorWindow::static_bouton_callback(Fl_Widget* w, void* ptr){
     me->bouton_callback();
 }
 void LevelEditorWindow::static_addingbouton_callback(Fl_Widget* w, void* ptr){
-    std::cout << "Entering static_addingbouton" << std::endl;
     LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
     me->adding_bouton_callback();
 }
@@ -140,48 +133,15 @@ int LevelEditorWindow::handle(int event) {
     return 0;
 }
 
-// bool LevelEditorWindow::checkWallAllAround() {
-//     std::cout << "size=" << canvas.getCells().size() << std::endl;
-//     std::cout << "lines=" << canvas.getNumberOfLines() << std::endl;
-//     std::cout << "cols=" << canvas.getNumberOfColumns() << std::endl;
-//     for (int i=0; i < canvas.getNumberOfColumns(); i++) {
-//         if (not (canvas.getCells()[i].getCurrent() == 1)) {
-//             return false;
-//         }
-//     } 
-//     for (int i=canvas.getCells().size()-1; i >= static_cast<int>(canvas.getCells().size()-canvas.getNumberOfColumns()) ; i--) {
-//         if (not (canvas.getCells()[i].getCurrent() == 1)) {
-//             return false;
-//         }
-//     }
-//     for (int i=canvas.getNumberOfLines()-1; i<=static_cast<int>(canvas.getCells().size()); i+=canvas.getNumberOfColumns()) {
-//         if (not (canvas.getCells()[i].getCurrent() == 1)) {
-//             return false;
-//         }
-//     }
-//     for (int i=0; i<=static_cast<int>(canvas.getCells().size()-canvas.getNumberOfLines()+1); i+=canvas.getNumberOfColumns()) {
-//         if (not (canvas.getCells()[i].getCurrent() == 1)) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
-
 bool LevelEditorWindow::onlyOnePlayer() {
-    std::cout << "ENTERING ONLYONEPLAYER" << std::endl;
-    std::cout << "lineInput: " << canvas.getNumberOfLines() << std::endl;
-    std::cout << "colInput: " << canvas.getNumberOfColumns() << std::endl;
-    std::cout << "lineCells: " << canvas.getCells().size() << std::endl;
-    std::cout << "colCells: " << canvas.getCells()[0].size() << std::endl; 
     int count = 0;
     for (int i=0; i < canvas.getNumberOfLines();i++){
         for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
-            std::cout << "i=" << i << " j=" << j << std::endl;
             if (canvas.getCells()[i][j].getCurrent() == 3) {
                 count++;
             }
             if (count > 1) {
-                std::cout << "TOO MUCH PLAYER" << std::endl;
+                std::cout << "TOO MUCH PLAYER (1 MAX)" << std::endl;
                 return false;
             }
         }
@@ -209,7 +169,7 @@ bool LevelEditorWindow::evenBoxAndTargets() {
     bool res = countBox >= countTargets;
 
     if (not res) {
-        std::cout << "Not enough boxes" << std::endl;
+        std::cout << "NOT ENOUGH BOX IN COMPARAISON OF TARGETS" << std::endl;
     }
     return res;
 }
@@ -222,14 +182,10 @@ bool LevelEditorWindow::isGridValid() {
 }
 
 void LevelEditorWindow::convertCanvaToTextFile() {
-    std::cout << "ENTERING CONVERT" << std::endl;
     std::ifstream allRead("lvls/all.txt");
-    std::cout << "READED ALL.TXT" << std::endl;
     std::string line;
     int counter = 0;
-    std::cout << "ENTERING WHILE LOOP" << std::endl;
     while(std::getline(allRead, line)) {
-        std::cout << counter << std::endl;
         counter++;
     }
     
@@ -238,7 +194,6 @@ void LevelEditorWindow::convertCanvaToTextFile() {
     filingName += std::to_string(counter+1);
     directory += filingName;
     directory += ".txt";
-    std::cout << directory << std::endl;
     std::ofstream fw(directory, std::ofstream::out);
     fw << canvas.getNumberOfLines() << " " << canvas.getNumberOfColumns() << " 0 " << movesLimit->value() << "\n";
     for (int i=0; i < canvas.getNumberOfLines();i++) {

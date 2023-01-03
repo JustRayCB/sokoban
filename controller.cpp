@@ -8,6 +8,7 @@
 #include "rectangle.hpp"
 
 
+
 void Controll::setBoard(Board *myBoard){
     board = myBoard;
 }
@@ -33,6 +34,29 @@ void Controll::movePlayer(int keyCode){
     tmp->setMove(move);
     tmp->addAnimation();
 
+}
+
+void Controll::clickMovePlayer(int x, int y) {
+    board->setObject(x, y, board->getElem(board->getPosX(), board->getPosY()));
+
+
+    if (board->isOnTarget(Point{board->getPosX(), board->getPosY()})) {
+        board->removeFromTarget(Point{board->getPosX(), board->getPosY()}, false);
+        board->setTarget(board->getPosX(), board->getPosY());
+    } else {
+        board->setEmpty(board->getPosX(), board->getPosY());
+    }
+    if (board->isTarget(x,y)) {
+        board->setOnTarget(Point{x,y}, false);
+    }
+
+    board->setPosPlayer(x, y);
+
+    GameObject *tmp = &board->getElem(x, y);
+    const int boxSize = tmp->getSize();
+    int newX = 200 + (x*boxSize);
+    int newY = 200 + (y*boxSize);
+    tmp->setPosFltk(newY, newX);
 }
 
 void Controll::tpPlayer(int x, int y){

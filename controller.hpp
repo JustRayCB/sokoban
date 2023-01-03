@@ -19,6 +19,8 @@ public:
         int &deltaY, const int &boxSize, std::string &move);
     void boxTargetToEmpty(GameObject &box);
 
+    void clickMovePlayer(int x, int y);
+
     //Possible moves with a box
     void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
