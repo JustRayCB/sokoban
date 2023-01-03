@@ -26,9 +26,20 @@ Pour les targets :
 $ Penser à un menu principal.
 
 
+________________________________
+TODO:
+1° Cas d'échecs :
+- quand dans les voisins consécutifs il y a soit 1 mur et 1 boite soit 2 boites soit 2 murs.
+2° rapport
+3° Refactor :
+- Classe texte
+
+
 ---------------------------------
 
 Pistes d'améliorations :
 1) Algorithme pour trouver un chemin devrait renvoyer la valeur minimale de pas et non une des valeurs possibles
    Pour ce faire -> Algorithme en largeur.
    Hugo a fichier sur son ordi
+2) Détection d'échecs
+   Si niveau plus possible, alors message plutôt que quand toutes les boites sont bloquées
