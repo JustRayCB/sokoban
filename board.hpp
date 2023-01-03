@@ -41,7 +41,7 @@ public:
 
     void mouseMove(Point mouseLoc);
     Point mouseClick(Point mouseLoc);
-    bool findPath(Point pos, Point target, std::vector<std::vector<bool>>&visited);
+    int findPath(Point pos, Point target, std::vector<std::vector<bool>>&visited, int limit);
     bool isValid(int x, int y, std::vector<std::vector<bool>>&visited);
     int getBoxSize();
 
@@ -96,7 +96,7 @@ public:
     void draw();
 
     void incrementTotalTargets();
-    void incrementStepCount();
+    void incrementStepCount(int x);
 
     Point searchMathTp(const Point &currentTp);
     void replaceTp();

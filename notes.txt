@@ -24,3 +24,11 @@ Pour les targets :
 - Utiliser des smart pointers où c'est possible.
 - Best score dans le fichier txt et l'afficher. DONE
 $ Penser à un menu principal.
+
+
+---------------------------------
+
+Pistes d'améliorations :
+1) Algorithme pour trouver un chemin devrait renvoyer la valeur minimale de pas et non une des valeurs possibles
+   Pour ce faire -> Algorithme en largeur.
+   Hugo a fichier sur son ordi

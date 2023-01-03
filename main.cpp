@@ -178,7 +178,19 @@ public:
                 else {
                     Point test = board.mouseClick(Point{Fl::event_x(), Fl::event_y()});
                     std::vector<std::vector<bool>> visited(board.getBoard().size(), std::vector<bool>(board.getBoard()[0].size(), false));
-                    std::cout << board.findPath(Point{board.getPosX(), board.getPosY()}, test, visited) << std::endl; 
+                    // std::cout << "isPath=" << board.findPath(Point{board.getPosX(), board.getPosY()}, test, visited) << std::endl;
+                    // if (board.findPath(Point{board.getPosX(), board.getPosY()}, test, visited)) {
+                    //     std::cout << "FOUND A PATH" << std::endl;
+                    //     controller.tpPlayer(test.x, test.y);
+                    // }
+                    int steps = board.findPath(Point{board.getPosX(), board.getPosY()}, test, visited, board.getLimit()-board.getStepCount());
+                    if (steps != -1) {
+                        std::cout << "FOUND A PATH OF " << steps << "STEPS" << std::endl;
+                        board.incrementStepCount(steps);
+                        controller.tpPlayer(test.x, test.y);
+                    } else {
+                        std::cout << "NO PATH FOUND IN LIMIT OF STEPS" << std::endl;
+                    }
                 }
                 return 1;
 

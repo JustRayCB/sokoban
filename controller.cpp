@@ -277,7 +277,7 @@ void Controll::move(int keyCode){
             else if (board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
                 targetPlayerTargetBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             } 
-            board->incrementStepCount();
+            board->incrementStepCount(1);
         }
         else if (not board->isBox(xIdx+deltaX, yIdx+deltaY)) {
             // joueur sur vide, vers vide
@@ -330,7 +330,7 @@ void Controll::move(int keyCode){
                 targetPlayerToTp({xIdx+deltaX, yIdx+deltaY}, {xIdx, yIdx});
             
             }
-            board->incrementStepCount();
+            board->incrementStepCount(1);
         }
     }else {
         // déplacement impossible

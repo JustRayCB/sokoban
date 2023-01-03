@@ -63,31 +63,43 @@ bool Board::isValid(int x, int y, std::vector<std::vector<bool>>&visited) {
            (gameBoard[x][y].isEmpty() or gameBoard[x][y].isTarget());
 }
 
-bool Board::findPath(Point pos, Point target, std::vector<std::vector<bool>> &visited) {
+int Board::findPath(Point pos, Point target, std::vector<std::vector<bool>> &visited, int limit) {
     // std::cout << "On : (" << pos.x << ", " << pos.y << ")" << std::endl;
     // std::cout << "Target : (" << target.x << ", " << target.y << ")" << std::endl; 
     
+
+
     int dx[4] = {-1, 0, 1, 0};
     int dy[4] = {0, 1, 0, -1};
     
     if (pos.x == target.x && pos.y == target.y) {
-        return true;
+        return 0;
+    }
+    if (limit == 0) {
+        return -1;
+    }
+    if (visited[pos.x][pos.y]) {
+        return -1;
     }
 
+
     visited[pos.x][pos.y] = true;
+
+    int steps = -1;
 
     for (int i=0; i< 4; i++) {
         int newX = pos.x + dx[i];
         int newY = pos.y + dy[i];
         // std::cout << "isValid: " << isValid(newX, newY, visited) << std::endl;
         if (isValid(newX, newY, visited)) {
-            if (findPath(Point{newX, newY}, target, visited)) {
-                return true;
-            }
+            int s = findPath(Point{newX, newY}, target, visited, limit-1);
+            if (s != -1) steps = s;
         }
     }
-    return false;
+    if (steps != -1) return steps + 1; 
+    else return -1;
 }
+
 
 
 Board::Board(const Board &other){
@@ -123,7 +135,7 @@ std::vector<std::vector<GameObject>>& Board::getBoard(){
 int Board::getTotalTargets() {return totalTargets;}
 void Board::incrementTotalTargets() {totalTargets++;}
 int Board::getStepCount() {return stepCount;}
-void Board::incrementStepCount() {stepCount++;}
+void Board::incrementStepCount(int x) {stepCount+=x;}
 int Board::getBestScore() {return bestScore;}
 int Board::getNbCol(){return gameBoard.at(0).size();}
 int Board::getNbLine(){return gameBoard.size();}
