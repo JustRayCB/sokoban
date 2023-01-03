@@ -33,8 +33,11 @@ void Cell::mouseClick(Point mouseLoc) {
             r.setFillColor(FL_MAGENTA);
             current++;
         } else if (current == 4) {
+            r.setFillColor(FL_CYAN);
+            current++;
+        } else if (current == 5) {
             r.setFillColor(FL_WHITE);
-            current -= 4;
+            current -= 5;
         }
     }
 }

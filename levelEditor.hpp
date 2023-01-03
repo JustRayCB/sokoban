@@ -55,6 +55,7 @@ private:
     Fl_Button* get_closeButton();
 
     bool isGridValid();
+    bool onlyTwoTp();
     bool onlyOnePlayer();
     bool evenBoxAndTargets();
 

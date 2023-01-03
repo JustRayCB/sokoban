@@ -2,6 +2,29 @@
 #include <cstring>
 #include <iostream> // nécessaire pour std::cout
 
+bool LevelEditorWindow::onlyTwoTp() {
+    std::cout << "ENTERING ONLYTWOTP" << std::endl;
+    std::cout << "lineInput: " << canvas.getNumberOfLines() << std::endl;
+    std::cout << "colInput: " << canvas.getNumberOfColumns() << std::endl;
+    std::cout << "lineCells: " << canvas.getCells().size() << std::endl;
+    std::cout << "colCells: " << canvas.getCells()[0].size() << std::endl; 
+    int count = 0;
+    for (int i=0; i < canvas.getNumberOfLines();i++){
+        for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
+            std::cout << "i=" << i << " j=" << j << std::endl;
+            if (canvas.getCells()[i][j].getCurrent() == 5) {
+                count++;
+            }
+            if (count > 2) {
+                std::cout << "TOO MUCH TPS" << std::endl;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 void LevelEditorWindow::bouton_callback(){
     if ((atoi(lineInput->value()) > 2) and ((atoi(colInput->value()) > 2))) {
         Canvas newCanvas = Canvas(atoi(colInput->value()),atoi(lineInput->value()));
@@ -15,7 +38,7 @@ void LevelEditorWindow::bouton_callback(){
     }
 }
 void LevelEditorWindow::adding_bouton_callback(){
-    if (isGridValid() and evenBoxAndTargets()) {
+    if (isGridValid()) {
         std::cout << "GOOD GRID" << std::endl;
         convertCanvaToTextFile();
     } else {
@@ -192,7 +215,7 @@ bool LevelEditorWindow::evenBoxAndTargets() {
 }
 
 bool LevelEditorWindow::isGridValid() {
-    if (onlyOnePlayer()) {
+    if (onlyOnePlayer() and evenBoxAndTargets() and onlyTwoTp()) {
         return true;
     }
     return false;
@@ -230,6 +253,8 @@ void LevelEditorWindow::convertCanvaToTextFile() {
                 fw << "@";
             } else if (canvas.getCells()[i][j].getCurrent() == 4) {
                 fw << ".";
+            } else if (canvas.getCells()[i][j].getCurrent() == 5) {
+                fw << "/";
             }
         }
         fw << "\n";
