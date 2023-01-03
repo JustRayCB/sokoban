@@ -23,10 +23,13 @@ public:
 
     //Possible moves with a box
     void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode);
     void emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
     void emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void tpPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
@@ -34,12 +37,12 @@ public:
     //Possible moves without a box
     void emptyPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
-    void emptyPlayerToTp(const Point &position, const Point &oldPosition);
+    void emptyPlayerToTp(const Point &position, const Point &oldPosition, int keyCode);
     void tpPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
-    void tpPlayerToEmpty(int keyCode);
+    void tpPlayerToEmpty(const Point &position, int keyCode);
     void targetPlayerToEmpty(const Point &position, int keyCode, int boxSize);
     void targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
-    void targetPlayerToTp(const Point &newPosition, const Point &oldPosition);
+    void targetPlayerToTp(const Point &newPosition, const Point &oldPosition, int  keyCode);
     
 
 };

@@ -38,7 +38,7 @@ void DisplayBoard::draw(){
                 " steps remainings", {850, 300}};
         remain.draw();
     } 
-    else if (board->getStepCount()==board->getLimit() and not board->isGameOver()) {
+    else if (board->isGameOver()) {
         status.setString("You Loose !!");
     }
     else {

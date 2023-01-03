@@ -147,7 +147,7 @@ void Board::setObject(const int &line, const int &col, GameObject &object){
 
 
 void Board::setEmpty(const int line, const int col){
-    std::cout << "Set empty " << std::endl;
+    //std::cout << "Set empty " << std::endl;
     getElem(line, col).setName("empty");
     getElem(line, col).setColor(FL_GRAY);
     getElem(line, col).setFrameColor(FL_GRAY);
@@ -156,7 +156,7 @@ void Board::setEmpty(const int line, const int col){
 }
 
 void Board::setTp(const int line, const int col){
-    std::cout << "Set tp " << std::endl;
+    //std::cout << "Set tp " << std::endl;
     getElem(line, col).setName("tp");
     getElem(line, col).setColor(fl_rgb_color(0, 255, 255));
     getElem(line, col).setFrameColor(FL_BLACK);
@@ -164,14 +164,14 @@ void Board::setTp(const int line, const int col){
 }
 
 void Board::setTarget(const int line, const int col){
-    std::cout << "Set target " << std::endl;
+    //std::cout << "Set target " << std::endl;
     getElem(line, col).setName("target");
     getElem(line, col).setColor(FL_MAGENTA);
     getElem(line, col).setFrameColor(FL_BLACK);
     getElem(line, col).setSize(getElem(line, col).getSize()/2);
 }
 void Board::setPosPlayer(const int &x, const int &y){
-    std::cout << "Newplayerpos->" << x << y << std::endl;
+    //std::cout << "Newplayerpos->" << x << y << std::endl;
     posPlayerLine = x;
     posPlayerCol = y;
 }
@@ -227,9 +227,9 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
 
 
 void Board::movePlayerInVector(const int newX, const int newY){
-    std::cout << "movePLayerVector : " << newX << newY << std::endl;
-    std::cout << "movePLayerVector : " << getPosX() << getPosY() << std::endl;
-    std::cout << getElem(getPosX(), getPosX()).getName() << std::endl;
+    //std::cout << "movePLayerVector : " << newX << newY << std::endl;
+    //std::cout << "movePLayerVector : " << getPosX() << getPosY() << std::endl;
+    //std::cout << getElem(getPosX(), getPosX()).getName() << std::endl;
     setObject(newX, newY, getElem(getPosX(), getPosY()));
     setEmpty(getPosX(), getPosY());
     setPosPlayer(newX, newY);
@@ -303,15 +303,15 @@ bool Board::hasWon() const{
 
 bool Board::isGameOver() {
     if (hasWon()){
-        std::cout << "All box are on a target" << std::endl;
+        //std::cout << "All box are on a target" << std::endl;
         return true;
     }
     else if (isLimitReached()){
-        std::cout << "The limit is reached\n";
+        //std::cout << "The limit is reached\n";
         return true;
     }
     else if (areBoxStuck()) {
-        std::cout << "The box are stuck, you cannot win the game anymore\n";
+        //std::cout << "The box are stuck, you cannot win the game anymore\n";
         return true;
     }
     return false;
@@ -410,7 +410,6 @@ Point Board::searchMathTp(const Point &currentTp){
         j = 0;
         for (auto &elem : line) {
             if (elem.isTp()){
-                std::cout << "Im a tp  : " << i << " ," <<  j  << std::endl;
                 if (currentTp.x != i or currentTp.y != j) {
                     return {i, j};
                 }
@@ -419,7 +418,7 @@ Point Board::searchMathTp(const Point &currentTp){
         }
         i++;
     }
-    return {i, j};
+    return {-1, -1};
 
 }
 
