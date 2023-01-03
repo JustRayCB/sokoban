@@ -402,7 +402,7 @@ Point Board::searchMathTp(const Point &currentTp){
         for (auto &elem : line) {
             if (elem.isTp()){
                 std::cout << "Im a tp  : " << i << " ," <<  j  << std::endl;
-                if (currentTp.x != i and currentTp.y != j) {
+                if (currentTp.x != i or currentTp.y != j) {
                     return {i, j};
                 }
             }
