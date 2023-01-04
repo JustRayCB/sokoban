@@ -168,6 +168,11 @@ void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, i
     board->setObject(position.x, position.y, target);
 }
 
+void Controll::tpPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){
+    moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    tpPlayerToEmpty(position, keyCode);
+}
+
 void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
@@ -178,6 +183,11 @@ void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, i
     // on redessine la cible
     GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
     board->setObject(position.x, position.y, target);
+}
+
+void Controll::tpPlayertpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
+    moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    board->setTp(position.x+deltaX, position.y+deltaY);
 }
 
 void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
@@ -250,10 +260,20 @@ void Controll::targetPlayerToTarget(const Point &position, int deltaX, int delta
     GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
     board->setObject(position.x, position.y, target);
 }
-
-
     
+void Controll::tpPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    emptyPlayerTargetBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
+    board->setTp(position.x, position.y);
+}
 
+void Controll::tpPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    emptyPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
+    board->setTp(position.x, position.y);
+}
+
+void Controll::emptyPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+    emptyPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+}
 
 void Controll::move(int keyCode){
     /*
@@ -293,18 +313,24 @@ void Controll::move(int keyCode){
                 emptyPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
             // joueur sur vide, box sur vide, vers cible OK
-            else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
+            else if (not board->isOnTarget({xIdx, yIdx}) 
+                    and not board->isOnTp({xIdx, yIdx})
+                    and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
+                    and not board->isOnTp({xIdx+deltaX, yIdx+deltaY})
                     and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
                 std::cout << "Joueur vide , box vide ,vers cible\n";
                 emptyPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             } 
             // joueur sur vide, box sur cible, vers vide OK
-            else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
-                    and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
+            //else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
+                    //and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
+            else if (not board->isOnTarget({xIdx, yIdx}) 
+                    and not board->isOnTp({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
+                    and board->isEmpty(xIdx+2*deltaX, yIdx+2*deltaY)){
                 std::cout << "Joueur vide , box cible ,vers vide\n";
                 emptyPlayerTargetBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
-            // joueur sur vide, box sur cible, vers cible 
+            // joueur sur vide, box sur cible, vers cible  OK
             else if (not board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) 
                     and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
                 std::cout << "Joueur vide , box cible ,vers cible\n";
@@ -312,17 +338,18 @@ void Controll::move(int keyCode){
             }
             // joueur sur cible, box sur vide, vers vide OK
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) 
-                    and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
+                    and not board->isOnTp({xIdx+deltaX, yIdx+deltaY})
+                    and not board->isEmpty(xIdx+2*deltaX, yIdx+2*deltaY)){
                 std::cout << "Joueur cible , box vide ,vers vide\n";
                 targetPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
-            // joueur sur cible, box sur vide, vers cible
+            // joueur sur cible, box sur vide, vers cible OK
             else if (board->isOnTarget({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) 
                     and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
                 std::cout << "Joueur cible , box vide ,vers cible\n";
                 targetPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
-            // joueur sur cible, box sur cible, vers vide
+            // joueur sur cible, box sur cible, vers vide OK
             else if (board->isOnTarget({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) 
                     and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)){
                 std::cout << "Joueur cible , box cible ,vers vide\n";
@@ -337,7 +364,7 @@ void Controll::move(int keyCode){
             
 
 
-            //joueur sur vide, box sur vide vers tp
+            //joueur sur vide, box sur vide vers tp OK
             else if (not board->isOnTp({xIdx, yIdx}) and not board->isOnTarget({xIdx, yIdx}) and 
                     not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
                     and not board->isOnTp({xIdx+deltaX, yIdx+deltaY}) and 
@@ -345,15 +372,17 @@ void Controll::move(int keyCode){
                 std::cout << "Joueur vide , box vide sur tp\n";
                 emptyPlayerEmptyBoxToTp({xIdx, yIdx}, deltaX, deltaY, keyCode);
             }
-            //joueur vide, box sur tp, vers vide
-            else if (not board->isOnTp({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and
+            //joueur vide, box sur tp, vers vide OK
+            else if (not board->isOnTp({xIdx, yIdx})
+                    and not board->isOnTarget({xIdx, yIdx})
+                    and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) and
                     board->isOnTp({xIdx+deltaX, yIdx+deltaY}) and 
                     not board->isOnTarget({xIdx+2*deltaX, yIdx+2*deltaY}) and
                     not board->isOnTp({xIdx+2*deltaX, yIdx+2*deltaY})){
                 std::cout << "Joueur vide , box tp vers vide\n";
                 emptyPlayerTpBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode);
             }
-            //joueur tp, box sur vide, vers vide
+            //joueur tp, box sur vide, vers vide OK
             else if (board->isOnTp({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
                     and not board->isOnTp({xIdx+deltaX, yIdx+deltaY})
                     and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)
@@ -361,13 +390,56 @@ void Controll::move(int keyCode){
                 std::cout << "Joueur tp , box vide ,vers vide\n";
                 tpPlayerEmptyBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
             }
-             //joueur sur vide box sur tp vers tp
+             //joueur sur vide box sur tp vers tp OK
             else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTp({xIdx, yIdx})
                     and board->isOnTp({xIdx+deltaX, yIdx+deltaY}) 
                     and board->isOnTp({xIdx+2*deltaX, yIdx+2*deltaY})){
                 std::cout << "Joueur vide , box tp ,vers tp\n";
-                //emptyPlayerTargetBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
+                emptyPlayerEmptyBoxToTp({xIdx, yIdx}, deltaX, deltaY, keyCode); //meme mouvement
             }
+            // joueur sur tp, box sur tp, vers vide OK
+            else if (board->isOnTp({xIdx, yIdx}) and board->isOnTp({xIdx+deltaX, yIdx+deltaY}) 
+                    and not board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY) 
+                    and not board->isTp(xIdx+2*deltaX, yIdx+2*deltaY)){
+                std::cout << "Joueur tp , box tp ,vers vide\n";
+                tpPlayertpBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode);
+            }
+            //Joueur sur tp, box sur vide vers tp OK
+            else if (board->isOnTp({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) 
+                    and not board->isOnTp({xIdx+deltaX, yIdx+deltaY})
+                    and board->isTp(xIdx+2*deltaX, yIdx+2*deltaY)){
+                std::cout << "Joueur tp , box vide ,vers tp\n";
+                tpPlayerEmptyBoxToTp({xIdx, yIdx}, deltaX, deltaY, keyCode);
+            }
+
+
+
+
+
+            // joueur sur tp, box sur cible, vers vide OK
+            else if (board->isOnTp({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
+                    and board->isEmpty(xIdx+2*deltaX, yIdx+2*deltaY)) {
+                std::cout << "Joueur sur tp, box sur cible, vers vide \n";
+                tpPlayerTargetBoxToEmpty({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
+            }
+
+            //joueur sur tp, box sur vide vers target
+            else if (board->isOnTp({xIdx, yIdx}) 
+                    and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
+                    and not board->isOnTp({xIdx+deltaX, yIdx+deltaY})
+                    and board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)) {
+                std::cout << "Joueur sur tp, box sur vide, vers target\n";
+                tpPlayerEmptyBoxToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
+            }
+
+            //joueur sur vide, box sur cible vers tp
+            else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTp({xIdx, yIdx})
+                    and board->isOnTarget({xIdx+deltaX, yIdx+deltaY}) 
+                    and board->isTp(xIdx+2*deltaX, yIdx+2*deltaY)){
+                std::cout << "Joueur vide , box target ,vers tp\n";
+                emptyPlayerTargetBoxToTp({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize); //meme mouvement
+            }
+
 
             board->incrementStepCount(1);
         }
@@ -400,27 +472,32 @@ void Controll::move(int keyCode){
 
             //joueur sur Tp vers cible
             else if (board->isOnTp({xIdx, yIdx}) and board->isOnTarget({xIdx+deltaX, yIdx+deltaY})) {
-                //std::cout << "Tp vers target" << std::endl;
+                std::cout << "Tp vers target" << std::endl;
                 //emptyPlayerToTp({xIdx+deltaX, yIdx+deltaY}, {xIdx, yIdx});
                 tpPlayerToTarget({xIdx, yIdx}, deltaX, deltaY, keyCode);
 
             }
             //joueur sur vide, vers tp
-            else if (not board->isOnTarget({xIdx, yIdx}) and board->isTp(xIdx+deltaX, yIdx+deltaY)) {
-                //std::cout << "Teleportation" << std::endl;
+            else if (not board->isOnTarget({xIdx, yIdx}) and not board->isOnTp({xIdx, yIdx})
+                    and board->isTp(xIdx+deltaX, yIdx+deltaY)) {
+                std::cout << "joueur vide vers tp" << std::endl;
                 emptyPlayerToTp({xIdx+deltaX, yIdx+deltaY}, {xIdx, yIdx}, keyCode);
             }
             //tp vers vide
             else if (board->isOnTp({xIdx, yIdx}) and not board->isOnTarget({xIdx+deltaX, yIdx+deltaY})
                     and not board->isTp(xIdx+deltaX, yIdx+deltaY)) {
-                //std::cout << "tp vers vide " << std::endl;
+                std::cout << "tp vers vide " << std::endl;
                 tpPlayerToEmpty({xIdx, yIdx}, keyCode);
             }
             //joueur sur cible, vers tp
             else if (board->isOnTarget({xIdx, yIdx}) and board->isTp(xIdx+deltaX, yIdx+deltaY)) {
-                //std::cout << "cible vers tp" << std::endl;
+                std::cout << "cible vers tp" << std::endl;
                 targetPlayerToTp({xIdx+deltaX, yIdx+deltaY}, {xIdx, yIdx}, keyCode);
             
+            }
+            //tp player vers tp
+            else if (board->isOnTp({xIdx, yIdx}) and board->isTp(xIdx+deltaX, yIdx+deltaY)) {
+                std::cout << "Tp vers tp \n";
             }
             board->incrementStepCount(1);
         }
