@@ -1,65 +1,4 @@
 #include "levelEditor.hpp"
-#include <cstring>
-#include <iostream> // nécessaire pour std::cout
-
-bool LevelEditorWindow::onlyTwoTp() {
-    int count = 0;
-    for (int i=0; i < canvas.getNumberOfLines();i++){
-        for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
-            if (canvas.getCells()[i][j].getCurrent() == 5) {
-                count++;
-            }
-            if (count > 2) {
-                std::cout << "TOO MUCH TPS (2MAX)" << std::endl;
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-
-void LevelEditorWindow::bouton_callback(){
-    if ((atoi(lineInput->value()) > 2) and ((atoi(colInput->value()) > 2))) {
-        Canvas newCanvas = Canvas(atoi(colInput->value()),atoi(lineInput->value()));
-        newCanvas.setNumberOfColumns(atoi(colInput->value()));
-        newCanvas.setNumberOfLines(atoi(lineInput->value()));
-        this->setCanva(newCanvas);
-        this->redraw();
-    }
-    else{
-        std::cout << "WRONG DIMENSIONS" << std::endl;
-    }
-}
-void LevelEditorWindow::adding_bouton_callback(){
-    if (isGridValid()) {
-        std::cout << "GOOD GRID" << std::endl;
-        convertCanvaToTextFile();
-    } else {
-        std::cout << "BAD GRID" << std::endl;
-    }
-}
-
-void LevelEditorWindow::static_bouton_callback(Fl_Widget* w, void* ptr){
-    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
-    me->bouton_callback();
-}
-void LevelEditorWindow::static_addingbouton_callback(Fl_Widget* w, void* ptr){
-    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
-    me->adding_bouton_callback();
-}
-void LevelEditorWindow::static_closingButton_callback(Fl_Widget* w, void* ptr){
-    Fl_Window* firstWindow = (Fl_Window*) ptr;
-    LevelEditorWindow* secondWindow = (LevelEditorWindow*) w->window();
-    secondWindow->closeWindow(firstWindow, secondWindow);
-}
-
-
-void LevelEditorWindow::closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow) {
-    secondWindow->hide();
-    firstWindow->show();
-    firstWindow->redraw();
-}
 
 LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor"){
     submitButton = new Fl_Button(150, 90, 50, 20, "Submit");
@@ -67,10 +6,9 @@ LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level E
     closeButton = new Fl_Button(300, 50, 100, 30, "Return to game");
     lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
     colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
-    levelName = new Fl_Input(150, 10, 100, 20, "Name of level: ");
     movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
-    submitButton->callback(static_bouton_callback, this);
-    addButton->callback(static_addingbouton_callback, this);
+    submitButton->callback(static_submitButton_callback, this);
+    addButton->callback(static_addingButton_callback, this);
     end();
     show();
 }
@@ -82,10 +20,6 @@ void LevelEditorWindow::setCanva(Canvas canva){
 void LevelEditorWindow::draw() {
     Fl_Window::draw();
     canvas.draw();
-}
-
-Fl_Button* LevelEditorWindow::get_closeButton() {
-    return closeButton;
 }
 
 int LevelEditorWindow::handle(int event) {
@@ -112,10 +46,6 @@ int LevelEditorWindow::handle(int event) {
                         and Fl::event_y() <= addButton->y()+addButton->h() and Fl::event_y() >=addButton->y()) {
                 addButton->do_callback();
             }
-            else if (Fl::event_x() <= levelName->x()+levelName->w() and Fl::event_x() >=levelName->x() 
-                        and Fl::event_y() <= levelName->y()+levelName->h() and Fl::event_y() >=levelName->y()) {
-                levelName->handle(event);   
-            }
             else if (Fl::event_x() <= movesLimit->x()+movesLimit->w() and Fl::event_x() >=movesLimit->x() 
                         and Fl::event_y() <= movesLimit->y()+movesLimit->h() and Fl::event_y() >=movesLimit->y()) {
                 movesLimit->handle(event);   
@@ -133,6 +63,29 @@ int LevelEditorWindow::handle(int event) {
     return 0;
 }
 
+bool LevelEditorWindow::isGridValid() {
+    if (onlyOnePlayer() and evenBoxAndTargets() and onlyTwoTp()) {
+        return true;
+    }
+    return false;
+}
+
+bool LevelEditorWindow::onlyTwoTp() {
+    int count = 0;
+    for (int i=0; i < canvas.getNumberOfLines();i++){
+        for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
+            if (canvas.getCells()[i][j].getCurrent() == 5) {
+                count++;
+            }
+            if (count > 2) {
+                fl_alert("You placed too much teleportation cells, the max is 2.");
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 bool LevelEditorWindow::onlyOnePlayer() {
     int count = 0;
     for (int i=0; i < canvas.getNumberOfLines();i++){
@@ -141,7 +94,7 @@ bool LevelEditorWindow::onlyOnePlayer() {
                 count++;
             }
             if (count > 1) {
-                std::cout << "TOO MUCH PLAYER (1 MAX)" << std::endl;
+                fl_alert("There is too much player, only one player is admitted.");
                 return false;
             }
         }
@@ -149,7 +102,7 @@ bool LevelEditorWindow::onlyOnePlayer() {
     if (count != 0) {
         return true;
     }
-    std::cout << "NO PLAYER" << std::endl;
+    fl_alert("There is no player, there need to be a single player.");
     return false;
 }
 
@@ -169,16 +122,9 @@ bool LevelEditorWindow::evenBoxAndTargets() {
     bool res = countBox >= countTargets;
 
     if (not res) {
-        std::cout << "NOT ENOUGH BOX IN COMPARAISON OF TARGETS" << std::endl;
+        fl_alert("There is not enough boxes in comparaison of targets.");
     }
     return res;
-}
-
-bool LevelEditorWindow::isGridValid() {
-    if (onlyOnePlayer() and evenBoxAndTargets() and onlyTwoTp()) {
-        return true;
-    }
-    return false;
 }
 
 void LevelEditorWindow::convertCanvaToTextFile() {
@@ -189,13 +135,19 @@ void LevelEditorWindow::convertCanvaToTextFile() {
         counter++;
     }
     
-    std::string directory = "lvls/";
-    std::string filingName = "lvl";
-    filingName += std::to_string(counter+1);
-    directory += filingName;
-    directory += ".txt";
+    std::string filingName = "lvl" + std::to_string(counter+1);
+    std::string directory = "lvls/" + filingName + ".txt";
+
     std::ofstream fw(directory, std::ofstream::out);
-    fw << canvas.getNumberOfLines() << " " << canvas.getNumberOfColumns() << " 0 " << movesLimit->value() << "\n";
+    const char* maxMoveInputValue = movesLimit->value();
+    std::string limit;
+    if(maxMoveInputValue != 0 && strlen(maxMoveInputValue) !=0) {
+        limit = movesLimit->value();
+    } else {
+        limit = "50";
+    }
+
+    fw << canvas.getNumberOfLines() << " " << canvas.getNumberOfColumns() << " 0 " << limit << "\n";
     for (int i=0; i < canvas.getNumberOfLines();i++) {
         for (int j=0; j < canvas.getNumberOfColumns();j++) {
             if (canvas.getCells()[i][j].getCurrent() == 0) {
@@ -216,9 +168,44 @@ void LevelEditorWindow::convertCanvaToTextFile() {
     }
     std::ofstream allWrite("lvls/all.txt", std::ofstream::app);
     allWrite << filingName << "\n";
-    std::cout << "ADDING FILE AS: " << filingName << std::endl;
+    fl_alert("File added as : %s", filingName.c_str());
 }
 
-void LevelEditorWindow::addLevelToLevels() {
+void LevelEditorWindow::static_submitButton_callback(Fl_Widget* w, void* ptr){
+    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
+    me->submitButtonCallback();
+}
 
+void LevelEditorWindow::static_addingButton_callback(Fl_Widget* w, void* ptr){
+    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
+    me->addingButtonCallback();
+}
+
+void LevelEditorWindow::submitButtonCallback(){
+    if ((atoi(lineInput->value()) > 2) and ((atoi(colInput->value()) > 2))) {
+        Canvas newCanvas = Canvas(atoi(colInput->value()),atoi(lineInput->value()));
+        newCanvas.setNumberOfColumns(atoi(colInput->value()));
+        newCanvas.setNumberOfLines(atoi(lineInput->value()));
+        this->setCanva(newCanvas);
+        this->redraw();
+    }
+    else{
+        fl_alert("You introduced bad dimensions, must be integers and greater than 2.");
+    }
+}
+
+void LevelEditorWindow::addingButtonCallback(){
+    if (isGridValid()) {
+        convertCanvaToTextFile();
+    }
+}
+
+Fl_Button* LevelEditorWindow::get_closeButton() {
+    return closeButton;
+}
+
+void LevelEditorWindow::closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow) {
+    secondWindow->hide();
+    firstWindow->show();
+    firstWindow->redraw();
 }
