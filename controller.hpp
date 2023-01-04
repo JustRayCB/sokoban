@@ -50,6 +50,10 @@ public:
     void tpPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void tpPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void emptyPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void targetPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
+    void emptyPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
+    void targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void tpPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
 };
 
 
