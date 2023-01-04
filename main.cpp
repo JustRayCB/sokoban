@@ -113,9 +113,11 @@ public:
         secondWindow->hide();
         configChoice(firstWindow->choice);
         std::string addedLevel = "lvls/"+static_cast<std::string>(firstWindow->choice->text(firstWindow->choice->size()-2))+".txt";
+        std::cout << addedLevel << std::endl;
         firstWindow->choice->value(firstWindow->choice->size()-2);
         Board newBoard;
         loadBoard(newBoard, addedLevel);
+        firstWindow->currentFile = addedLevel;
         firstWindow->setBoard(newBoard);
         firstWindow->show();
     }
