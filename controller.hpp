@@ -54,6 +54,11 @@ public:
     void emptyPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
     void targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void tpPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
+    void tpPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void targetPlayerTpBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode);
+    void targetPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void targetPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
+    void tpPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
 };
 
 
