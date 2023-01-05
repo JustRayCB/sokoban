@@ -35,9 +35,6 @@ class Canvas {
   void draw();
   void mouseMove(Point mouseLoc);
   void mouseClick(Point mouseLoc);
-  void keyPressed(int /*keyCode*/) {
-    exit(0);
-  }
   void setNumberOfLines(int lineNumber);
   void setNumberOfColumns(int colNumber);
   int getNumberOfLines();

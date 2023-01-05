@@ -86,8 +86,8 @@ public:
     bool isGameOver();
     bool isLimitReached();
     bool hasWon() const;
-    bool wasOnTarget(const Point &position, bool isBox);
-    bool wasOnTp(const Point &position, bool isBox);
+    // bool wasOnTarget(const Point &position, bool isBox);
+    // bool wasOnTp(const Point &position, bool isBox);
     bool isOnTarget(const Point &position);
     bool isOnTp(const Point &position);
     bool areBoxStuck();
