@@ -1,5 +1,6 @@
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
+#include <unistd.h>
 #include <algorithm>
 #include <cstddef>
 #include <cstring>
@@ -57,8 +58,8 @@ bool Board::isValid(int x, int y, std::vector<std::vector<bool>>&visited) {
     // std::cout << "gameBoard[x][y].isEmpty()=" << gameBoard[x][y].isEmpty() << std::endl;
     // std::cout << "gameBoard[x][y].isTarget()=" << gameBoard[x][y].isTarget() << std::endl;
 
-    return x >= 0 && x < gameBoard.size() &&
-           y >= 0 && y < gameBoard[0].size() &&
+    return x >= 0 && static_cast<std::size_t>(x) < gameBoard.size() &&
+           y >= 0 && static_cast<std::size_t>(y) < gameBoard[0].size() &&
            !visited[x][y] &&
            (gameBoard[x][y].isEmpty() or gameBoard[x][y].isTarget());
 }
@@ -355,6 +356,10 @@ void loadBoard(Board &board, std::string file){
     }
 }
 
+
+
+
+
 bool Board::isBoxStuck(int &xVector, int &yVector){
     std::vector<std::tuple<int, int>> coord = {{xVector+1, yVector}, {xVector-1, yVector},
                                                 {xVector, yVector+1},{xVector, yVector-1}};
@@ -365,18 +370,12 @@ bool Board::isBoxStuck(int &xVector, int &yVector){
     if (isInBoard(xVector+1, yVector)) { rightOk = true; right = &getElem(xVector+1, yVector); }
     if (isInBoard(xVector-1, yVector)) { leftOk = true; left = &getElem(xVector-1, yVector); }
     bool onTarget = isOnTarget({xVector, yVector});
-    // std::cout << "Box is on target : " << onTarget << std::endl;
-    // compteur qui a la base vaut 0 puis regarde haut si mur ++
-    // droit si mur ++
-    // est ce que le compteur == 2 si oui true
-    // test mur puis box appel recursif si blocker incréement compteur
-    //
     if ((upOk and up->isWall())
             and (rightOk and right->isWall())) { return true; }    
     else if ((upOk and up->isWall())
-            and (leftOk and left->isWall())) { return true; }    
+            and (leftOk and left->isWall()) ) { return true; }    
     else if ((downOk and down->isWall())
-            and (rightOk and right->isWall())) { return true; }    
+            and (rightOk and right->isWall()) ) { return true; }    
     else if ((downOk and down->isWall())
             and (leftOk and left->isWall())) { return true; }    
 
@@ -387,12 +386,17 @@ bool Board::areBoxStuck(){
 
     int boxStuck = 0;
     int totalBox = 0;
+    vector<vector<bool>> blockBoard(gameBoard.size() , vector<bool> (gameBoard.at(0).size(), false));
+    std::cout << "Size of blockbord line : " << blockBoard.size() << std::endl;
+    std::cout << "Size of blockbord col : " << blockBoard.at(0).size() << std::endl;
 
     for (int line = 0; static_cast<std::size_t>(line) < gameBoard.size(); line++) {
         for (int col = 0; static_cast<std::size_t>(col) < gameBoard.at(line).size(); col++) {
             if (isBox(line, col)){
                 totalBox++;
-                if (isBoxStuck(line, col)) { boxStuck++; }
+                std::cout << "Calling on " << line << " ," << col <<std::endl;
+                if (isBoxStuck(line, col, blockBoard)) { boxStuck++; }
+                sleep(1);
             }
         }
     }
@@ -403,6 +407,188 @@ bool Board::areBoxStuck(){
 
     return false;
 }
+
+
+bool Board::isBoxStuck(int xVector, int yVector, std::vector<std::vector<bool>> &blockBoard){
+    bool upOk = false, downOk = false, leftOk = false, rightOk = false;    
+    GameObject *up = nullptr, *down = nullptr, *right = nullptr, *left = nullptr;
+    if (isInBoard(xVector -1, yVector)) { upOk = true;}
+    if (isInBoard(xVector+1, yVector)) { downOk = true; }
+    if (isInBoard(xVector, yVector+1)) { rightOk = true; }
+    if (isInBoard(xVector, yVector-1)) { leftOk = true; }
+    //si la case est déja visitée
+    if (blockBoard.at(xVector).at(yVector)) {
+        std::cout << xVector << " ," << yVector << std::endl;
+        std::cout << "deja visitée\n";
+        return false;
+    }
+
+    //si la case est un wall
+    if (gameBoard.at(xVector).at(yVector).isWall()) {
+        std::cout << xVector << " ," << yVector << std::endl;
+        std::cout << "Is a wall\n";
+        return true;
+    }
+    blockBoard.at(xVector).at(yVector) = true;
+    if ((xVector == 0 or static_cast<std::size_t>(xVector) == gameBoard.size()-1) and 
+            (yVector == 0 or static_cast<std::size_t>(yVector) == gameBoard.at(0).size()-1)) {
+        std::cout << xVector << " ," << yVector << std::endl;
+        std::cout << "Une boite se trouve dans un coin \n";
+        return true;
+    }
+    bool upBlocked = false;
+    bool downBlocked = false;
+    bool leftBlocked = false;
+    bool rightBlocked = false;
+    if (upOk) {
+        upBlocked = isBoxStuck(xVector-1, yVector, blockBoard);
+    }
+    if (downOk) {
+        downOk = isBoxStuck(xVector+1, yVector, blockBoard);
+    }
+    if (rightOk) {
+        rightBlocked = isBoxStuck(xVector, yVector+1, blockBoard);
+    }
+    if (leftOk) {
+        leftBlocked = isBoxStuck(xVector, yVector-1, blockBoard);
+    }
+
+    if (upBlocked and rightBlocked) {
+        std::cout << "Position : " << xVector << ", " << yVector << std::endl;
+        std::cout << "Bloqué par le haut et pas la droite\n";
+        return true;
+    }
+    if (upBlocked and leftBlocked) {
+        std::cout << "Position : " << xVector << ", " << yVector << std::endl;
+        std::cout << "Bloqué par le haut et pas la gauche\n";
+        return true;
+    }
+    if (downBlocked and leftBlocked) {
+        std::cout << "Position : " << xVector << ", " << yVector << std::endl;
+        std::cout << "Bloqué par le bas et pas la gauche\n";
+        return true;
+    }
+    if (downBlocked and rightBlocked) {
+        std::cout << "Position : " << xVector << ", " << yVector << std::endl;
+        std::cout << "Bloqué par le bas et pas la droite\n";
+        return true;
+    }
+    return false;
+}
+
+
+
+//int Board::countBlockedBoxes(std::vector<std::vector<bool>>& grid) {
+  //int numBlockedBoxes = 0;
+
+  //// Définir la fonction récursive isBoxBlocked()
+  //function<bool(int, int)> isBoxBlocked;
+  //isBoxBlocked = [&](int i, int j) {
+    //// Vérifier si la boîte actuelle est bloquée par un mur
+    //if (gameBoard.at(i).at(j).isWall()) return true;
+    //// Vérifier si la boîte actuelle est déjà marquée comme bloquée
+    //if (grid[i][j]) return true;
+    //// Si la boîte actuelle n'est pas bloquée, marquer la boîte comme visitée
+    //grid[i][j] = 'X';
+    //// Si la boîte actuelle est dans un coin, elle est bloquée
+    //if ((i == 0 || i == grid.size() - 1) && (j == 0 || j == grid[i].size() - 1)) return true;
+    //// Si la boîte actuelle n'est pas dans un coin, vérifier si ses voisins sont bloqués
+    //if ((i > 0 && isBoxBlocked(i - 1, j)) ||
+        //(i < grid.size() - 1 && isBoxBlocked(i + 1, j)) ||
+        //(j > 0 && isBoxBlocked(i, j - 1)) ||
+        //(j < grid[i].size() - 1 && isBoxBlocked(i, j + 1))) {
+      //return true;
+    //}
+    //// Si aucun des voisins de la boîte actuelle n'est bloqué, la boîte actuelle n'est pas bloquée
+    //return false;
+  //};
+
+  //// Parcourir chaque boîte de la grille et vérifier si elle est bloquée
+  //for (int i = 0; i < grid.size(); i++) {
+    //for (int j = 0; j < grid[i].size(); j++) {
+      //if (grid[i][j] == 'B' && isBoxBlocked(i, j)) {
+        //numBlockedBoxes++;
+      //}
+    //}
+  //}
+
+  //return numBlockedBoxes;
+//}
+
+
+
+
+
+
+
+
+
+
+//bool Board::isBoxStuck(int xVector, int yVector, std::vector<std::vector<bool>> &blockBoard){
+    //int neighbor = 0;
+    //if ((xVector == 0 or xVector == gameBoard.size()-1) and 
+            //(yVector == 0 or yVector == gameBoard.at(0).size()-1)) {
+        //std::cout << "Une boite se trouve dans un coin \n";
+        //blockBoard.at(xVector).at(yVector) = true;
+        //return true;
+    //}
+    //std::vector<std::tuple<int, int>> coord = {{xVector+1, yVector}, {xVector-1, yVector},
+                                                //{xVector, yVector+1},{xVector, yVector-1}};
+    //bool upOk = false, downOk = false, leftOk = false, rightOk = false;    
+    //GameObject *up = nullptr, *down = nullptr, *right = nullptr, *left = nullptr;
+    //if (isInBoard(xVector, yVector-1) and !blockBoard.at(xVector).at(yVector-1)) { upOk = true; up = &getElem(xVector, yVector-1);}
+    //if (isInBoard(xVector, yVector+1) and !blockBoard.at(xVector).at(yVector+1)) { downOk = true;  down = &getElem(xVector, yVector+1); }
+    //if (isInBoard(xVector+1, yVector) and !blockBoard.at(xVector+1).at(yVector)) { rightOk = true; right = &getElem(xVector+1, yVector); }
+    //if (isInBoard(xVector-1, yVector) and !blockBoard.at(xVector-1).at(yVector)) { leftOk = true; left = &getElem(xVector-1, yVector); }
+    //bool onTarget = isOnTarget({xVector, yVector});
+    //// std::cout << "Box is on target : " << onTarget << std::endl;
+    //// compteur qui a la base vaut 0 puis regarde haut si mur ++
+    //// droit si mur ++
+    //// est ce que le compteur == 2 si oui true
+    //// test mur puis box appel recursif si blocker incréement compteur
+    ////
+    //if (upOk) {
+        //if (up->isWall()) {
+            //return true;
+        //}else {
+            //if (isBoxStuck(xVector, yVector-1, blockBoard)){neighbor++;}
+        //}
+    //}
+    ////if ((upOk and up->isWall())
+            ////and (rightOk and right->isWall())) { return true; }    
+    ////else if ((upOk and up->isWall())
+            ////and (leftOk and left->isWall())) { return true; }    
+    ////else if ((downOk and down->isWall())
+            ////and (rightOk and right->isWall())) { return true; }    
+    ////else if ((downOk and down->isWall())
+            ////and (leftOk and left->isWall())) { return true; }    
+
+    //return false;
+//}
+
+//bool Board::areBoxStuck(){
+
+    //int boxStuck = 0;
+    //int totalBox = 0;
+    //vector<vector<bool>> blockBoard(gameBoard.size() , vector<bool> (gameBoard.at(0).size(), false));
+    //std::cout << "Size of blockbord line : " << blockBoard.size();
+    //std::cout << "Size of blockbord col : " << blockBoard.at(0).size();
+
+    //for (int line = 0; static_cast<std::size_t>(line) < gameBoard.size(); line++) {
+        //for (int col = 0; static_cast<std::size_t>(col) < gameBoard.at(line).size(); col++) {
+            //if (isBox(line, col)){
+                //totalBox++;
+                //if (isBoxStuck(line, col, blockBoard)) { boxStuck++; }
+            //}
+        //}
+    //}
+
+    //if (totalBox == boxStuck) {
+        //return true;
+    //}
+
+    //return false;
+//}
 
 Point Board::searchMathTp(const Point &currentTp){
     int i = 0, j = 0;

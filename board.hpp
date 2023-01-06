@@ -92,6 +92,8 @@ public:
     bool isOnTp(const Point &position);
     bool areBoxStuck();
     bool isBoxStuck(int &xVector, int &yVector);
+    bool isBoxStuck(int xVector, int yVector, std::vector<std::vector<bool>> &blockBoard);
+    int countBlockedBoxes(std::vector<std::vector<bool>>& grid);
 
     void draw();
 
