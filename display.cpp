@@ -39,7 +39,6 @@ void DisplayBoard::draw(){
         remain.draw();
     } 
     else if (board->isGameOver()) {
-        fl_alert("GAME OVER");
         status.setString("You Loose !!");
     }
     else {

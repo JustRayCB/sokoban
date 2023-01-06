@@ -201,7 +201,9 @@ public:
                         controller.move(Fl::event_key());    
                         if (board.hasWon()) { newBestScore(); stopMove = 1;}
                     }
-                    else { stopMove = 1; }
+                    else {
+                        fl_alert("GAME OVER");
+                        stopMove = 1; }
                 }
         }
         return 0;
