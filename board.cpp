@@ -361,15 +361,12 @@ void loadBoard(Board &board, std::string file){
 
 
 bool Board::isBoxStuck(int &xVector, int &yVector){
-    std::vector<std::tuple<int, int>> coord = {{xVector+1, yVector}, {xVector-1, yVector},
-                                                {xVector, yVector+1},{xVector, yVector-1}};
     bool upOk = false, downOk = false, leftOk = false, rightOk = false;    
     GameObject *up = nullptr, *down = nullptr, *right = nullptr, *left = nullptr;
-    if (isInBoard(xVector-1, yVector)) { upOk = true; up = &getElem(xVector, yVector-1);}
-    if (isInBoard(xVector+1, yVector)) { downOk = true;  down = &getElem(xVector, yVector+1); }
-    if (isInBoard(xVector, yVector+1)) { rightOk = true; right = &getElem(xVector+1, yVector); }
-    if (isInBoard(xVector, yVector-1)) { leftOk = true; left = &getElem(xVector-1, yVector); }
-    bool onTarget = isOnTarget({xVector, yVector});
+    if (isInBoard(xVector-1, yVector)) { upOk = true; up = &getElem(xVector-1, yVector);}
+    if (isInBoard(xVector+1, yVector)) { downOk = true;  down = &getElem(xVector+1, yVector); }
+    if (isInBoard(xVector, yVector+1)) { rightOk = true; right = &getElem(xVector, yVector+1); }
+    if (isInBoard(xVector, yVector-1)) { leftOk = true; left = &getElem(xVector, yVector-1); }
     if ((upOk and (up->isWall() or up->isBox()))
             and (rightOk and (right->isWall() or right->isBox()))) { return true; }    
     else if ((upOk and (up->isWall() or up->isBox()))
@@ -386,7 +383,6 @@ bool Board::areBoxStuck(){
 
     int boxStuck = 0;
     int totalBox = 0;
-
     for (int line = 0; static_cast<std::size_t>(line) < gameBoard.size(); line++) {
         for (int col = 0; static_cast<std::size_t>(col) < gameBoard.at(line).size(); col++) {
             if (isBox(line, col)){
