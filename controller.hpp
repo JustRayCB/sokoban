@@ -17,9 +17,12 @@ public:
 
     void setDeltas(int &keycode, int &xVector, int &yVector, int &deltaX, 
         int &deltaY, const int &boxSize, std::string &move);
-    void boxTargetToEmpty(GameObject &box);
+    // void boxTargetToEmpty(GameObject &box);
 
     void clickMovePlayer(int x, int y);
+
+    void manageMovePlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageMovePlayerAndBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
 
     //Possible moves with a box
     void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
