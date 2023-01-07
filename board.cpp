@@ -245,6 +245,13 @@ bool Board::isEmpty(const int line, const int col){ return getElem(line, col).is
 bool Board::isBox(const int line, const int col){ return getElem(line, col).isBox();}
 bool Board::isTarget(const int line, const int col){ return getElem(line, col).isTarget();}
 bool Board::isTp(const int line, const int col){ return getElem(line, col).isTp();}
+bool Board::isWall(Point &position){ return getElem(position.x, position.y).isWall();}
+bool Board::isEmpty(Point &position){ return getElem(position.x, position.y).isEmpty();}
+bool Board::isBox(Point &position){ return getElem(position.x, position.y).isBox();}
+bool Board::isTarget(Point &position){ return getElem(position.x, position.y).isTarget();}
+bool Board::isTp(Point &position){ return getElem(position.x, position.y).isTp();}
+
+
 bool Board::isInBoard(const int line, const int col){ 
     bool res =  (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
         (col < static_cast<int>(gameBoard[0].size()) and 0 <= col);

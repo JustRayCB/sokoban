@@ -23,6 +23,21 @@ public:
 
     void manageMovePlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void manageMovePlayerAndBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    
+    void manageFromEmptyPlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTargetPlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTpPlayer(const Point &position, int deltaX, int deltaY, int keyCode);
+
+    void manageFromEmptyPlayerEmptyBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromEmptyPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromEmptyPlayerTpBox(const Point &position, int deltaX, int deltaY, int keyCode);
+    void manageFromTargetPlayerEmptyBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTargetPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTargetPlayerTpBox(const Point &position, int deltaX, int deltaY, int keyCode);
+    void manageFromTpPlayerEmptyBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTpPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTpPlayerTpBox(const Point &position, int deltaX, int deltaY, int keyCode);
+
 
     //Possible moves with a box
     void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
@@ -36,7 +51,7 @@ public:
     void targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     void tpPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode);
     void targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
-    void tpPlayertpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
+    void tpPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
     void targetPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
     
     //Possible moves without a box

@@ -83,6 +83,11 @@ public:
     bool isTarget(const int line, const int col);
     bool isTp(const int line, const int col);
     bool isInBoard(const int line, const int col);
+    bool isWall(Point &position);
+    bool isEmpty(Point &position);
+    bool isBox(Point &position);
+    bool isTarget(Point &position);
+    bool isTp(Point &position);
     bool isGameOver();
     bool isLimitReached();
     bool hasWon() const;

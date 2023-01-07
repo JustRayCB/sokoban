@@ -119,10 +119,10 @@ bool LevelEditorWindow::evenBoxAndTargets() {
             }
         }
     }
-    bool res = countBox >= countTargets;
+    bool res = countBox >= countTargets and countBox != 0 and countTargets != 0;
 
     if (not res) {
-        fl_alert("There is not enough boxes in comparaison of targets.");
+        fl_alert("There is not enough boxes in comparaison of targets. Need to be at least 1 box and 1 target.");
     }
     return res;
 }
