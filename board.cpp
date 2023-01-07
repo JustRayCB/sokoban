@@ -33,9 +33,9 @@ void Board::mouseMove(Point mouseLoc) {
     }
 }
 
-int Board::getBoxSize() {
-    return gameBoard[0][0].getSize();
-}
+//int Board::getBoxSize() {
+    //return gameBoard[0][0].getSize();
+//}
 
 Point Board::mouseClick(Point mouseLoc) {
   for (auto &c:gameBoard) {
@@ -50,55 +50,38 @@ Point Board::mouseClick(Point mouseLoc) {
 }
 
 bool Board::isValid(int x, int y, std::vector<std::vector<bool>>&visited) {
-    // std::cout << "x>=0 : " << (x <= 0) << std::endl;
-    // std::cout << "y>=0 : " << (y <= 0) << std::endl;
-    // std::cout << "x<=gameBoard.size() : " << (x <= gameBoard.size()) << std::endl;
-    // std::cout << "y<=gameBoard[0].size() : " << (y <= gameBoard[0].size()) << std::endl;
-    // std::cout << "visited[x][y]=" << visited[x][y] << std::endl;
-    // std::cout << "gameBoard[x][y].isEmpty()=" << gameBoard[x][y].isEmpty() << std::endl;
-    // std::cout << "gameBoard[x][y].isTarget()=" << gameBoard[x][y].isTarget() << std::endl;
-
-    return x >= 0 && static_cast<std::size_t>(x) < gameBoard.size() &&
-           y >= 0 && static_cast<std::size_t>(y) < gameBoard[0].size() &&
-           !visited[x][y] &&
-           (gameBoard[x][y].isEmpty() or gameBoard[x][y].isTarget());
+    return isInBoard(x, y) and
+        not visited.at(x).at(y) and (isEmpty(x, y) or isTarget(x, y));
 }
 
 int Board::findPath(Point pos, Point target, std::vector<std::vector<bool>> &visited, int limit) {
-    // std::cout << "On : (" << pos.x << ", " << pos.y << ")" << std::endl;
-    // std::cout << "Target : (" << target.x << ", " << target.y << ")" << std::endl; 
-    
-
-
     int dx[4] = {-1, 0, 1, 0};
     int dy[4] = {0, 1, 0, -1};
     
-    if (pos.x == target.x && pos.y == target.y) {
+    if (pos.x == target.x and pos.y == target.y) {
         return 0;
     }
     if (limit == 0) {
         return -1;
     }
-    if (visited[pos.x][pos.y]) {
+    if (visited.at(pos.x).at(pos.y)) {
         return -1;
     }
 
-
-    visited[pos.x][pos.y] = true;
+    visited.at(pos.x).at(pos.y) = true;
 
     int steps = -1;
 
     for (int i=0; i< 4; i++) {
         int newX = pos.x + dx[i];
         int newY = pos.y + dy[i];
-        // std::cout << "isValid: " << isValid(newX, newY, visited) << std::endl;
         if (isValid(newX, newY, visited)) {
             int s = findPath(Point{newX, newY}, target, visited, limit-1);
             if (s != -1) steps = s;
         }
     }
     if (steps != -1) return steps + 1; 
-    else return -1;
+    return -1;
 }
 
 
@@ -148,31 +131,28 @@ void Board::setObject(const int &line, const int &col, GameObject &object){
 
 
 void Board::setEmpty(const int line, const int col){
-    //std::cout << "Set empty " << std::endl;
-    getElem(line, col).setName("empty");
-    getElem(line, col).setColor(FL_GRAY);
-    getElem(line, col).setFrameColor(FL_GRAY);
-    //GameObject empty{{xGridFltk, yGridFltk}, size, FL_GRAY, FL_GRAY, "empty"};
-
+    GameObject *willBeEmpty = &getElem(line, col);
+    willBeEmpty->setName("empty");
+    willBeEmpty->setColor(FL_GRAY);
+    willBeEmpty->setFrameColor(FL_GRAY);
 }
 
 void Board::setTp(const int line, const int col){
     //std::cout << "Set tp " << std::endl;
-    getElem(line, col).setName("tp");
-    getElem(line, col).setColor(fl_rgb_color(0, 255, 255));
-    getElem(line, col).setFrameColor(FL_BLACK);
-
+    GameObject *willBeTp = &getElem(line, col);
+    willBeTp->setName("tp");
+    willBeTp->setColor(fl_rgb_color(0, 255, 255));
+    willBeTp->setFrameColor(FL_BLACK);
 }
 
 void Board::setTarget(const int line, const int col){
-    //std::cout << "Set target " << std::endl;
-    getElem(line, col).setName("target");
-    getElem(line, col).setColor(FL_MAGENTA);
-    getElem(line, col).setFrameColor(FL_BLACK);
-    getElem(line, col).setSize(getElem(line, col).getSize()/2);
+    GameObject *willBeTarget = &getElem(line, col);
+    willBeTarget->setName("target");
+    willBeTarget->setColor(FL_MAGENTA);
+    willBeTarget->setFrameColor(FL_BLACK);
+    willBeTarget->setSize(willBeTarget->getSize()/2);
 }
 void Board::setPosPlayer(const int &x, const int &y){
-    //std::cout << "Newplayerpos->" << x << y << std::endl;
     posPlayerLine = x;
     posPlayerCol = y;
 }
@@ -190,18 +170,14 @@ void Board::resize(const int &nbLine, const int &nbCol){
 
 void Board::configBoard(const int &line, const int &col, const char &symbol, const int size){
     //we start to display the board at 200,200
-    
     int xGridFltk = 200+(col*size); 
     int yGridFltk = 200+(line*size); 
 
     if (symbol == '@') {
         //Player
         GameObject player{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_GREEN, "player"};
-        setObject(line, col, player);
-        setPosPlayer(line, col);
+        setObject(line, col, player); setPosPlayer(line, col);
     }else if (symbol == ' ') {
-        //Nothing
-        // setEmpty(line, col);
         GameObject empty{{xGridFltk, yGridFltk}, size, FL_GRAY, FL_GRAY, "empty"};
         setObject(line, col, empty);
     }else if (symbol == '#') {
@@ -218,19 +194,15 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         //Box
         GameObject box{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_YELLOW, "box"};
         setObject(line, col, box);
-    }else {
+    }else if (symbol == '/'){
         GameObject tp{{xGridFltk, yGridFltk}, size, FL_BLACK, fl_rgb_color(0, 255, 255), "tp"};
         setObject(line, col, tp);
         tpPos.push_back({line, col});
-        
     }
 }
 
 
 void Board::movePlayerInVector(const int newX, const int newY){
-    //std::cout << "movePLayerVector : " << newX << newY << std::endl;
-    //std::cout << "movePLayerVector : " << getPosX() << getPosY() << std::endl;
-    //std::cout << getElem(getPosX(), getPosX()).getName() << std::endl;
     setObject(newX, newY, getElem(getPosX(), getPosY()));
     setEmpty(getPosX(), getPosY());
     setPosPlayer(newX, newY);
@@ -245,17 +217,16 @@ bool Board::isEmpty(const int line, const int col){ return getElem(line, col).is
 bool Board::isBox(const int line, const int col){ return getElem(line, col).isBox();}
 bool Board::isTarget(const int line, const int col){ return getElem(line, col).isTarget();}
 bool Board::isTp(const int line, const int col){ return getElem(line, col).isTp();}
-bool Board::isWall(Point &position){ return getElem(position.x, position.y).isWall();}
-bool Board::isEmpty(Point &position){ return getElem(position.x, position.y).isEmpty();}
-bool Board::isBox(Point &position){ return getElem(position.x, position.y).isBox();}
-bool Board::isTarget(Point &position){ return getElem(position.x, position.y).isTarget();}
-bool Board::isTp(Point &position){ return getElem(position.x, position.y).isTp();}
+bool Board::isWall(Point &position){ return isWall(position.x, position.y);}
+bool Board::isEmpty(Point &position){ return isEmpty(position.x, position.y);}
+bool Board::isBox(Point &position){ return isBox(position.x, position.y);}
+bool Board::isTarget(Point &position){ return isTarget(position.x, position.y);}
+bool Board::isTp(Point &position){ return isTp(position.x, position.y);}
 
 
 bool Board::isInBoard(const int line, const int col){ 
-    bool res =  (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
+    return (line < static_cast<int>(gameBoard.size()) and 0 <= line) and 
         (col < static_cast<int>(gameBoard[0].size()) and 0 <= col);
-    return res;
 }
 bool Board::isLimitReached(){ return limit == stepCount; }
 
@@ -338,12 +309,9 @@ void loadBoard(Board &board, std::string file){
                 std::getline(myFile, lineS);
                 stringstream temp(lineS);
                 string tempLine, tempCol, tempBestScore, tempLimit;
-                getline(temp, tempLine, ' ');
-                getline(temp, tempCol, ' ');
-                getline(temp, tempBestScore, ' ');
-                getline(temp, tempLimit, ' ');
-                int nbLine = std::stoi(tempLine);
-                int nbCol = std::stoi(tempCol);
+                getline(temp, tempLine, ' '); getline(temp, tempCol, ' ');
+                getline(temp, tempBestScore, ' '); getline(temp, tempLimit, ' ');
+                int nbLine = std::stoi(tempLine); int nbCol = std::stoi(tempCol);
                 int bestScore = std::stoi(tempBestScore);
                 int limit = std::stoi(tempLimit); //if error set limit = 0
                 board.setBestScore(bestScore);
@@ -399,9 +367,7 @@ bool Board::areBoxStuck(){
         }
     }
 
-    if (totalBox == boxStuck) {
-        return true;
-    }
+    if (totalBox == boxStuck) return true;
 
     return false;
 }
@@ -426,9 +392,9 @@ Point Board::searchMathTp(const Point &currentTp){
 
 }
 
-void Board::replaceTp(){
-    for (auto tp : tpPos) {
-        setTp(tp.x, tp.y);
-    }
+//void Board::replaceTp(){
+    //for (auto tp : tpPos) {
+        //setTp(tp.x, tp.y);
+    //}
     
-}
+//}
