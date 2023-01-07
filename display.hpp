@@ -12,7 +12,9 @@ public:
     DisplayBoard(Board &board);//: board(&board){}
     DisplayBoard()=default;
     void setBoard(Board *myBoard);//{ board = myBoard;}
-    void draw();
+    void drawCells(); //function tha will draw all cells in the gameBoard vector
+    void displayTxt(); //function that will draw the text
+    void draw(); //main draw function
 };
 
 
