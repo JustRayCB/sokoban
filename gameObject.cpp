@@ -35,9 +35,6 @@ void GameObject::fltkToVector(Point &vectorPos){
     }
     vectorPos.x = (pos.y - 200) / newBoxSize;
     vectorPos.y = (pos.x - 200) / newBoxSize;
-    std::cout << "(" << vectorPos.x << "," << vectorPos.y << ")" << "\n";
-    std::cout << "FLTKx : " << 200+vectorPos.x*newBoxSize << std::endl;
-    std::cout << "FLTKy : " << 200+vectorPos.y*newBoxSize << std::endl;
 
 }
 

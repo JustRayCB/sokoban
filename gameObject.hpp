@@ -13,7 +13,7 @@ class GameObject{
     int boxSize = 20;
     Rectangle myRectangle;
     std::string name = "";
-    std::string move = "";
+    std::string move = ""; //current animation move
     Animation *animation = nullptr;
 
     
@@ -35,15 +35,31 @@ public:
 
     GameObject &operator=(const GameObject &other);
 
+    /*
+     * @brief: Functin that will change the frame color when the mouse is on
+     * this cell
+     * @param mouseLoc: X and y position of the mouse
+     */
     void mouseMove(Point mouseLoc);
+    /*
+     * @brief: Functin that will tp the player on the cell on which the player has clicked
+     * @param mouseLoc: X and y position of the mouse
+     */
     Point mouseClick(Point mouseLoc);
 
+    
     Point getPosFltk() const;
-    void fltkToVector(Point &vectorPos);
     int getSize() const;
     Rectangle &getRectangle() ;
     std::string getName() const;
     std::string whichMove() const;
+
+    /*
+     * @brief: Convert fltk coordinate into vector coordinates
+     * @param vectorPos: variable where we put the result
+     */
+    void fltkToVector(Point &vectorPos);
+
     bool isWall() const;
     bool isBox() const ;
     bool isPlayer() const;
@@ -52,12 +68,21 @@ public:
     bool isTp() const;
 
     void setPosFltk(int x, int y);
+
+    /*
+     * @brief: When the animation has ended update the FLTK pos of the current
+     * object
+     */
     void setPosAfterMove();
     void setName(std::string newName);
     void setColor(Fl_Color newFillColor);
     void setFrameColor(Fl_Color newFramColor);
     void setSize(int size);
     void setMove(std::string newMove);
+
+    /*
+     * Add an animation to the current object
+     */
     void addAnimation();
 
 
@@ -67,7 +92,9 @@ public:
     void drawWithoutAnimation();
 };
 
-
+/*
+ * Those are the same class as in the tp
+ */
 struct Translation {
   Translation(Point p) {
     fl_push_matrix();
@@ -88,6 +115,11 @@ class Animation {
   Animation(GameObject *cellToAnimate, std::string move) : c{cellToAnimate}, move{move} {}
   void draw();
   bool isComplete();
+
+  /*
+   * Function that will make a translation of the cell according to a certain
+   * move
+   */
   Point currentTranslation();
 };
 

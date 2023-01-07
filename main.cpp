@@ -6,6 +6,7 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Widget.H>
+#include <FL/fl_ask.H>
 #include <FL/fl_draw.H>
 #include <FL/fl_types.h>
 #include <FL/Fl_Button.H>
@@ -42,9 +43,13 @@ void configChoice(Fl_Choice *choice){
     choice->value(0);
 
 }
-void updateWelcomeMessageCB(void *data);
 
+void configHello(Fl_Box *hello){
+    hello->labelsize(26);
+    hello->labelfont(FL_BOLD+FL_ITALIC);
+    hello->labeltype(FL_SHADOW_LABEL);
 
+}
 
 class MainWindow : public Fl_Window {
     Board board;
@@ -56,7 +61,7 @@ class MainWindow : public Fl_Window {
     Fl_Button *reset;
     Fl_Button *lvlEditor;
     bool showMessage = true;
-    Fl_Box *box;
+    Fl_Box *hello;
     // static void open_second_window(Fl_Widget* widget, void* data);
     // static void close_second_window(Fl_Widget* widget, void* data);
     //Il faut un endroit ou stocker les niveaux et savoir au quel niveau on est
@@ -65,8 +70,9 @@ public:
     ~MainWindow(){
         std::cout << "Destroying " << std::endl;
         delete choice;
-        delete box;
+        delete hello;
         delete reset;
+        delete lvlEditor;
     }
 
     MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
@@ -76,28 +82,27 @@ public:
         loadBoard(board, currentFile);
         display.setBoard(&board);
         controller.setBoard(&board);
-        choice = new Fl_Choice(210,120,100,30,"Levels");
         reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
         lvlEditor = new Fl_Button(165, 60, 150, 30, "Create New Level");
         lvlEditor->callback(open_second_window, this);
+        choice = new Fl_Choice(210,120,100,30,"Levels");
         choice->hide(); reset->hide(); lvlEditor->hide();
         configChoice(choice);
-        box = new Fl_Box(350,250,300,300,"Bienvenue !\n"
-                "Jeu Sokoban, Créé par \nHugo Callens et"
-                "\nRayan Contuliano Bravo");
-        box->labelsize(26);
-        box->labelfont(FL_BOLD+FL_ITALIC);
-        box->labeltype(FL_SHADOW_LABEL);
-        Fl::add_timeout(1.0, updateWelcomeMessageCB, this);
+        hello = new Fl_Box(350,250,300,300,"Bienvenue !\n"
+                            "Jeu Sokoban, Créé par \nHugo Callens et"
+                            "\nRayan Contuliano Bravo");
+        configHello(hello);
+        Fl::add_timeout(1.0, updateWelcomeMessage, this);
     }
-    void updateWelcomeMessage() {
-        showMessage = false;
-        box->hide();
+    static void updateWelcomeMessage(void *window) {
+        MainWindow* firstWindow = (MainWindow*) window;
+        firstWindow->showMessage = false;
+        firstWindow->hello->hide();
     }
     void draw() override {
         Fl_Window::draw();
         if (showMessage) {
-            box->show();
+            hello->show();
         }
         else {
             display.draw();
@@ -174,20 +179,10 @@ public:
                 }
                 else if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
                         and Fl::event_y() <= lvlEditor->y()+lvlEditor->h() and Fl::event_y() >=lvlEditor->y()) {
-                    std::cout << "On lvlEditor" << std::endl;
                     lvlEditor->do_callback();
                 }
                 else {
-                    Point test = board.mouseClick(Point{Fl::event_x(), Fl::event_y()});
-                    std::vector<std::vector<bool>> visited(board.getBoard().size(), std::vector<bool>(board.getBoard()[0].size(), false));
-                    int steps = board.findPath(Point{board.getPosX(), board.getPosY()}, test, visited, board.getLimit()-board.getStepCount());
-                    if (steps != -1) {
-                        std::cout << "FOUND A PATH OF " << steps << "STEPS" << std::endl;
-                        board.incrementStepCount(steps);
-                        controller.clickMovePlayer(test.x, test.y);
-                    } else {
-                        std::cout << "NO PATH FOUND IN LIMIT OF STEPS" << std::endl;
-                    }
+                    controller.moveWithMouse(Fl::event_x(), Fl::event_y());
                 }
                 return 1;
 
@@ -210,8 +205,7 @@ public:
     }
     void newBestScore(){
         if (board.getBestScore() > board.getStepCount() or board.getBestScore() == 0) {
-            std::cout << "New best score : " << board.getStepCount() << 
-                " before : " << board.getBestScore() << std::endl;
+            fl_alert("Congrats, you have a new best score ");
             board.setBestScore(board.getStepCount());
             writeBestScore();
         }
@@ -232,7 +226,7 @@ public:
         }
         allLines[0] = std::to_string(board.getNbLine()) + " " + 
             std::to_string(board.getNbCol()) + " " + std::to_string(board.getBestScore()) + " "
-            + std::to_string(board.getLimit());
+            + std::to_string(board.getLimit()); //remake the first line pattern of all lvl files
         std::ofstream writeFile(currentFile);
         if (writeFile.is_open()) {
             for (auto &str : allLines) { writeFile << str << std::endl; }
@@ -240,11 +234,6 @@ public:
         writeFile.close();
     }
 };
-
-void updateWelcomeMessageCB(void *data) {
-    MainWindow *window = static_cast<MainWindow*>(data);
-    window->updateWelcomeMessage();
-}
 
 /*--------------------------------------------------
 

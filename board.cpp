@@ -391,10 +391,3 @@ Point Board::searchMathTp(const Point &currentTp){
     return {-1, -1};
 
 }
-
-//void Board::replaceTp(){
-    //for (auto tp : tpPos) {
-        //setTp(tp.x, tp.y);
-    //}
-    
-//}

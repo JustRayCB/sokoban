@@ -1,6 +1,7 @@
 #include <FL/Enumerations.H>
 #include <iostream>
 #include <unistd.h>
+#include <FL/fl_ask.H>
 
 #include "controller.hpp"
 #include "board.hpp"
@@ -598,3 +599,17 @@ void Controll::move(int keyCode){
         std::cout << "You shall not pass" << std::endl;
     }
 }
+
+void Controll::moveWithMouse(int eventX, int eventY){
+
+    Point test = board->mouseClick({eventX, eventY});
+    std::vector<std::vector<bool>> visited(board->getBoard().size(), std::vector<bool>(board->getBoard()[0].size(), false));
+    int steps = board->findPath(Point{board->getPosX(), board->getPosY()}, test, visited, board->getLimit()-board->getStepCount());
+    if (steps != -1) {
+        std::cout << "FOUND A PATH OF " << steps << "STEPS" << std::endl;
+        board->incrementStepCount(steps);
+        clickMovePlayer(test.x, test.y);
+    } else {
+        fl_alert("No path found in limit of steps");
+    }
+    }

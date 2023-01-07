@@ -17,6 +17,11 @@ public:
      */
     void movePlayer(int keyCode);
     /*
+     * @brief: Function that will find a path to the clicked cell
+     * to move the player on it
+     */
+    void moveWithMouse(int eventX, int eventY);
+    /*
      * @brief: Function that will make the box make the right move
      * @param keyCode: key that represent the move
      * @param boxPosX: position of the box in the vector coordinate X
