@@ -8,15 +8,31 @@ class Controll{
     Board *board = nullptr;
 
 public:
-    void setBoard(Board *myBoard);//{ board = myBoard;}
-                                  
+
+    void setBoard(Board *myBoard);
+
+    /*
+     * @brief: Function that will make the player make the right move
+     * @param keyCode: key that represent the move
+     */
     void movePlayer(int keyCode);
-    void tpPlayer(int x, int y);
+    /*
+     * @brief: Function that will make the box make the right move
+     * @param keyCode: key that represent the move
+     * @param boxPosX: position of the box in the vector coordinate X
+     * @param boxPosY: position of the box in the vector coordinate Y
+     */
     void moveBox(int keyCode, int boxPosX, int boxPosY);
+    /*
+     * @brief: Function that will check if the keyCode
+     * is ok to make the player move according to all elements around
+     * @param keyCode: key pressed by the player
+     */
     void move(int keyCode);
 
-    void setDeltas(int &keycode, int &xVector, int &yVector, int &deltaX, 
-        int &deltaY, const int &boxSize, std::string &move);
+    void tpPlayer(int x, int y);
+
+    void setDeltas(int &keycode, int &xVector, int &yVector, std::string &move);
     // void boxTargetToEmpty(GameObject &box);
 
     void clickMovePlayer(int x, int y);

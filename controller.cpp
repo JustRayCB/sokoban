@@ -13,86 +13,58 @@ void Controll::setBoard(Board *myBoard){
     board = myBoard;
 }
 
-void Controll::setDeltas(int &keyCode, int &xVector, int &yVector, int &deltaX, 
-        int &deltaY, const int &boxSize, std::string &move){
-    if (keyCode == FL_Up or keyCode == 'z') {xVector--; deltaY-=boxSize; move = "up";}
-    else if (keyCode == FL_Left or keyCode == 'q') {yVector--; deltaX-=boxSize; move = "left";}
-    else if (keyCode == FL_Down or keyCode == 's') {xVector++; deltaY+=boxSize; move = "down";}
-    else if (keyCode == FL_Right or keyCode == 'd') {yVector++; deltaX+=boxSize; move = "right";}
+void Controll::setDeltas(int &keyCode, int &xVector, int &yVector, std::string &move){
+    if (keyCode == FL_Up or keyCode == 'z') {xVector--; move = "up";}
+    else if (keyCode == FL_Left or keyCode == 'q') {yVector--; move = "left";}
+    else if (keyCode == FL_Down or keyCode == 's') {xVector++; move = "down";}
+    else if (keyCode == FL_Right or keyCode == 'd') {yVector++; move = "right";}
 
 }
 
 void Controll::movePlayer(int keyCode){
     int newX = board->getPosX(), newY = board->getPosY();
     GameObject *tmp = &board->getElem(newX, newY);
-    const int boxSize = tmp->getSize();
-    int deltaX = 0, deltaY = 0; std::string move = "";
-    setDeltas(keyCode, newX, newY, deltaX, deltaY, boxSize, move); //delta sert plus a rien je crois
-
+    std::string move = "";
+    setDeltas(keyCode, newX, newY, move);
     board->movePlayerInVector(newX, newY);
-    tmp = &board->getElem(newX, newY);
+    tmp = &board->getElem(newX, newY); //get the player cause he moved in the vector
+    tmp->setMove(move);
+    tmp->addAnimation();
+
+}
+
+void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
+    int oldX = boxPosX, oldY = boxPosY;
+    GameObject *tmp = &board->getElem(boxPosX, boxPosY);
+    std::string move = "";
+    setDeltas(keyCode, boxPosX, boxPosY, move);
+    board->movBoxInVector(boxPosX, boxPosY, oldX, oldY);
+    tmp = &board->getElem(boxPosX, boxPosY); //get the box caus it moved in the vector
     tmp->setMove(move);
     tmp->addAnimation();
 
 }
 
 void Controll::clickMovePlayer(int x, int y) {
-    board->setObject(x, y, board->getElem(board->getPosX(), board->getPosY()));
+    Point oldPos = {board->getPosX(), board->getPosY()};
+    tpPlayer(x, y);
 
-
-    if (board->isOnTarget(Point{board->getPosX(), board->getPosY()})) {
-        board->removeFromTarget(Point{board->getPosX(), board->getPosY()}, false);
-        board->setTarget(board->getPosX(), board->getPosY());
-    } else {
-        board->setEmpty(board->getPosX(), board->getPosY());
+    if (board->isOnTarget(oldPos)) {
+        board->removeFromTarget(oldPos, false);
+        board->setTarget(oldPos.x, oldPos.y);
     }
     if (board->isTarget(x,y)) {
         board->setOnTarget(Point{x,y}, false);
     }
-
-    board->setPosPlayer(x, y);
-
-    GameObject *tmp = &board->getElem(x, y);
-    const int boxSize = tmp->getSize();
-    int newX = 200 + (x*boxSize);
-    int newY = 200 + (y*boxSize);
-    tmp->setPosFltk(newY, newX);
 }
 
 void Controll::tpPlayer(int x, int y){
-    //int oldX = board->getPosX(), oldY = board->getPosY();
-    //std::cout << "Old x : " << oldX << "\n Old y : " << oldY << std::endl;
-    //std::cout << "new x : " << x << "\n new y : " << y << std::endl;
-
-
     board->movePlayerInVector(x, y);
     GameObject *tmp = &board->getElem(x, y);
-    //std::cout << "Old xFLTK : " << tmp->getPosFltk().x << "\n Old yFLTK : " << tmp->getPosFltk().y << std::endl;
     const int boxSize = tmp->getSize();
     int newX = 200 + (x*boxSize);
     int newY = 200 + (y*boxSize);
     tmp->setPosFltk(newY, newX);
-    //std::cout << "new xFLTK : " << tmp->getPosFltk().x << "\n new yFLTK : " << tmp->getPosFltk().y << std::endl;
-    
-}
-
-
-void Controll::moveBox(int keyCode, int boxPosX, int boxPosY){
-    const int oldX = boxPosX, oldY = boxPosY;
-    GameObject *tmp = &board->getElem(boxPosX, boxPosY);
-    //const Point boxPosFltk = tmp->getPosFltk();
-    const int boxSize = tmp->getSize();
-    int deltaX = 0, deltaY = 0; std::string move = "";
-    std::cout << "before : " << boxPosX << " , " << boxPosY << std::endl;
-    setDeltas(keyCode, boxPosX, boxPosY, deltaX, deltaY, boxSize, move);
-
-    std::cout << "here : " << boxPosX << " , " << boxPosY << std::endl;
-    //tmp->setPosFltk(boxPosFltk.x+deltaX, boxPosFltk.y+deltaY);
-    board->movBoxInVector(boxPosX, boxPosY, oldX, oldY);
-    tmp = &board->getElem(boxPosX, boxPosY);
-    tmp->setMove(move);
-    tmp->addAnimation();
-
 }
 
 
@@ -231,7 +203,7 @@ void Controll::tpPlayerToEmpty(const Point &position, int keyCode){
 void Controll::emptyPlayerToTp(const Point &newPosition, const Point &oldPosition, int keyCode){
     Point matchTp = board->searchMathTp(newPosition);
     if (matchTp.x != -1) {
-        this->tpPlayer(matchTp.x, matchTp.y);
+        tpPlayer(matchTp.x, matchTp.y);
         board->setEmpty(oldPosition.x, oldPosition.y);
         board->setTp(newPosition.x, newPosition.y);
     }else {
@@ -584,36 +556,41 @@ void Controll::manageMovePlayerAndBox(const Point &position, int deltaX, int del
 
 void Controll::move(int keyCode){
     /*
-     * z -> deltaX = -1, deltaY = 0
-     * q -> deltaX = 0, deltaY = -1 
-     * s -> deltaX = +1, deltaY = 0
-     * d -> deltaX = 0, deltaY = +1
+     * z (up)-> deltaX = -1, deltaY = 0
+     * q (left)-> deltaX = 0, deltaY = -1 
+     * s (down)-> deltaX = +1, deltaY = 0
+     * d (right)-> deltaX = 0, deltaY = +1
      */
 
-    // board->displayTargets();
     int deltaX = 0, deltaY = 0;
 
+    //set the delta in order to get the move coordinate for the new position of the player
     if (keyCode == FL_Up or keyCode == 'z') {deltaX--;}
     else if (keyCode == FL_Left or keyCode == 'q') {deltaY--;}
     else if (keyCode == FL_Down or keyCode == 's') {deltaX++;}
     else if (keyCode == FL_Right or keyCode == 'd') {deltaY++;}
     else {return;}
 
-    int xIdx = board->getPosX(), yIdx = board->getPosY();
-    int boxSize = board->getElem(xIdx, yIdx).getSize();
-    bool isPlayerMovable = board->isInBoard(xIdx+deltaX, yIdx+deltaY) 
-                        and not board->isWall(xIdx+deltaX, yIdx+deltaY);
+    //int xIdx = board->getPosX(), yIdx = board->getPosY();
+    Point playerPosition = {board->getPosX(), board->getPosY()};
+    Point futurePlayerPosition = {playerPosition.x+deltaX, playerPosition.y+deltaY}; //aka boxPosition
+    Point futureBoxPosition = {futurePlayerPosition.x+deltaX, futurePlayerPosition.y + deltaY};
+
+    int boxSize = board->getElem(playerPosition.x, playerPosition.y).getSize();
+    bool isPlayerMovable = board->isInBoard(futurePlayerPosition.x, futurePlayerPosition.y) 
+                        and not board->isWall(futurePlayerPosition.x, futurePlayerPosition.y);
     if (isPlayerMovable){
-        bool isBoxMovable = board->isBox(xIdx+deltaX, yIdx+deltaY) and board->isInBoard(xIdx+2*deltaX, yIdx+2*deltaY)  
-                and (board->isEmpty(xIdx+2*deltaX, yIdx+2*deltaY) 
-                    or board->isTarget(xIdx+2*deltaX, yIdx+2*deltaY)
-                or board->isOnTp({xIdx+2*deltaX, yIdx+2*deltaY}));
+        bool isBoxMovable = board->isBox(futurePlayerPosition) and board->isInBoard(futureBoxPosition.x, futureBoxPosition.y)
+            and not board->isWall(futureBoxPosition);
+                //and (board->isEmpty(futureBoxPosition) 
+                    //or board->isTarget(futureBoxPosition)
+                //or board->isOnTp({futureBoxPosition}));
         if (isBoxMovable) {
-            manageMovePlayerAndBox({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
+            manageMovePlayerAndBox(playerPosition, deltaX, deltaY, keyCode, boxSize);
             board->incrementStepCount(1);
         }
-        else if (not board->isBox(xIdx+deltaX, yIdx+deltaY)) {
-            manageMovePlayer({xIdx, yIdx}, deltaX, deltaY, keyCode, boxSize);
+        else if (not board->isBox(futurePlayerPosition)) {
+            manageMovePlayer(playerPosition, deltaX, deltaY, keyCode, boxSize);
             board->incrementStepCount(1);
         }
     }else {
