@@ -71,10 +71,7 @@ void Controll::tpPlayer(int x, int y){
 
 void Controll::emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
-    this->movePlayer(keyCode);
-    // on redessine la case vide
-    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
-    board->setObject(position.x, position.y, empty);
+    emptyPlayerToEmpty(position, keyCode, boxSize);
 }
 void Controll::emptyPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
