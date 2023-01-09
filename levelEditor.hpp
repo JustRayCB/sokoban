@@ -46,7 +46,14 @@ private:
 
  public:
     LevelEditorWindow();
-    virtual ~LevelEditorWindow() {};
+    ~LevelEditorWindow() {
+        delete submitButton;
+        delete addButton;
+        delete closeButton;
+        delete lineInput;
+        delete colInput;
+        delete movesLimit;
+    };
     void setCanva(Canvas canva);
     void draw() override;
     int handle(int event) override;
