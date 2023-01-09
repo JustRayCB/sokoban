@@ -189,19 +189,19 @@ void LevelEditorWindow::convertCanvaToTextFile() {
     }
 
     fw << canvas.getNumberOfLines() << " " << canvas.getNumberOfColumns() << " 0 " << limit << "\n";
-    for (int i=0; i < canvas.getNumberOfLines();i++) {
-        for (int j=0; j < canvas.getNumberOfColumns();j++) {
-            if (canvas.getCells()[i][j].getCurrent() == 0) {
+    for (auto &line : canvas.getCells()) {
+        for (auto &elem : line) {
+            if (elem.getCurrent() == 0) {
                 fw << " ";
-            } else if (canvas.getCells()[i][j].getCurrent() == 1) {
+            } else if (elem.getCurrent() == 1) {
                 fw << "#";
-            } else if (canvas.getCells()[i][j].getCurrent() == 2) {
+            } else if (elem.getCurrent() == 2) {
                 fw << "$";
-            } else if (canvas.getCells()[i][j].getCurrent() == 3) {
+            } else if (elem.getCurrent() == 3) {
                 fw << "@";
-            } else if (canvas.getCells()[i][j].getCurrent() == 4) {
+            } else if (elem.getCurrent() == 4) {
                 fw << ".";
-            } else if (canvas.getCells()[i][j].getCurrent() == 5) {
+            } else if (elem.getCurrent() == 5) {
                 fw << "/";
             }
         }
