@@ -63,23 +63,14 @@ private:
      * @brief: Function that checks if an user input grid is valid
      */
     bool isGridValid();
-
+    /*
+     * @brief: Function that checks if there's only one player
+     * and if there's only two telportation cases and
+     * if there's the same number of target
+     * cases as boxes cases (there must be at least one of each box and target)
+     * in the grid
+     */
     bool checkCorrectGrid();
-    /*
-     * @brief: Function that checks if there's only two telportation
-     * cases in the user input grid
-     */
-    bool onlyTwoTp();
-    /*
-     * @brief: Function that checks if there's only one player the user 
-     * input grid
-     */
-    bool onlyOnePlayer();
-    /*
-     * @brief: Function that checks if there's the same number of target
-     * cases as boxes cases there must be at least one of each
-     */
-    bool evenBoxAndTargets();
     /*
      * @brief: Function that converts a user input grid into a .txt file
      * so that the player can play on the created level

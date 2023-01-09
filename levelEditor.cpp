@@ -64,10 +64,6 @@ int LevelEditorWindow::handle(int event) {
 }
 
 bool LevelEditorWindow::isGridValid() {
-    //if (onlyOnePlayer() and evenBoxAndTargets() and onlyTwoTp()) {
-        //return true;
-    //}
-    //return false;
     return checkCorrectGrid();
 }
 
@@ -110,62 +106,6 @@ bool LevelEditorWindow::checkCorrectGrid(){
         return false;
     }
     return true;
-}
-bool LevelEditorWindow::onlyTwoTp() {
-    int count = 0;
-    for (int i=0; i < canvas.getNumberOfLines();i++){
-        for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
-            if (canvas.getCells()[i][j].getCurrent() == 5) {
-                count++;
-            }
-            if (count > 2) {
-                fl_alert("You placed too much teleportation cells, the max is 2.");
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-bool LevelEditorWindow::onlyOnePlayer() {
-    int count = 0;
-    for (int i=0; i < canvas.getNumberOfLines();i++){
-        for (int j = 0; j < canvas.getNumberOfColumns(); j++) {
-            if (canvas.getCells()[i][j].getCurrent() == 3) {
-                count++;
-            }
-            if (count > 1) {
-                fl_alert("There is too much player, only one player is admitted.");
-                return false;
-            }
-        }
-    }
-    if (count != 0) {
-        return true;
-    }
-    fl_alert("There is no player, there need to be a single player.");
-    return false;
-}
-
-bool LevelEditorWindow::evenBoxAndTargets() {
-    int countBox = 0;
-    int countTargets = 0;
-    for (int i=0; i < canvas.getNumberOfLines();i++) {
-        for (int j=0; j < canvas.getNumberOfColumns();j++){
-            if (canvas.getCells()[i][j].getCurrent() == 4) {
-                countTargets++;
-            }
-            else if (canvas.getCells()[i][j].getCurrent() == 2) {
-                countBox++;
-            }
-        }
-    }
-    bool res = countBox >= countTargets and countBox != 0 and countTargets != 0;
-
-    if (not res) {
-        fl_alert("There is not enough boxes in comparaison of targets. Need to be at least 1 box and 1 target.");
-    }
-    return res;
 }
 
 void LevelEditorWindow::convertCanvaToTextFile() {
