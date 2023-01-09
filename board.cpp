@@ -25,30 +25,6 @@ Board::Board(const int nbLine, const int nbCol):
     gameBoard(nbLine, std::vector<GameObject>(nbCol)){
 }
 
-void Board::mouseMove(Point mouseLoc) {
-    for (auto &c:gameBoard) {
-        for (auto &cc:c) {
-            cc.mouseMove(mouseLoc);
-        }
-    }
-}
-
-//int Board::getBoxSize() {
-    //return gameBoard[0][0].getSize();
-//}
-
-Point Board::mouseClick(Point mouseLoc) {
-  for (auto &c:gameBoard) {
-    for (auto &cc:c) {
-        Point p = cc.mouseClick(mouseLoc);
-        if (p.x != - 1) {
-            return p;
-        }
-    }
-  } 
-  return {-1,-1};
-}
-
 bool Board::isValid(int x, int y, std::vector<std::vector<bool>>&visited) {
     return isInBoard(x, y) and
         not visited.at(x).at(y) and (isEmpty(x, y) or isTarget(x, y));

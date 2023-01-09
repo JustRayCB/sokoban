@@ -39,8 +39,6 @@ public:
     Board(const Board &other);
     Board &operator=(const Board& other);
 
-    void mouseMove(Point mouseLoc);
-    Point mouseClick(Point mouseLoc);
     int findPath(Point pos, Point target, std::vector<std::vector<bool>>&visited, int limit);
     bool isValid(int x, int y, std::vector<std::vector<bool>>&visited);
     int getBoxSize();
@@ -103,7 +101,7 @@ public:
     void incrementTotalTargets();
     void incrementStepCount(int x);
 
-    Point searchMathTp(const Point &currentTp);
+    Point searchMatchTp(const Point &currentTp);
     void replaceTp();
 
 };

@@ -9,6 +9,9 @@ class Controll{
 
 public:
 
+    void mouseMove(Point mouseLoc);
+    Point mouseClick(Point mouseLoc);
+
     void setBoard(Board *myBoard);
 
     /*

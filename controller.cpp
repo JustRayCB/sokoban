@@ -9,6 +9,13 @@
 #include "rectangle.hpp"
 
 
+void Controll::mouseMove(Point mouseLoc) {
+    for (auto &c:board->getBoard()) {
+        for (auto &cc:c) {
+            cc.mouseMove(mouseLoc);
+        }
+    }
+}
 
 void Controll::setBoard(Board *myBoard){
     board = myBoard;
@@ -82,10 +89,7 @@ void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, in
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
-    this->movePlayer(keyCode);
-    // on redessine la case vide
-    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
-    board->setObject(position.x, position.y, empty);
+    emptyPlayerToEmpty(position, keyCode, boxSize);
 }
 
 void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
@@ -95,8 +99,7 @@ void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, in
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
     // on redessine la case vide
-    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
-    board->setObject(position.x, position.y, empty);
+    board->setEmpty(position.x, position.y);
 }
 
 void Controll::emptyPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
@@ -251,7 +254,6 @@ void Controll::emptyPlayerTargetBoxToTp(const Point &position, int deltaX, int d
 void Controll::targetPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     targetPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
-    std::cout << position.x+2*deltaX << " ," << position.y+2*deltaY << std::endl;
 }
 void Controll::emptyPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     moveBox(keyCode, position.x+deltaX, position.y+deltaY);
@@ -597,9 +599,22 @@ void Controll::move(int keyCode){
     }
 }
 
+Point Controll::mouseClick(Point mouseLoc) {
+  for (auto &c:board->getBoard()) {
+    for (auto &cc:c) {
+        Point p = cc.mouseClick(mouseLoc);
+        if (p.x != - 1) {
+            return p;
+        }
+    }
+  } 
+  return {-1,-1};
+}
+
+
 void Controll::moveWithMouse(int eventX, int eventY){
 
-    Point test = board->mouseClick({eventX, eventY});
+    Point test = mouseClick({eventX, eventY});
     std::vector<std::vector<bool>> visited(board->getBoard().size(), std::vector<bool>(board->getBoard()[0].size(), false));
     int steps = board->findPath(Point{board->getPosX(), board->getPosY()}, test, visited, board->getLimit()-board->getStepCount());
     if (steps != -1) {

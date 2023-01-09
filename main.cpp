@@ -164,7 +164,7 @@ public:
     int handle(int event) override {
         switch (event) {
             case FL_MOVE:
-                board.mouseMove(Point{Fl::event_x(), Fl::event_y()});
+                controller.mouseMove(Point{Fl::event_x(), Fl::event_y()});
                 this->redraw();
                 return 1;
             case FL_PUSH:{
