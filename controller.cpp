@@ -202,7 +202,7 @@ void Controll::tpPlayerToEmpty(const Point &position, int keyCode){
 }
 
 void Controll::emptyPlayerToTp(const Point &newPosition, const Point &oldPosition, int keyCode){
-    Point matchTp = board->searchMathTp(newPosition);
+    Point matchTp = board->searchMatchTp(newPosition);
     if (matchTp.x != -1) {
         tpPlayer(matchTp.x, matchTp.y);
         board->setEmpty(oldPosition.x, oldPosition.y);
@@ -220,7 +220,7 @@ void Controll::targetPlayerToEmpty(const Point &position, int keyCode, int boxSi
 }
 void Controll::targetPlayerToTp(const Point &newPosition, const Point &oldPosition, int keyCode){
     board->removeFromTarget(Point{oldPosition.x, oldPosition.y}, false);
-    Point matchTp = board->searchMathTp(newPosition);
+    Point matchTp = board->searchMatchTp(newPosition);
     if (matchTp.x != -1) {
         this->tpPlayer(matchTp.x, matchTp.y);
         board->setTp(newPosition.x, newPosition.y);

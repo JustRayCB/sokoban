@@ -350,7 +350,7 @@ bool Board::areBoxStuck(){
 
 
 
-Point Board::searchMathTp(const Point &currentTp){
+Point Board::searchMatchTp(const Point &currentTp){
     int i = 0, j = 0;
     for (auto &line : gameBoard) {
         j = 0;

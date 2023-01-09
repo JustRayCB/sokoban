@@ -63,6 +63,8 @@ private:
      * @brief: Function that checks if an user input grid is valid
      */
     bool isGridValid();
+
+    bool checkCorrectGrid();
     /*
      * @brief: Function that checks if there's only two telportation
      * cases in the user input grid

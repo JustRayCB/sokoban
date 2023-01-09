@@ -64,12 +64,53 @@ int LevelEditorWindow::handle(int event) {
 }
 
 bool LevelEditorWindow::isGridValid() {
-    if (onlyOnePlayer() and evenBoxAndTargets() and onlyTwoTp()) {
-        return true;
-    }
-    return false;
+    //if (onlyOnePlayer() and evenBoxAndTargets() and onlyTwoTp()) {
+        //return true;
+    //}
+    //return false;
+    return checkCorrectGrid();
 }
 
+bool LevelEditorWindow::checkCorrectGrid(){
+    int countPlayer = 0;
+    int countBox = 0;
+    int countTargets = 0;
+    int countTp = 0;
+    for (auto &line : canvas.getCells()) {
+        for (auto &elem : line) {
+            if (elem.getCurrent() == 5) {
+                countTp++;
+            }
+            if (elem.getCurrent() == 3) {
+                countPlayer++;
+            }
+            if (elem.getCurrent() == 4) {
+                countTargets++;
+            }
+            if (elem.getCurrent() == 2) {
+                countBox++;
+            }
+        }
+    }
+    bool res = countBox >= countTargets and countBox != 0 and countTargets != 0;
+    if (not res) {
+        fl_alert("There is not enough boxes in comparaison of targets. Need to be at least 1 box and 1 target.");
+        return false;
+    }
+    if (countTp > 2) {
+        fl_alert("You placed too much teleportation cells, the max is 2.");
+        return false;
+    }
+    if (countPlayer > 1) {
+        fl_alert("There is too much player, only one player is admitted.");
+        return false;
+    }
+    if (countPlayer == 0) {
+        fl_alert("You should place the player !");
+        return false;
+    }
+    return true;
+}
 bool LevelEditorWindow::onlyTwoTp() {
     int count = 0;
     for (int i=0; i < canvas.getNumberOfLines();i++){
