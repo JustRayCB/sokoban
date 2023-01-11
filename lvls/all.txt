@@ -7,7 +7,4 @@ lvl6
 lvl7
 lvl8
 lvl9
-lvl1
-lvl1
-lvl1
-lvl1
+lvl10

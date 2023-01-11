@@ -41,14 +41,10 @@ private:
     Fl_Input* movesLimit;
     void closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow);
     static void submitButtonCallback(Fl_Widget* w, void* ptr);
-    void addingButtonCallback();
-    void replaceButtonCallBack();
-    static void static_replaceButton_callback(Fl_Widget* w, void* ptr);
-    //static void static_submitButton_callback(Fl_Widget* w, void* ptr);
-    static void static_addingButton_callback(Fl_Widget* w, void* ptr);
+    static void addingButtonCallback(Fl_Widget* w, void* ptr);
+    static void replaceButtonCallback(Fl_Widget* w, void* ptr);
     Canvas canvas;
 
-    int bestScore = 0;
     std::string filingName = "";
 
  public:
@@ -58,20 +54,25 @@ private:
         delete submitButton;
         delete addButton;
         delete closeButton;
+        delete replaceButton;
         delete lineInput;
         delete colInput;
         delete movesLimit;
         delete replaceButton;
     };
     void setCanva(Canvas canva);
+    Fl_Button* get_closeButton();
     void draw() override;
     int handle(int event) override;
-
+    /*
+     * @brief: Function that converts a gameObjext 2D vector into a canva (Canvas class)
+     * @param objectVector: 2D vector that we want to convert
+     */
     Canvas convertObjectVectorToCanva(std::vector<std::vector<GameObject>> objectVector);
-    std::string getLatestFileName();
-    void setFileName(std::string newFileName);
-
-    Fl_Button* get_closeButton();
+    /*
+     * @brief: get the name of the last level present in lvls/all.txt
+     */
+    std::string getLastFileName();
     /*
      * @brief: Function that checks if an user input grid is valid
      */
@@ -87,8 +88,10 @@ private:
     /*
      * @brief: Function that converts a user input grid into a .txt file
      * so that the player can play on the created level
+     * @param fileName: name of the file
+     * @param isEdit: boolean showing if we add a as a new level or not
      */
-    void convertCanvaToTextFile(std::string fileName);
+    void convertCanvaToTextFile(std::string fileName, bool addingAsNew);
 };
 
 #endif
