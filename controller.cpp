@@ -112,8 +112,7 @@ void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, i
 
 void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     board->removeFromTarget(Point{position.x, position.y}, false);
-    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
-    this->movePlayer(keyCode);
+    emptyPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
     // on redessine la cible
     board->setTarget(position.x, position.y);
 }
