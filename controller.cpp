@@ -174,9 +174,9 @@ void Controll::emptyPlayerToTp(const Point &newPosition, const Point &oldPositio
     Point matchTp = board->searchMatchTp(newPosition);
     if (matchTp.x != -1) {
         tpPlayer(matchTp.x, matchTp.y);
-        board->setEmpty(oldPosition.x, oldPosition.y);
+        board->setEmpty(oldPosition.x, oldPosition.y); //position befor go in the tp
         board->setTp(newPosition.x, newPosition.y);
-    }else {
+    }else {//there is a box on the match tp
         movePlayer(keyCode);
     }
 }
@@ -188,19 +188,12 @@ void Controll::targetPlayerToEmpty(const Point &position, int keyCode){
 }
 void Controll::targetPlayerToTp(const Point &newPosition, const Point &oldPosition, int keyCode){
     board->removeFromTarget(Point{oldPosition.x, oldPosition.y}, false);
-    Point matchTp = board->searchMatchTp(newPosition);
-    if (matchTp.x != -1) {
-        this->tpPlayer(matchTp.x, matchTp.y);
-        board->setTp(newPosition.x, newPosition.y);
-    }else {
-        movePlayer(keyCode);
-    }
+    emptyPlayerToTp(newPosition, oldPosition, keyCode);
     board->setTarget(oldPosition.x, oldPosition.y);
 }
 void Controll::targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
+    emptyPlayerToTarget(position, deltaX, deltaY, keyCode);
     board->removeFromTarget(Point{position.x, position.y}, false);
-    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
-    this->movePlayer(keyCode);
     board->setTarget(position.x, position.y);
 }
     
