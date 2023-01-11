@@ -145,7 +145,7 @@ void Controll::tpPlayerEmptyBoxToTp(const Point &position, int deltaX, int delta
     tpPlayerToEmpty(position, keyCode);
 }
 
-void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     board->removeFromTarget(Point{position.x, position.y}, false);
@@ -153,8 +153,7 @@ void Controll::targetPlayerTargetBoxToEmpty(const Point &position, int deltaX, i
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
     // on redessine la cible
-    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-    board->setObject(position.x, position.y, target);
+    board->setTarget(position.x, position.y);
 }
 
 void Controll::tpPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
@@ -278,7 +277,7 @@ void Controll::targetPlayerTpBoxToTp(const Point &position, int deltaX, int delt
     targetPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
 }
 void Controll::targetPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){ 
-    targetPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+    targetPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 void Controll::targetPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){ 
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
@@ -437,7 +436,7 @@ void Controll::manageFromTargetPlayerTargetBox(const Point &position, int deltaX
     } else if (not board->isTarget(destinationPosition)
             and not board->isTp(destinationPosition)) {
         // vers vide
-        targetPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+        targetPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
     } else {
         perror("Mouvement non pris en charge");
     }
