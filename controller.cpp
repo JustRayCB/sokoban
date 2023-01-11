@@ -225,6 +225,7 @@ void Controll::targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int d
 }
 
 void Controll::tpPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){ 
+    //player does not move because he move on a tp so he is directly tp 
     moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+2*deltaX, position.y+2*deltaY).setColor(FL_MAGENTA);
@@ -235,6 +236,7 @@ void Controll::tpPlayerTargetBoxToTp(const Point &position, int deltaX, int delt
     board->setTp(position.x, position.y);
 }
 void Controll::targetPlayerTpBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){ 
+    //tp does not work cause there is a box over
     moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     targetPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
 }
@@ -247,9 +249,7 @@ void Controll::targetPlayerTpBoxToTarget(const Point &position, int deltaX, int 
     targetPlayerTpBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 void Controll::tpPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){ 
-    tpPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
-    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
-    board->getElem(position.x+2*deltaX, position.y+2*deltaY).setColor(FL_MAGENTA);
+    emptyPlayerTargetBoxToTarget(position, deltaX, deltaY, keyCode);
     board->setTp(position.x, position.y);
 
 }
