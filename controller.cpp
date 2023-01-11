@@ -508,7 +508,7 @@ void Controll::manageFromTpPlayerTpBox(const Point &position, int deltaX, int de
 
 
 
-void Controll::manageMovePlayerAndBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize) {
+void Controll::manageMovePlayerAndBox(const Point &position, int deltaX, int deltaY, int keyCode) {
     Point boxPosition = {position.x+deltaX, position.y+deltaY};
     if (not board->isOnTarget(position) and not board->isOnTp(position)
         and not board->isOnTarget(boxPosition) and not board->isOnTp(boxPosition)) {
@@ -529,7 +529,7 @@ void Controll::manageMovePlayerAndBox(const Point &position, int deltaX, int del
     } else if (board->isOnTarget(position) and not board->isOnTp(position)
         and board->isOnTarget(boxPosition) and not board->isOnTp(boxPosition)) {
             // Joueur sur cible box sur cible
-            manageFromTargetPlayerTargetBox(position, deltaX, deltaY, keyCode, boxSize);
+            manageFromTargetPlayerTargetBox(position, deltaX, deltaY, keyCode);
     } else if (board->isOnTarget(position) and not board->isOnTp(position)
         and not board->isOnTarget(boxPosition) and board->isOnTp(boxPosition)) {
             // Joueur sur cible box sur tp
@@ -582,7 +582,7 @@ void Controll::move(int keyCode){
                     //or board->isTarget(futureBoxPosition)
                 //or board->isOnTp({futureBoxPosition}));
         if (isBoxMovable) {
-            manageMovePlayerAndBox(playerPosition, deltaX, deltaY, keyCode, boxSize);
+            manageMovePlayerAndBox(playerPosition, deltaX, deltaY, keyCode);
             board->incrementStepCount(1);
         }
         else if (not board->isBox(futurePlayerPosition)) {
