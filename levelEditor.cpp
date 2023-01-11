@@ -2,12 +2,12 @@
 
 LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor"){
     submitButton = new Fl_Button(150, 90, 50, 20, "Submit");
-    addButton = new Fl_Button(300, 20, 100, 30, "Add Level");
-    closeButton = new Fl_Button(300, 50, 100, 30, "Return to game");
+    replaceButton = new Fl_Button(300, 20, 120, 30, "Replace level");
+    addButton = new Fl_Button(300, 50, 120, 30, "Add as new level");
+    closeButton = new Fl_Button(300, 80, 120, 30, "Return to game");
     lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
     colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
     movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
-    replaceButton = new Fl_Button(300,20, 120, 30, "Replace level");
     replaceButton->hide();
     submitButton->callback(submitButtonCallback, this);
     addButton->callback(static_addingButton_callback, this);

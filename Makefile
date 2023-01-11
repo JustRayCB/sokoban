@@ -1,5 +1,5 @@
 COMPILER = g++
-FLAGS = -std=c++20 -Wall -Wextra -pedantic `fltk-config --ldflags` -g
+FLAGS = -std=c++20 -Wall -Wextra -pedantic -fsanitize=address `fltk-config --ldflags` -g
 # FLAGS += $(shell fltk-config --cxxflags)
 # FLAGS  += $(shell fltk-config --ldflags)
 
