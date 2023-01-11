@@ -139,9 +139,8 @@ public:
      * @param deltaX: the corresponding delta of the X axe of the move that the player wants to make 
      * @param deltaY: the corresponding delta of the Y axe of the move that the player wants to make
      * @param keyCode: key pressed by the player
-     * @param boxSize: size of the box of the corresponding object
      */
-    void manageFromTargetPlayerEmptyBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void manageFromTargetPlayerEmptyBox(const Point &position, int deltaX, int deltaY, int keyCode);
     /*
      * @brief: Function that manage the possible moves of a player that is on a target case that is pushing a box
      * that is on an target case
