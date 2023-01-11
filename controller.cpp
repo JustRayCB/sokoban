@@ -530,7 +530,6 @@ void Controll::move(int keyCode){
     else if (keyCode == FL_Right or keyCode == 'd') {deltaY++;}
     else {return;}
 
-    //int xIdx = board->getPosX(), yIdx = board->getPosY();
     Point playerPosition = {board->getPosX(), board->getPosY()};
     Point futurePlayerPosition = {playerPosition.x+deltaX, playerPosition.y+deltaY}; //aka boxPosition
     Point futureBoxPosition = {futurePlayerPosition.x+deltaX, futurePlayerPosition.y + deltaY};
