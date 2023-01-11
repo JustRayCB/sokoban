@@ -7,6 +7,19 @@
 Cell::Cell(Point center, int w, int h) : r(center, w, h, FL_BLACK, FL_WHITE) {}
 
 void Cell::draw() {
+    if (current == 0) {
+        r.setFillColor(FL_WHITE);
+    } else if (current == 1) {
+        r.setFillColor(FL_BLUE);
+    } else if (current == 2) {
+        r.setFillColor(FL_YELLOW);
+    } else if (current == 3) {
+        r.setFillColor(FL_GREEN);
+    } else if (current == 4) {
+        r.setFillColor(FL_MAGENTA);
+    } else if (current == 5) {
+        r.setFillColor(FL_CYAN);
+    }
     r.draw();
 }
 
@@ -46,7 +59,12 @@ int Cell::getCurrent() {
     return current;
 }
 
+void Cell::setCurrent(int newCurrent) {
+    current = newCurrent;
+}
+
 Canvas::Canvas(int nbColone, int nbLigne) {
+    std::cout << "Entering Canva constructor with dimensions: " << nbLigne << " " << nbColone << std::endl;
     int size = std::min(500/nbColone, 500/nbLigne);
     for(int i=0; i < nbLigne; i++){
         std::vector<Cell> innerVec;
@@ -93,4 +111,8 @@ int Canvas::getNumberOfLines(){
 
 std::vector<std::vector<Cell>> Canvas::getCells() {
     return cells;
+}
+
+void Canvas::setCells(std::vector<std::vector<Cell>> newCells) {
+    cells = newCells;
 }

@@ -28,24 +28,32 @@
 #include <cstring>
 
 #include "grid.hpp"
+#include "board.hpp"
 
 class LevelEditorWindow : public Fl_Window {
 private:
     Fl_Button* submitButton;
     Fl_Button* addButton;
     Fl_Button* closeButton;
+    Fl_Button* replaceButton;
     Fl_Input* lineInput;
     Fl_Input* colInput;
     Fl_Input* movesLimit;
     void closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow);
     void submitButtonCallback();
     void addingButtonCallback();
+    void replaceButtonCallBack();
+    static void static_replaceButton_callback(Fl_Widget* w, void* ptr);
     static void static_submitButton_callback(Fl_Widget* w, void* ptr);
     static void static_addingButton_callback(Fl_Widget* w, void* ptr);
     Canvas canvas;
 
+    int bestScore = 0;
+    std::string filingName = "";
+
  public:
     LevelEditorWindow();
+    LevelEditorWindow(std::string filename, Board board);
     ~LevelEditorWindow() {
         delete submitButton;
         delete addButton;
@@ -57,6 +65,10 @@ private:
     void setCanva(Canvas canva);
     void draw() override;
     int handle(int event) override;
+
+    Canvas convertObjectVectorToCanva(std::vector<std::vector<GameObject>> objectVector);
+    std::string getLatestFileName();
+    void setFileName(std::string newFileName);
 
     Fl_Button* get_closeButton();
     /*
@@ -75,7 +87,7 @@ private:
      * @brief: Function that converts a user input grid into a .txt file
      * so that the player can play on the created level
      */
-    void convertCanvaToTextFile();
+    void convertCanvaToTextFile(std::string fileName);
 };
 
 #endif

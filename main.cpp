@@ -60,6 +60,7 @@ class MainWindow : public Fl_Window {
     Fl_Choice *choice;
     Fl_Button *reset;
     Fl_Button *lvlEditor;
+    Fl_Button *lvlEditEditor;
     bool showMessage = true;
     Fl_Box *hello;
     // static void open_second_window(Fl_Widget* widget, void* data);
@@ -73,6 +74,7 @@ public:
         delete hello;
         delete reset;
         delete lvlEditor;
+        delete lvlEditEditor;
     }
 
     MainWindow() : Fl_Window(000, 000, 1000, 975, "Sokoban") {
@@ -85,8 +87,10 @@ public:
         reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
         lvlEditor = new Fl_Button(165, 60, 150, 30, "Create New Level");
         lvlEditor->callback(open_second_window, this);
+        lvlEditEditor = new Fl_Button(165, 30, 150, 30, "Edit this level");
+        lvlEditEditor->callback(edit_second_window, this);
         choice = new Fl_Choice(210,120,100,30,"Levels");
-        choice->hide(); reset->hide(); lvlEditor->hide();
+        choice->hide(); reset->hide(); lvlEditor->hide(); lvlEditEditor->hide();
         configChoice(choice);
         hello = new Fl_Box(350,250,300,300,"Bienvenue !\n"
                             "Jeu Sokoban, Créé par \nHugo Callens et"
@@ -109,6 +113,7 @@ public:
             choice->show();
             reset->show();
             lvlEditor->show();
+            lvlEditEditor->show();
         }
     }
 
@@ -134,10 +139,20 @@ public:
     void setBoard(Board newBoard) {
         board = newBoard;
     }
+    
 
     static void open_second_window(Fl_Widget* widget, void* data) {
         MainWindow* firstWindow = (MainWindow*) data;
         LevelEditorWindow* secondWindow = new LevelEditorWindow;
+        Fl_Button* test = secondWindow->get_closeButton();
+        test->callback(close_second_window, firstWindow);
+        secondWindow->show();
+        firstWindow->hide();
+    }
+
+    static void edit_second_window(Fl_Widget* w, void* data) {
+        MainWindow* firstWindow = (MainWindow*) data;
+        LevelEditorWindow* secondWindow = new LevelEditorWindow(firstWindow->currentFile, firstWindow->board);
         Fl_Button* test = secondWindow->get_closeButton();
         test->callback(close_second_window, firstWindow);
         secondWindow->show();
@@ -180,6 +195,10 @@ public:
                 else if (Fl::event_x() <= lvlEditor->x()+lvlEditor->w() and Fl::event_x() >=lvlEditor->x() 
                         and Fl::event_y() <= lvlEditor->y()+lvlEditor->h() and Fl::event_y() >=lvlEditor->y()) {
                     lvlEditor->do_callback();
+                }
+                else if (Fl::event_x() <= lvlEditEditor->x()+lvlEditEditor->w() and Fl::event_x() >=lvlEditEditor->x() 
+                        and Fl::event_y() <= lvlEditEditor->y()+lvlEditEditor->h() and Fl::event_y() >=lvlEditEditor->y()) {
+                    lvlEditEditor->do_callback();
                 }
                 else {
                     if(!stopMove) controller.moveWithMouse(Fl::event_x(), Fl::event_y());

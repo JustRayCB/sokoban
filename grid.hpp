@@ -24,6 +24,7 @@ class Cell {
   void mouseMove(Point mouseLoc);
   void mouseClick(Point mouseLoc);
   int getCurrent();
+  void setCurrent(int newCurrent);
 };
 
 class Canvas {
@@ -40,6 +41,7 @@ class Canvas {
   int getNumberOfLines();
   int getNumberOfColumns();
   std::vector<std::vector<Cell>> getCells();
+  void setCells(std::vector<std::vector<Cell>> newCells);
 
 };
 
