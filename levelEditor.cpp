@@ -29,23 +29,31 @@ LevelEditorWindow::LevelEditorWindow(std::string filename, Board board) : LevelE
 Canvas LevelEditorWindow::convertObjectVectorToCanva(std::vector<std::vector<GameObject>> objectVector) {
     Canvas canvass = Canvas(objectVector[0].size(), objectVector.size());
     std::vector<std::vector<Cell>> c = canvass.getCells();
-    for (int i=0; i < objectVector.size(); i++) {
-        for (int j=0; j < objectVector[0].size(); j++) {
-            if (objectVector[i][j].getName() == "empty") {
+    int i = 0, j = 0;
+    for (auto &line : objectVector) {
+        j = 0;
+        for (auto &elem : line) {
+            if (elem.isEmpty()) {
                 c[i][j].setCurrent(0);
-            } else if (objectVector[i][j].getName() == "wall") {
+            }else if (elem.isWall()) {
                 c[i][j].setCurrent(1);
-            } else if (objectVector[i][j].getName() == "box") {
+            }
+            else if (elem.isBox()) {
                 c[i][j].setCurrent(2);
-            } else if (objectVector[i][j].getName() == "player") {
+            }
+            else if (elem.isPlayer()) {
                 c[i][j].setCurrent(3); 
-            } else if (objectVector[i][j].getName() == "target") {
+            }
+            else if (elem.isTarget()) {
                 c[i][j].setCurrent(4);
-            } else if (objectVector[i][j].getName() == "tp") {
+            }
+            else if (elem.isTp()) {
                 c[i][j].setCurrent(5);
-            } 
+            }
+            j++;
         }
-    }   
+        i++;
+    }
     canvass.setCells(c);
     canvass.setNumberOfColumns(objectVector[0].size());
     canvass.setNumberOfLines(objectVector.size());

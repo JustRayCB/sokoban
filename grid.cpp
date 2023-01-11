@@ -33,24 +33,9 @@ void Cell::mouseMove(Point mouseLoc) {
 
 void Cell::mouseClick(Point mouseLoc) { 
     if (r.contains(mouseLoc)) {
-        if (current == 0) {
-            r.setFillColor(FL_BLUE);
-            current++;
-        } else if (current == 1) {
-            r.setFillColor(FL_YELLOW);
-            current++;
-        } else if (current == 2) {
-            r.setFillColor(FL_GREEN);
-            current++;
-        } else if (current == 3) {
-            r.setFillColor(FL_MAGENTA);
-            current++;
-        } else if (current == 4) {
-            r.setFillColor(FL_CYAN);
-            current++;
-        } else if (current == 5) {
-            r.setFillColor(FL_WHITE);
-            current -= 5;
+        current++;
+        if (current == 6) {
+            current = 0;
         }
     }
 }

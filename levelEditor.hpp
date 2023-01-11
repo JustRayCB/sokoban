@@ -58,7 +58,6 @@ private:
         delete lineInput;
         delete colInput;
         delete movesLimit;
-        delete replaceButton;
     };
     void setCanva(Canvas canva);
     Fl_Button* get_closeButton();
