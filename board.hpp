@@ -31,6 +31,7 @@ class Board{
         stepCount = other.stepCount;
         bestScore = other.bestScore;
         boxStuck = other.boxStuck;
+        limit = other.limit;
     }
 
 public:

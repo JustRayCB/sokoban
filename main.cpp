@@ -129,6 +129,7 @@ public:
         loadBoard(newBoard, addedLevel);
         firstWindow->currentFile = addedLevel;
         firstWindow->setBoard(newBoard);
+        firstWindow->redraw();
         firstWindow->show();
     }
 
