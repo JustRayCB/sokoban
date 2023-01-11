@@ -304,7 +304,7 @@ void Controll::manageFromEmptyPlayer(const Point &position, int deltaX, int delt
     }
 }
 
-void Controll::manageFromTargetPlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize) {
+void Controll::manageFromTargetPlayer(const Point &position, int deltaX, int deltaY, int keyCode) {
     Point destinationPosition = {position.x+deltaX, position.y+deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
@@ -344,7 +344,7 @@ void Controll::manageMovePlayer(const Point &position, int deltaX, int deltaY, i
         manageFromEmptyPlayer(position, deltaX, deltaY, keyCode);
     } else if (board->isOnTarget(position)) {
         // joueur est sur une cible
-        manageFromTargetPlayer(position, deltaX, deltaY, keyCode, boxSize);
+        manageFromTargetPlayer(position, deltaX, deltaY, keyCode);
     } else if (board->isOnTp(position)) {
         // joueur est sur un tp
         manageFromTpPlayer(position, deltaX, deltaY, keyCode);
