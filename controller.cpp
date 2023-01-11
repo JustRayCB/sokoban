@@ -238,7 +238,7 @@ void Controll::targetPlayerToTarget(const Point &position, int deltaX, int delta
     board->setObject(position.x, position.y, target);
 }
     
-void Controll::tpPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::tpPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     emptyPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
     board->setTp(position.x, position.y);
 }
@@ -289,7 +289,7 @@ void Controll::targetPlayerTpBoxToTarget(const Point &position, int deltaX, int 
     targetPlayerTpBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 void Controll::tpPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){ 
-    tpPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+    tpPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+2*deltaX, position.y+2*deltaY).setColor(FL_MAGENTA);
     board->setTp(position.x, position.y);
@@ -491,7 +491,7 @@ void Controll::manageFromTpPlayerTargetBox(const Point &position, int deltaX, in
     } else if (not board->isTarget(destinationPosition)
             and not board->isTp(destinationPosition)) {
         // vers vide
-        tpPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+        tpPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
     } else {
         perror("Mouvement non pris en charge");
     }
