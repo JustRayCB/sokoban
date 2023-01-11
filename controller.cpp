@@ -117,13 +117,12 @@ void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, i
     board->setEmpty(position.x, position.y);
 }
 
-void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     board->removeFromTarget(Point{position.x, position.y}, false);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
     // on redessine la cible
-    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-    board->setObject(position.x, position.y, target);
+    board->setTarget(position.x, position.y);
 }
 
 void Controll::tpPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
@@ -262,7 +261,7 @@ void Controll::emptyPlayerTpBoxToTarget(const Point &position, int deltaX, int d
     emptyPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
 }
 void Controll::targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
-    targetPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+    targetPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 
 void Controll::tpPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){ 
@@ -422,7 +421,7 @@ void Controll::manageFromTargetPlayerEmptyBox(const Point &position, int deltaX,
     } else if (not board->isTarget(destinationPosition)
             and not board->isTp(destinationPosition)) {
         // vers vide
-        targetPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+        targetPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
     } else {
         perror("Mouvement non pris en charge");
     }
