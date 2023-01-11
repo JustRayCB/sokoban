@@ -424,7 +424,7 @@ void Controll::manageFromTargetPlayerEmptyBox(const Point &position, int deltaX,
     }
 }
 
-void Controll::manageFromTargetPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize) {
+void Controll::manageFromTargetPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode) {
     Point destinationPosition = {position.x+2*deltaX, position.y+2*deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
