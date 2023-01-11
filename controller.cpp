@@ -567,7 +567,6 @@ void Controll::move(int keyCode){
     Point futurePlayerPosition = {playerPosition.x+deltaX, playerPosition.y+deltaY}; //aka boxPosition
     Point futureBoxPosition = {futurePlayerPosition.x+deltaX, futurePlayerPosition.y + deltaY};
 
-    int boxSize = board->getElem(playerPosition.x, playerPosition.y).getSize();
     bool isPlayerMovable = board->isInBoard(futurePlayerPosition.x, futurePlayerPosition.y) 
                         and not board->isWall(futurePlayerPosition.x, futurePlayerPosition.y);
     if (isPlayerMovable){
