@@ -221,12 +221,11 @@ void Controll::targetPlayerToTp(const Point &newPosition, const Point &oldPositi
     }
     board->setTarget(oldPosition.x, oldPosition.y);
 }
-void Controll::targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::targetPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->removeFromTarget(Point{position.x, position.y}, false);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     this->movePlayer(keyCode);
-    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-    board->setObject(position.x, position.y, target);
+    board->setTarget(position.x, position.y);
 }
     
 void Controll::tpPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
@@ -309,7 +308,7 @@ void Controll::manageFromTargetPlayer(const Point &position, int deltaX, int del
     Point destinationPosition = {position.x+deltaX, position.y+deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
-        targetPlayerToTarget(position, deltaX, deltaY, keyCode, boxSize);
+        targetPlayerToTarget(position, deltaX, deltaY, keyCode);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
         targetPlayerToTp(destinationPosition, position, keyCode);
