@@ -127,7 +127,7 @@ void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, in
     board->setObject(position.x, position.y, target);
 }
 
-void Controll::tpPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::tpPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     emptyPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
     board->setTp(position.x, position.y);
 }
@@ -474,7 +474,7 @@ void Controll::manageFromTpPlayerEmptyBox(const Point &position, int deltaX, int
     } else if (not board->isTarget(destinationPosition)
             and not board->isTp(destinationPosition)) {
         // vers vide
-        tpPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode, boxSize);
+        tpPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
     } else {
         perror("Mouvement non pris en charge");
     }
