@@ -260,7 +260,7 @@ void Controll::emptyPlayerTpBoxToTarget(const Point &position, int deltaX, int d
     board->getElem(position.x+2*deltaX, position.y+2*deltaY).setColor(FL_MAGENTA);
     emptyPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
 }
-void Controll::targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){
     targetPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 
@@ -417,7 +417,7 @@ void Controll::manageFromTargetPlayerEmptyBox(const Point &position, int deltaX,
         targetPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
-        targetPlayerEmptyBoxToTp(position, deltaX, deltaY, keyCode, boxSize);
+        targetPlayerEmptyBoxToTp(position, deltaX, deltaY, keyCode);
     } else if (not board->isTarget(destinationPosition)
             and not board->isTp(destinationPosition)) {
         // vers vide
