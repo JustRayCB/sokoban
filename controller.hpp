@@ -201,9 +201,8 @@ public:
      * @param deltaX: the corresponding delta of the X axe of the move that the player wants to make 
      * @param deltaY: the corresponding delta of the Y axe of the move that the player wants to make
      * @param keyCode: key pressed by the player
-     * @param boxSize: size of the box of the corresponding object
      */
-    void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void emptyPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
     /*
      * @brief: Function that moves a player that is on an empty case pushing a box that is on an empty case to a teleportation case 
      * @param position: the position of the player in the vector 
@@ -420,9 +419,8 @@ public:
      * @brief: Function that moves a player that is on an empty case to an empty case 
      * @param position: the position of the player in the vector 
      * @param keyCode: key pressed by the player
-     * @param boxSize: size of the box of the corresponding object
      */
-    void emptyPlayerToEmpty(const Point &position, int keyCode, int boxSize);
+    void emptyPlayerToEmpty(const Point &position, int keyCode);
     /*
      * @brief: Function that moves a player that is on an empty case to a target case 
      * @param position: the position of the player in the vector 
