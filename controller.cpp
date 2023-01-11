@@ -158,9 +158,7 @@ void Controll::emptyPlayerToEmpty(const Point &position, int keyCode){
 }
 void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
-    this->movePlayer(keyCode);
-    // on redessine la case vide
-    board->setEmpty(position.x, position.y);
+    emptyPlayerToEmpty(position, keyCode);
 }
 void Controll::tpPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
