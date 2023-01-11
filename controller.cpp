@@ -243,7 +243,7 @@ void Controll::tpPlayerTargetBoxToEmpty(const Point &position, int deltaX, int d
     board->setTp(position.x, position.y);
 }
 
-void Controll::tpPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::tpPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     emptyPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode);
     board->setTp(position.x, position.y);
 }
@@ -467,7 +467,7 @@ void Controll::manageFromTpPlayerEmptyBox(const Point &position, int deltaX, int
     Point destinationPosition = {position.x+2*deltaX, position.y+2*deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
-        tpPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
+        tpPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
         tpPlayerEmptyBoxToTp(position, deltaX, deltaY, keyCode);

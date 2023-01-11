@@ -322,7 +322,7 @@ public:
      * @param keyCode: key pressed by the player
      * @param boxSize: size of the box of the corresponding object
      */
-    void tpPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void tpPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode);
     /*
      * @brief: Function that moves a player that is on an empty case pushing a box that is on a target case to a teleportation case 
      * @param position: the position of the player in the vector 
