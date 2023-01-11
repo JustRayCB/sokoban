@@ -131,6 +131,7 @@ public:
         firstWindow->setBoard(newBoard);
         firstWindow->redraw();
         firstWindow->show();
+        delete secondWindow;
     }
 
     Board getBoard() {

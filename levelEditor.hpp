@@ -61,6 +61,7 @@ private:
         delete lineInput;
         delete colInput;
         delete movesLimit;
+        delete replaceButton;
     };
     void setCanva(Canvas canva);
     void draw() override;

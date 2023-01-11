@@ -175,16 +175,13 @@ void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, 
 void Controll::emptyPlayerToEmpty(const Point &position, int keyCode){
     this->movePlayer(keyCode);
     // on redessine la case vide
-    //GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
-    //board->setObject(position.x, position.y, empty);
     board->setEmpty(position.x, position.y);
 }
-void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     this->movePlayer(keyCode);
     // on redessine la case vide
-    GameObject empty{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize, FL_GRAY, FL_GRAY, "empty"};
-    board->setObject(position.x, position.y, empty);
+    board->setEmpty(position.x, position.y);
 }
 void Controll::tpPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
@@ -292,11 +289,11 @@ void Controll::tpPlayerTargetBoxToTarget(const Point &position, int deltaX, int 
 }
 
 
-void Controll::manageFromEmptyPlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize) {
+void Controll::manageFromEmptyPlayer(const Point &position, int deltaX, int deltaY, int keyCode) {
     Point destinationPosition = {position.x+deltaX, position.y+deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
-        emptyPlayerToTarget(position, deltaX, deltaY, keyCode, boxSize);
+        emptyPlayerToTarget(position, deltaX, deltaY, keyCode);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
         emptyPlayerToTp(destinationPosition, position, keyCode);
@@ -346,7 +343,7 @@ void Controll::manageMovePlayer(const Point &position, int deltaX, int deltaY, i
     //std::cout << "Yo" << std::endl;
     if (not board->isOnTarget(position) and not board->isOnTp(position)) {
         // joueur est sur une case vide
-        manageFromEmptyPlayer(position, deltaX, deltaY, keyCode, boxSize);
+        manageFromEmptyPlayer(position, deltaX, deltaY, keyCode);
     } else if (board->isOnTarget(position)) {
         // joueur est sur une cible
         manageFromTargetPlayer(position, deltaX, deltaY, keyCode, boxSize);
