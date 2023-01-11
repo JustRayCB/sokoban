@@ -431,9 +431,8 @@ public:
      * @brief: Function that moves a player that is on a target case to an empty case 
      * @param position: the position of the player in the vector 
      * @param keyCode: key pressed by the player
-     * @param boxSize: size of the box of the corresponding object
      */
-    void targetPlayerToEmpty(const Point &position, int keyCode, int boxSize);
+    void targetPlayerToEmpty(const Point &position, int keyCode);
     /*
      * @brief: Function that moves a player that is on a target case to a target case 
      * @param position: the position of the player in the vector 
