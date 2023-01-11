@@ -92,6 +92,7 @@ void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, in
 }
 
 void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
+    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
@@ -105,12 +106,8 @@ void Controll::emptyPlayerTpBoxToEmpty(const Point &position, int deltaX, int de
 
 void Controll::emptyPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
-    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
-    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
-    this->movePlayer(keyCode);
-    // on redessine la case vide
-    board->setEmpty(position.x, position.y);
+    emptyPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode);
 }
 
 void Controll::targetPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
