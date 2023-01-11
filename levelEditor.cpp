@@ -10,42 +10,27 @@ LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level E
     movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
     replaceButton->hide();
     submitButton->callback(submitButtonCallback, this);
-    addButton->callback(static_addingButton_callback, this);
+    addButton->callback(addingButtonCallback, this);
+    replaceButton->callback(replaceButtonCallback, this);
     end();
     show();
 }
 
-LevelEditorWindow::LevelEditorWindow(std::string filename, Board board) : Fl_Window(000,000,1000,975,"Level Editor"){
-    std::cout << "Entering edit" << std::endl;
-    this->filingName = filename;
-    this->bestScore = board.getBestScore();
-    submitButton = new Fl_Button(150, 90, 50, 20, "Submit");
-    replaceButton = new Fl_Button(300,20, 120, 30, "Replace level");
-    addButton = new Fl_Button(300, 50, 120, 30, "Add as new level");
-    closeButton = new Fl_Button(300, 80, 120, 30, "Return to game");
-    lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
-    colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
-    movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
-    submitButton->callback(submitButtonCallback, this); 
-    addButton->callback(static_addingButton_callback, this);
-    replaceButton->callback(static_replaceButton_callback, this);
+LevelEditorWindow::LevelEditorWindow(std::string filename, Board board) : LevelEditorWindow() {
+    replaceButton->show();
+    filingName = filename;
     Canvas cv = convertObjectVectorToCanva(board.getBoard());
-    this->setCanva(cv);
-    std::cout << this->canvas.getNumberOfColumns() << this->canvas.getNumberOfLines() << "\n";
-    this->draw();
+    setCanva(cv);
+    draw();
     end();
     show();
 }
 
 Canvas LevelEditorWindow::convertObjectVectorToCanva(std::vector<std::vector<GameObject>> objectVector) {
-    std::cout << "Entering convert" << std::endl;
     Canvas canvass = Canvas(objectVector[0].size(), objectVector.size());
-    std::cout << "line=" << objectVector.size() << " cols=" << objectVector[0].size() << "\n";
     std::vector<std::vector<Cell>> c = canvass.getCells();
-    std::cout << "Cells->lines=" << c.size() << " cols=" << c[0].size() << "\n";
     for (int i=0; i < objectVector.size(); i++) {
         for (int j=0; j < objectVector[0].size(); j++) {
-            std::cout << "[" << i << "][" << j << "]\n";
             if (objectVector[i][j].getName() == "empty") {
                 c[i][j].setCurrent(0);
             } else if (objectVector[i][j].getName() == "wall") {
@@ -58,9 +43,7 @@ Canvas LevelEditorWindow::convertObjectVectorToCanva(std::vector<std::vector<Gam
                 c[i][j].setCurrent(4);
             } else if (objectVector[i][j].getName() == "tp") {
                 c[i][j].setCurrent(5);
-            } else {
-                std::cout << "NONE" << std::endl;
-            }
+            } 
         }
     }   
     canvass.setCells(c);
@@ -127,7 +110,6 @@ bool LevelEditorWindow::isGridValid() {
     return checkCorrectGrid();
 }
 
-
 bool LevelEditorWindow::checkCorrectGrid(){
     int countPlayer = 0;
     int countBox = 0;
@@ -169,7 +151,7 @@ bool LevelEditorWindow::checkCorrectGrid(){
     return true;
 }
 
-void LevelEditorWindow::convertCanvaToTextFile(std::string fileName) {
+void LevelEditorWindow::convertCanvaToTextFile(std::string fileName, bool addingAsNew) {
     std::string directory = "lvls/" + fileName + ".txt";
 
     std::ofstream fw(directory, std::ofstream::out);
@@ -200,33 +182,21 @@ void LevelEditorWindow::convertCanvaToTextFile(std::string fileName) {
         }
         fw << "\n";
     }
-    std::ofstream allWrite("lvls/all.txt", std::ofstream::app);
-    allWrite << fileName << "\n";
+    if (addingAsNew) {
+        std::ofstream allWrite("lvls/all.txt", std::ofstream::app);
+        allWrite << fileName << "\n";
+    }
     fl_alert("File added as : %s", fileName.c_str());
 }
 
-//void LevelEditorWindow::static_submitButton_callback(Fl_Widget* w, void* ptr){
-    //LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
-    //me->submitButtonCallback();
-//}
-
-void LevelEditorWindow::static_addingButton_callback(Fl_Widget* w, void* ptr){
+void LevelEditorWindow::replaceButtonCallback(Fl_Widget* w, void* ptr) {
     LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
-    me->addingButtonCallback();
-}
-
-void LevelEditorWindow::static_replaceButton_callback(Fl_Widget* w, void* ptr) {
-    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
-    me->replaceButtonCallBack();
-}
-
-void LevelEditorWindow::replaceButtonCallBack() {
-    if(isGridValid()) {
-        int pos1 = filingName.find("/");
-        std::string tmpStr = filingName.substr(pos1+1);
+    if(me->isGridValid()) {
+        int pos1 = me->filingName.find("/");
+        std::string tmpStr = me->filingName.substr(pos1+1);
         int pos2 = tmpStr.find(".");
         std::string finalStr = tmpStr.substr(0, pos2);
-        convertCanvaToTextFile(finalStr);
+        me->convertCanvaToTextFile(finalStr, false);
     }
 }
     
@@ -244,9 +214,10 @@ void LevelEditorWindow::submitButtonCallback(Fl_Widget* w, void* ptr){
     }
 }
 
-void LevelEditorWindow::addingButtonCallback(){
-    if (isGridValid()) {
-        convertCanvaToTextFile(getLatestFileName());
+void LevelEditorWindow::addingButtonCallback(Fl_Widget* w, void* ptr){
+    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
+    if (me->isGridValid()) {
+        me->convertCanvaToTextFile(me->getLastFileName(), true);
     }
 }
 
@@ -260,7 +231,7 @@ void LevelEditorWindow::closeWindow(Fl_Window* firstWindow, Fl_Window* secondWin
     firstWindow->redraw();
 }
 
-std::string LevelEditorWindow::getLatestFileName() {
+std::string LevelEditorWindow::getLastFileName() {
     std::ifstream allRead("lvls/all.txt");
     std::string line;
     int counter = 0;
@@ -268,11 +239,7 @@ std::string LevelEditorWindow::getLatestFileName() {
         counter++;
     }
     
-    std::string filingName = "lvl" + std::to_string(counter+1);
+    std::string fname = "lvl" + std::to_string(counter+1);
 
-    return filingName;
-}
-
-void LevelEditorWindow::setFileName(std::string newFileName) {
-    filingName = newFileName;
+    return fname;
 }

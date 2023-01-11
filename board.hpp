@@ -103,7 +103,6 @@ public:
     void incrementStepCount(int x);
 
     Point searchMatchTp(const Point &currentTp);
-    void replaceTp();
 
 };
 

@@ -146,8 +146,8 @@ public:
     static void open_second_window(Fl_Widget* widget, void* data) {
         MainWindow* firstWindow = (MainWindow*) data;
         LevelEditorWindow* secondWindow = new LevelEditorWindow;
-        Fl_Button* test = secondWindow->get_closeButton();
-        test->callback(close_second_window, firstWindow);
+        Fl_Button* b = secondWindow->get_closeButton();
+        b->callback(close_second_window, firstWindow);
         secondWindow->show();
         firstWindow->hide();
     }
@@ -155,8 +155,8 @@ public:
     static void edit_second_window(Fl_Widget* w, void* data) {
         MainWindow* firstWindow = (MainWindow*) data;
         LevelEditorWindow* secondWindow = new LevelEditorWindow(firstWindow->currentFile, firstWindow->board);
-        Fl_Button* test = secondWindow->get_closeButton();
-        test->callback(close_second_window, firstWindow);
+        Fl_Button* b = secondWindow->get_closeButton();
+        b->callback(close_second_window, firstWindow);
         secondWindow->show();
         firstWindow->hide();
     }
