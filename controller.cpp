@@ -276,7 +276,7 @@ void Controll::targetPlayerTpBoxToTp(const Point &position, int deltaX, int delt
     moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     targetPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
 }
-void Controll::targetPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){ 
+void Controll::targetPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){
     targetPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 void Controll::targetPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){ 
@@ -432,7 +432,7 @@ void Controll::manageFromTargetPlayerTargetBox(const Point &position, int deltaX
         targetPlayerTargetBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
-        targetPlayerTargetBoxToTp(position, deltaX, deltaY, keyCode, boxSize);
+        targetPlayerTargetBoxToTp(position, deltaX, deltaY, keyCode);
     } else if (not board->isTarget(destinationPosition)
             and not board->isTp(destinationPosition)) {
         // vers vide
