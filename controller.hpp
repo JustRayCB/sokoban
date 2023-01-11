@@ -366,9 +366,8 @@ public:
      * @param deltaX: the corresponding delta of the X axe of the move that the player wants to make 
      * @param deltaY: the corresponding delta of the Y axe of the move that the player wants to make
      * @param keyCode: key pressed by the player
-     * @param boxSize: size of the box of the corresponding object
      */
-    void tpPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize);
+    void tpPlayerTargetBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode);
     /*
      * @brief: Function that moves a player that is on a target case pushing a box that is on a teleportation case to a teleportation case 
      * @param position: the position of the player in the vector 
