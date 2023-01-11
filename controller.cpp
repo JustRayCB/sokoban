@@ -336,7 +336,7 @@ void Controll::manageFromTpPlayer(const Point &position, int deltaX, int deltaY,
 }
 
 
-void Controll::manageMovePlayer(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize) {
+void Controll::manageMovePlayer(const Point &position, int deltaX, int deltaY, int keyCode) {
     // joueur sur vide, vers vide
     //std::cout << "Yo" << std::endl;
     if (not board->isOnTarget(position) and not board->isOnTp(position)) {
@@ -581,7 +581,7 @@ void Controll::move(int keyCode){
             board->incrementStepCount(1);
         }
         else if (not board->isBox(futurePlayerPosition)) {
-            manageMovePlayer(playerPosition, deltaX, deltaY, keyCode, boxSize);
+            manageMovePlayer(playerPosition, deltaX, deltaY, keyCode);
             board->incrementStepCount(1);
         }
     }else {
