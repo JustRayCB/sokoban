@@ -581,7 +581,7 @@ void Controll::move(int keyCode){
                         and not board->isWall(futurePlayerPosition.x, futurePlayerPosition.y);
     if (isPlayerMovable){
         bool isBoxMovable = board->isBox(futurePlayerPosition) and board->isInBoard(futureBoxPosition.x, futureBoxPosition.y)
-            and not board->isWall(futureBoxPosition);
+            and not (board->isWall(futureBoxPosition) or board->isBox(futureBoxPosition));
                 //and (board->isEmpty(futureBoxPosition) 
                     //or board->isTarget(futureBoxPosition)
                 //or board->isOnTp({futureBoxPosition}));

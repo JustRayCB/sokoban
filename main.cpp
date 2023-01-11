@@ -182,7 +182,7 @@ public:
                     lvlEditor->do_callback();
                 }
                 else {
-                    controller.moveWithMouse(Fl::event_x(), Fl::event_y());
+                    if(!stopMove) controller.moveWithMouse(Fl::event_x(), Fl::event_y());
                 }
                 return 1;
 
