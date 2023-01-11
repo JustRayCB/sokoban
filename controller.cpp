@@ -216,10 +216,9 @@ void Controll::targetPlayerTpBoxToEmpty(const Point &position, int deltaX, int d
     targetPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
 }
 void Controll::emptyPlayerTpBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
-    moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
-    board->getElem(position.x+2*deltaX, position.y+2*deltaY).setColor(FL_MAGENTA);
-    emptyPlayerToTp({position.x+deltaX, position.y+deltaY}, position, keyCode);
+    board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
+    emptyPlayerTpBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 void Controll::targetPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){
     targetPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
