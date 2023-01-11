@@ -94,8 +94,7 @@ void Controll::emptyPlayerEmptyBoxToTarget(const Point &position, int deltaX, in
 void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
     board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_YELLOW);
-    board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, false);
-    board->removeFromTarget(Point{position.x+deltaX, position.y+deltaY}, true);
+    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
     emptyPlayerEmptyBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
 
