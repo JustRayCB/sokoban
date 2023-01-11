@@ -288,7 +288,7 @@ void Controll::targetPlayerTpBoxToTarget(const Point &position, int deltaX, int 
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
     targetPlayerTpBoxToEmpty(position, deltaX, deltaY, keyCode);
 }
-void Controll::tpPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){ 
+void Controll::tpPlayerTargetBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){ 
     tpPlayerTargetBoxToEmpty(position, deltaX, deltaY, keyCode);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+2*deltaX, position.y+2*deltaY).setColor(FL_MAGENTA);
@@ -484,7 +484,7 @@ void Controll::manageFromTpPlayerTargetBox(const Point &position, int deltaX, in
     Point destinationPosition = {position.x+2*deltaX, position.y+2*deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
-        tpPlayerTargetBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
+        tpPlayerTargetBoxToTarget(position, deltaX, deltaY, keyCode);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
         tpPlayerTargetBoxToTp(position, deltaX, deltaY, keyCode);
