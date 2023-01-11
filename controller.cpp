@@ -377,7 +377,7 @@ void Controll::manageFromEmptyPlayerEmptyBox(const Point &position, int deltaX, 
     }
 }
 
-void Controll::manageFromEmptyPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize) {
+void Controll::manageFromEmptyPlayerTargetBox(const Point &position, int deltaX, int deltaY, int keyCode) {
     Point destinationPosition = {position.x+2*deltaX, position.y+2*deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
@@ -521,7 +521,7 @@ void Controll::manageMovePlayerAndBox(const Point &position, int deltaX, int del
     } else if (not board->isOnTarget(position) and not board->isOnTp(position)
         and board->isOnTarget(boxPosition) and not board->isOnTp(boxPosition)) {
             // Joueur sur vide box sur cible
-            manageFromEmptyPlayerTargetBox(position, deltaX, deltaY, keyCode, boxSize);
+            manageFromEmptyPlayerTargetBox(position, deltaX, deltaY, keyCode);
     } else if (not board->isOnTarget(position) and not board->isOnTp(position)
         and not board->isOnTarget(boxPosition) and board->isOnTp(boxPosition)) {
             // Joueur sur vide box sur tp
