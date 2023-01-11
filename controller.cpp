@@ -99,7 +99,7 @@ void Controll::emptyPlayerTargetBoxToEmpty(const Point &position, int deltaX, in
 }
 
 void Controll::emptyPlayerTpBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode){
-    this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
+    moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     emptyPlayerToTp({position.x +deltaX, position.y+deltaY}, position, keyCode);
 }
 
@@ -152,7 +152,7 @@ void Controll::targetPlayerTargetBoxToTarget(const Point &position, int deltaX, 
 }
 
 void Controll::emptyPlayerToEmpty(const Point &position, int keyCode){
-    this->movePlayer(keyCode);
+    movePlayer(keyCode);
     // on redessine la case vide
     board->setEmpty(position.x, position.y);
 }
@@ -166,7 +166,7 @@ void Controll::tpPlayerToTarget(const Point &position, int deltaX, int deltaY, i
 }
 
 void Controll::tpPlayerToEmpty(const Point &position, int keyCode){
-    this->movePlayer(keyCode);
+    movePlayer(keyCode);
     board->setTp(position.x, position.y);
 }
 
@@ -183,7 +183,7 @@ void Controll::emptyPlayerToTp(const Point &newPosition, const Point &oldPositio
 
 void Controll::targetPlayerToEmpty(const Point &position, int keyCode){
     board->removeFromTarget(Point{position.x, position.y}, false);
-    this->movePlayer(keyCode);
+    movePlayer(keyCode);
     board->setTarget(position.x, position.y);
 }
 void Controll::targetPlayerToTp(const Point &newPosition, const Point &oldPosition, int keyCode){
@@ -306,7 +306,6 @@ void Controll::manageFromTpPlayer(const Point &position, int deltaX, int deltaY,
 
 void Controll::manageMovePlayer(const Point &position, int deltaX, int deltaY, int keyCode) {
     // joueur sur vide, vers vide
-    //std::cout << "Yo" << std::endl;
     if (not board->isOnTarget(position) and not board->isOnTp(position)) {
         // joueur est sur une case vide
         manageFromEmptyPlayer(position, deltaX, deltaY, keyCode);
@@ -552,7 +551,6 @@ void Controll::move(int keyCode){
         }
     }else {
         // déplacement impossible
-        std::cout << "You shall not pass" << std::endl;
     }
 }
 
@@ -575,7 +573,6 @@ void Controll::moveWithMouse(int eventX, int eventY){
     std::vector<std::vector<bool>> visited(board->getBoard().size(), std::vector<bool>(board->getBoard()[0].size(), false));
     int steps = board->findPath(Point{board->getPosX(), board->getPosY()}, test, visited, board->getLimit()-board->getStepCount());
     if (steps != -1) {
-        std::cout << "FOUND A PATH OF " << steps << "STEPS" << std::endl;
         board->incrementStepCount(steps);
         clickMovePlayer(test.x, test.y);
     } else {

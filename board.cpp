@@ -34,14 +34,14 @@ int Board::findPath(Point pos, Point target, std::vector<std::vector<bool>> &vis
     int dx[4] = {-1, 0, 1, 0};
     int dy[4] = {0, 1, 0, -1};
     
-    if (pos.x == target.x and pos.y == target.y) {
+    if (pos.x == target.x and pos.y == target.y) { //we reached the desired position
         return 0;
     }
     if (limit == 0) {
         return -1;
     }
     if (visited.at(pos.x).at(pos.y)) {
-        return -1;
+        return -1; //the position is already visited
     }
 
     visited.at(pos.x).at(pos.y) = true;
@@ -171,7 +171,7 @@ void Board::configBoard(const int &line, const int &col, const char &symbol, con
         GameObject box{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_YELLOW, "box"};
         setObject(line, col, box);
     }else if (symbol == '/'){
-        GameObject tp{{xGridFltk, yGridFltk}, size, FL_BLACK, fl_rgb_color(0, 255, 255), "tp"};
+        GameObject tp{{xGridFltk, yGridFltk}, size, FL_BLACK, FL_CYAN, "tp"};
         setObject(line, col, tp);
         tpPos.push_back({line, col});
     }
@@ -281,7 +281,7 @@ void loadBoard(Board &board, std::string file){
     if (myFile.is_open()) {
         while (myFile) {
             if (!idx) {
-                //To set the size of the game board
+                //To get all the info from the first line of the file
                 std::getline(myFile, lineS);
                 stringstream temp(lineS);
                 string tempLine, tempCol, tempBestScore, tempLimit;
@@ -289,7 +289,7 @@ void loadBoard(Board &board, std::string file){
                 getline(temp, tempBestScore, ' '); getline(temp, tempLimit, ' ');
                 int nbLine = std::stoi(tempLine); int nbCol = std::stoi(tempCol);
                 int bestScore = std::stoi(tempBestScore);
-                int limit = std::stoi(tempLimit); //if error set limit = 0
+                int limit = std::stoi(tempLimit);
                 board.setBestScore(bestScore);
                 board.setLimit(limit);
                 boxSize = min(600/nbLine, 75);
@@ -314,10 +314,12 @@ void loadBoard(Board &board, std::string file){
 bool Board::isBoxStuck(int &xVector, int &yVector){
     bool upOk = false, downOk = false, leftOk = false, rightOk = false;    
     GameObject *up = nullptr, *down = nullptr, *right = nullptr, *left = nullptr;
+    //check if there is up, right, left, down neighbors
     if (isInBoard(xVector-1, yVector)) { upOk = true; up = &getElem(xVector-1, yVector);}
     if (isInBoard(xVector+1, yVector)) { downOk = true;  down = &getElem(xVector+1, yVector); }
     if (isInBoard(xVector, yVector+1)) { rightOk = true; right = &getElem(xVector, yVector+1); }
     if (isInBoard(xVector, yVector-1)) { leftOk = true; left = &getElem(xVector, yVector-1); }
+    //check if the box is in a box corner or wall (or both)
     if ((upOk and (up->isWall() or up->isBox()))
             and (rightOk and (right->isWall() or right->isBox()))) { return true; }    
     else if ((upOk and (up->isWall() or up->isBox()))
@@ -343,7 +345,7 @@ bool Board::areBoxStuck(){
         }
     }
 
-    if (totalBox == boxStuck) return true;
+    if (totalBox == boxStuck) return true; //if all box are stuck you cannot win the game
 
     return false;
 }

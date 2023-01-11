@@ -101,16 +101,16 @@ void GameObject::setName(std::string newName){
 }
 
 void GameObject::setColor(Fl_Color newFillColor){
-    getRectangle().setFillColor(newFillColor);
+    myRectangle.setFillColor(newFillColor);
 }
 
 void GameObject::setFrameColor(Fl_Color newFrameColor){
-    getRectangle().setFrameColor(newFrameColor);
+    myRectangle.setFrameColor(newFrameColor);
 }
 
 void GameObject::setSize(int size) {
     boxSize = size;
-    getRectangle().setSize(size);
+    myRectangle.setSize(size);
 }
 
 void GameObject::setMove(std::string newMove){
@@ -162,13 +162,13 @@ Point Animation::currentTranslation() {
       return {0, -static_cast<int>(speed * time)}; // translation vers le haut de speed pixels par seconde
     }
     else if (move == "down"){
-      return {0, static_cast<int>(speed * time)}; // translation vers le haut de speed pixels par seconde
+      return {0, static_cast<int>(speed * time)}; 
     }
     else if (move == "left"){
-      return {-static_cast<int>(speed * time), 0}; // translation vers le haut de speed pixels par seconde
+      return {-static_cast<int>(speed * time), 0};
     }
     else{
-      return {static_cast<int>(speed * time), 0}; // translation vers le haut de speed pixels par seconde
+      return {static_cast<int>(speed * time), 0}; 
     }
 }
 
