@@ -40,11 +40,11 @@ private:
     Fl_Input* colInput;
     Fl_Input* movesLimit;
     void closeWindow(Fl_Window* firstWindow, Fl_Window* secondWindow);
-    void submitButtonCallback();
+    static void submitButtonCallback(Fl_Widget* w, void* ptr);
     void addingButtonCallback();
     void replaceButtonCallBack();
     static void static_replaceButton_callback(Fl_Widget* w, void* ptr);
-    static void static_submitButton_callback(Fl_Widget* w, void* ptr);
+    //static void static_submitButton_callback(Fl_Widget* w, void* ptr);
     static void static_addingButton_callback(Fl_Widget* w, void* ptr);
     Canvas canvas;
 

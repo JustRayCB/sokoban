@@ -7,7 +7,9 @@ LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level E
     lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
     colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
     movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
-    submitButton->callback(static_submitButton_callback, this);
+    replaceButton = new Fl_Button(300,20, 120, 30, "Replace level");
+    replaceButton->hide();
+    submitButton->callback(submitButtonCallback, this);
     addButton->callback(static_addingButton_callback, this);
     end();
     show();
@@ -24,7 +26,7 @@ LevelEditorWindow::LevelEditorWindow(std::string filename, Board board) : Fl_Win
     lineInput = new Fl_Input(150, 30, 50, 20, "Number of lines: ");
     colInput = new Fl_Input(150, 50, 50, 20, "Number of columns: ");
     movesLimit = new Fl_Input(150, 70, 50, 20, "Maximum moves: ");
-    submitButton->callback(static_submitButton_callback, this); 
+    submitButton->callback(submitButtonCallback, this); 
     addButton->callback(static_addingButton_callback, this);
     replaceButton->callback(static_replaceButton_callback, this);
     Canvas cv = convertObjectVectorToCanva(board.getBoard());
@@ -203,10 +205,10 @@ void LevelEditorWindow::convertCanvaToTextFile(std::string fileName) {
     fl_alert("File added as : %s", fileName.c_str());
 }
 
-void LevelEditorWindow::static_submitButton_callback(Fl_Widget* w, void* ptr){
-    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
-    me->submitButtonCallback();
-}
+//void LevelEditorWindow::static_submitButton_callback(Fl_Widget* w, void* ptr){
+    //LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
+    //me->submitButtonCallback();
+//}
 
 void LevelEditorWindow::static_addingButton_callback(Fl_Widget* w, void* ptr){
     LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
@@ -228,13 +230,14 @@ void LevelEditorWindow::replaceButtonCallBack() {
     }
 }
     
-void LevelEditorWindow::submitButtonCallback(){
-    if ((atoi(lineInput->value()) > 2) and ((atoi(colInput->value()) > 2))) {
-        Canvas newCanvas = Canvas(atoi(colInput->value()),atoi(lineInput->value()));
-        newCanvas.setNumberOfColumns(atoi(colInput->value()));
-        newCanvas.setNumberOfLines(atoi(lineInput->value()));
-        this->setCanva(newCanvas);
-        this->redraw();
+void LevelEditorWindow::submitButtonCallback(Fl_Widget* w, void* ptr){
+    LevelEditorWindow* me = static_cast<LevelEditorWindow*>(ptr);
+    if ((atoi(me->lineInput->value()) > 2) and ((atoi(me->colInput->value()) > 2))) {
+        Canvas newCanvas = Canvas(atoi(me->colInput->value()),atoi(me->lineInput->value()));
+        newCanvas.setNumberOfColumns(atoi(me->colInput->value()));
+        newCanvas.setNumberOfLines(atoi(me->lineInput->value()));
+        me->setCanva(newCanvas);
+        me->redraw();
     }
     else{
         fl_alert("You introduced bad dimensions, must be integers and greater than 2.");
