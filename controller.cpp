@@ -130,15 +130,14 @@ void Controll::tpPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int de
     board->setTp(position.x, position.y);
 }
 
-void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode, int boxSize){
+void Controll::targetPlayerEmptyBoxToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
     board->removeFromTarget(Point{position.x, position.y}, false);
     board->setOnTarget(Point{position.x+2*deltaX, position.y+2*deltaY}, true);
     board->getElem(position.x+deltaX, position.y+deltaY).setColor(FL_MAGENTA);
     this->moveBox(keyCode, position.x+deltaX, position.y+deltaY);
     this->movePlayer(keyCode);
     // on redessine la cible
-    GameObject target{{200+position.y*boxSize, 200+position.x*boxSize}, boxSize/2, FL_BLACK, FL_MAGENTA, "target"};
-    board->setObject(position.x, position.y, target);
+    board->setTarget(position.x, position.y);
 }
 
 void Controll::tpPlayerEmptyBoxToTp(const Point &position, int deltaX, int deltaY, int keyCode){
@@ -414,7 +413,7 @@ void Controll::manageFromTargetPlayerEmptyBox(const Point &position, int deltaX,
     Point destinationPosition = {position.x+2*deltaX, position.y+2*deltaY};
     if (board->isTarget(destinationPosition)) {
         // vers target
-        targetPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode, boxSize);
+        targetPlayerEmptyBoxToTarget(position, deltaX, deltaY, keyCode);
     } else if (board->isTp(destinationPosition)) {
         // vers tp
         targetPlayerEmptyBoxToTp(position, deltaX, deltaY, keyCode);
