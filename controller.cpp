@@ -161,8 +161,7 @@ void Controll::emptyPlayerToTarget(const Point &position, int deltaX, int deltaY
     emptyPlayerToEmpty(position, keyCode);
 }
 void Controll::tpPlayerToTarget(const Point &position, int deltaX, int deltaY, int keyCode){
-    board->setOnTarget(Point{position.x+deltaX, position.y+deltaY}, false);
-    this->movePlayer(keyCode);
+    emptyPlayerToTarget(position, deltaX, deltaY, keyCode);
     board->setTp(position.x, position.y);
 }
 
