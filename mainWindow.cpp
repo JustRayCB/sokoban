@@ -47,9 +47,9 @@ MainWindow::MainWindow(): Fl_Window(000, 000, 1000, 975, "Sokoban") {
     controller.setBoard(&board);
     reset = new Fl_Button(310, 120, 150, 30, "Reset Best Score");
     lvlEditor = new Fl_Button(165, 60, 150, 30, "Create New Level");
-    lvlEditor->callback(open_second_window, this);
+    lvlEditor->callback(openSecondWindow, this);
     lvlEditEditor = new Fl_Button(165, 30, 150, 30, "Edit this level");
-    lvlEditEditor->callback(edit_second_window, this);
+    lvlEditEditor->callback(editSecondWindow, this);
     choice = new Fl_Choice(210,120,100,30,"Levels");
     choice->hide(); reset->hide(); lvlEditor->hide(); lvlEditEditor->hide();
     configChoice(choice);
@@ -78,7 +78,7 @@ void MainWindow::draw(){
     }
 }
 
-void MainWindow::close_second_window(Fl_Widget* widget, void* data) {
+void MainWindow::closeSecondWindow(Fl_Widget* widget, void* data) {
     MainWindow* firstWindow = (MainWindow*) data;
     LevelEditorWindow* secondWindow = (LevelEditorWindow*) widget->window();
     secondWindow->hide();
@@ -104,20 +104,20 @@ void MainWindow::setBoard(Board newBoard) {
 }
 
 
-void MainWindow::open_second_window(Fl_Widget* widget, void* data) {
+void MainWindow::openSecondWindow(Fl_Widget* widget, void* data) {
     MainWindow* firstWindow = (MainWindow*) data;
     LevelEditorWindow* secondWindow = new LevelEditorWindow;
     Fl_Button* b = secondWindow->get_closeButton();
-    b->callback(close_second_window, firstWindow);
+    b->callback(closeSecondWindow, firstWindow);
     secondWindow->show();
     firstWindow->hide();
 }
 
-void MainWindow::edit_second_window(Fl_Widget* w, void* data) {
+void MainWindow::editSecondWindow(Fl_Widget* w, void* data) {
     MainWindow* firstWindow = (MainWindow*) data;
     LevelEditorWindow* secondWindow = new LevelEditorWindow(firstWindow->currentFile, firstWindow->board);
     Fl_Button* b = secondWindow->get_closeButton();
-    b->callback(close_second_window, firstWindow);
+    b->callback(closeSecondWindow, firstWindow);
     secondWindow->show();
     firstWindow->hide();
 }

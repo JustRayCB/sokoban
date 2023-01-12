@@ -63,7 +63,6 @@ public:
 
     GameObject &getElem(const int line, const int col); //return the element of the board [line][col]
                                                         //
-    int getBoxSize(); //return the boxSize
     std::vector<std::vector<GameObject>> &getBoard();
     int getPosX() const; //return the x coordinate of the player in the board
     int getPosY() const; //return the y coordinate of the player in the board
@@ -130,8 +129,6 @@ public:
     bool isOnTp(const Point &position);
     bool areBoxStuck(); //check if all the box are stuck in the board
     bool isBoxStuck(int &xVector, int &yVector); //check if the box of position xVector, yVector is stuck
-
-    void draw();
 
     void incrementTotalTargets();
     void incrementStepCount(int x);

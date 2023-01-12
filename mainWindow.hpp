@@ -33,9 +33,9 @@ class MainWindow: public Fl_Window{
     Fl_Box *hello;
     static void Timer_CB(void *userdata);
     static void updateWelcomeMessage(void *window);
-    static void close_second_window(Fl_Widget* widget, void* data);
-    static void open_second_window(Fl_Widget* widget, void* data);
-    static void edit_second_window(Fl_Widget* w, void* data);
+    static void closeSecondWindow(Fl_Widget* widget, void* data);
+    static void openSecondWindow(Fl_Widget* widget, void* data);
+    static void editSecondWindow(Fl_Widget* w, void* data);
 
 public:
     ~MainWindow(){
