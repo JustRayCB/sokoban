@@ -5,8 +5,6 @@
 
 #include "controller.hpp"
 #include "board.hpp"
-#include "gameObject.hpp"
-#include "rectangle.hpp"
 
 
 void Controll::mouseMove(Point mouseLoc) {
@@ -538,9 +536,6 @@ void Controll::move(int keyCode){
     if (isPlayerMovable){
         bool isBoxMovable = board->isBox(futurePlayerPosition) and board->isInBoard(futureBoxPosition.x, futureBoxPosition.y)
             and not (board->isWall(futureBoxPosition) or board->isBox(futureBoxPosition));
-                //and (board->isEmpty(futureBoxPosition) 
-                    //or board->isTarget(futureBoxPosition)
-                //or board->isOnTp({futureBoxPosition}));
         if (isBoxMovable) {
             manageMovePlayerAndBox(playerPosition, deltaX, deltaY, keyCode);
             board->incrementStepCount(1);
