@@ -292,12 +292,14 @@ void loadBoard(Board &board, std::string file){
                 int limit = std::stoi(tempLimit);
                 board.setBestScore(bestScore);
                 board.setLimit(limit);
-                boxSize = min(600/nbLine, 75);
+                int lineSize = min(600/nbLine, 75);
+                int colSize = min(600/nbCol, 75);
+                boxSize = min(lineSize, colSize); 
                 board.resize(nbLine, nbCol);
 
             }
             std::getline(myFile, lineS);
-             for (char &letter :  lineS) {
+            for (char &letter :  lineS) {
                  board.configBoard(line, col, letter, boxSize);
                  col++;
              }
