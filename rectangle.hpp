@@ -14,6 +14,9 @@
 #include <time.h>
 #include <vector>
 
+/*
+* These clases come from the cursus INFOF202 "Langages de programmation 2" of the Université Libre de Bruxelles.
+*/
 struct Point {
     int x, y;
     void printPoint();

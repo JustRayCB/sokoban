@@ -49,7 +49,6 @@ void Cell::setCurrent(int newCurrent) {
 }
 
 Canvas::Canvas(int nbColone, int nbLigne) {
-    std::cout << "Entering Canva constructor with dimensions: " << nbLigne << " " << nbColone << std::endl;
     int size = std::min(500/nbColone, 500/nbLigne);
     for(int i=0; i < nbLigne; i++){
         std::vector<Cell> innerVec;

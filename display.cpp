@@ -39,7 +39,7 @@ void DisplayBoard::displayTxt(){
     if (target == board->getTotalTargets()){
         status.setString("You won !!");
         Text remain{std::to_string(board->getLimit()-board->getStepCount()) + 
-                " steps remainings", {STARTDISPLAYX, STARTDISPLAYY+200}};
+                " steps remaining", {STARTDISPLAYX, STARTDISPLAYY+200}};
         remain.draw();
     } 
     else if (board->isGameOver()) {

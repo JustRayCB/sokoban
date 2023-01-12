@@ -15,6 +15,10 @@
 
 #include "rectangle.hpp"
 
+/*
+* These clases come from the cursus INFOF202 "Langages de programmation 2" of the Université Libre de Bruxelles.
+*/
+
 class Cell {
   Rectangle r;
   int current = 0;
