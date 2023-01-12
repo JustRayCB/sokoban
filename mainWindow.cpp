@@ -199,7 +199,7 @@ bool MainWindow::hasWon(){
 }
 
 bool MainWindow::gameOver(){
-    if (board.isGameOver()) {
+    if (board.isGameOver() and not board.hasWon()) {
         if (board.isLimitReached()) {
             fl_alert("Too bad, you reached the limit !");
         }
