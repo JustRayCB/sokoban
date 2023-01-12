@@ -43,7 +43,7 @@ void configHello(Fl_Box *hello){
 
 
 MainWindow::MainWindow(): Fl_Window(000, 000, 1000, 975, "Sokoban") {
-    Fl::add_timeout(1.0 / 60, Timer_CB, this);
+    Fl::add_timeout(1.0 / 120, Timer_CB, this);
     currentFile = "lvls/lvl1.txt";
     loadBoard(board, currentFile);
     display.setBoard(&board);
