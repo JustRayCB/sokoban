@@ -10,6 +10,9 @@
 #include <FL/fl_types.h>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Input.H>
+#include <ostream>
+#include <fstream>
+#include <sstream>
 
 #include "board.hpp"
 #include "display.hpp"

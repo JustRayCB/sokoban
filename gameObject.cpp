@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <Fl/Enumerations.H>
-#include <unistd.h>
 
 #include "gameObject.hpp"
 #include "rectangle.hpp"

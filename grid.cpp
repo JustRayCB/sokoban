@@ -1,7 +1,6 @@
 #include "grid.hpp"
 #include <cstring>
 #include <iostream>
-#include <algorithm>
 
 
 Cell::Cell(Point center, int w, int h) : r(center, w, h, FL_BLACK, FL_WHITE) {}

@@ -1,13 +1,8 @@
 #include <FL/Enumerations.H>
 #include <FL/fl_draw.H>
-#include <unistd.h>
-#include <algorithm>
-#include <cstddef>
-#include <cstring>
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <variant>
 #include <iostream>
 #include <string>
 #include <tuple>
@@ -15,7 +10,6 @@
 
 #include "board.hpp"
 #include "gameObject.hpp"
-#include "rectangle.hpp"
 
 
 using namespace std;

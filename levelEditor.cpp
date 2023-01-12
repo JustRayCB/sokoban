@@ -1,4 +1,5 @@
 #include "levelEditor.hpp"
+#include <fstream>
 #include "text.hpp"
 #define STARTDISPLAYX (800)
 #define STARTDISPLAYY (200)

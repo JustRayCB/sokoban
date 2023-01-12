@@ -12,20 +12,6 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Input.H>
 #include <FL/fl_message.H>
-#include <fstream>
-#include <math.h>
-#include <memory>
-#include <ostream>
-#include <time.h>
-#include <chrono>
-#include <iostream>
-#include <random>
-#include <string>
-#include <vector>
-#include <Fl/Fl_Choice.H>
-#include <memory.h>
-#include <fstream>
-#include <cstring>
 
 #include "grid.hpp"
 #include "board.hpp"
