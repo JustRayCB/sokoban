@@ -14,7 +14,8 @@ public:
     void setBoard(Board *myBoard);//{ board = myBoard;}
     void drawCells(); //function tha will draw all cells in the gameBoard vector
     void displayTxt(); //function that will draw the text
-    void displayLegend();
+    void displayLegend(); // function that display the legend of all the colored
+                          // element in the board
     void draw(); //main draw function
 };
 
