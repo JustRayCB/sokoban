@@ -91,6 +91,8 @@ private:
      * @param isEdit: boolean showing if we add a as a new level or not
      */
     void convertCanvaToTextFile(std::string fileName, bool addingAsNew);
+
+    void displayLegend();
 };
 
 #endif

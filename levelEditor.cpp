@@ -1,4 +1,7 @@
 #include "levelEditor.hpp"
+#include "text.hpp"
+#define STARTDISPLAYX (800)
+#define STARTDISPLAYY (200)
 
 LevelEditorWindow::LevelEditorWindow() : Fl_Window(000, 000, 1000, 975, "Level Editor"){
     submitButton = new Fl_Button(150, 90, 50, 20, "Submit");
@@ -64,9 +67,26 @@ void LevelEditorWindow::setCanva(Canvas canva){
     canvas = canva;
 }
 
+void LevelEditorWindow::displayLegend(){
+    Rectangle player({STARTDISPLAYX, STARTDISPLAYY+260}, 20, 20, FL_BLACK, FL_GREEN);
+    Text txtPlayer("Player", {STARTDISPLAYX+15, STARTDISPLAYY+270});
+    Rectangle box({STARTDISPLAYX, STARTDISPLAYY+285}, 20, 20, FL_BLACK, FL_YELLOW);
+    Text txtBox("Boxes", {STARTDISPLAYX+15, STARTDISPLAYY+295});
+    Rectangle target({STARTDISPLAYX, STARTDISPLAYY+310}, 20, 20, FL_BLACK, FL_MAGENTA);
+    Text txtTarget("Targets", {STARTDISPLAYX+15, STARTDISPLAYY+320});
+    Rectangle tp({STARTDISPLAYX, STARTDISPLAYY+335}, 20, 20, FL_BLACK, FL_CYAN);
+    Text txtTp("Tps", {STARTDISPLAYX+15, STARTDISPLAYY+345});
+    Rectangle wall({STARTDISPLAYX, STARTDISPLAYY+360}, 20, 20, FL_BLACK, FL_BLUE);
+    Text txtWall("Walls", {STARTDISPLAYX+15, STARTDISPLAYY+370});
+    player.draw(); box.draw(); target.draw(); tp.draw(); wall.draw();
+    txtPlayer.draw(); txtBox.draw(); txtTarget.draw(); txtTp.draw(); txtWall.draw();
+
+}
+
 void LevelEditorWindow::draw() {
     Fl_Window::draw();
     canvas.draw();
+    displayLegend();
 }
 
 int LevelEditorWindow::handle(int event) {
