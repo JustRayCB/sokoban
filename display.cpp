@@ -1,10 +1,11 @@
+#include <FL/Enumerations.H>
 #include <FL/Fl.H>
 #include <iostream>
 #include <string>
 
 #include "board.hpp"
 #include "display.hpp"
-#include "gameObject.hpp"
+#include "rectangle.hpp"
 #include "text.hpp"
 
 #define STARTDISPLAYX (800)
@@ -50,9 +51,26 @@ void DisplayBoard::displayTxt(){
     }
     status.draw(); steps.draw(); bestScore.draw(); limit.draw();
 }
+
+void DisplayBoard::displayLegend(){
+    Rectangle player({STARTDISPLAYX, STARTDISPLAYY+260}, 20, 20, FL_BLACK, FL_GREEN);
+    Text txtPlayer("Player", {STARTDISPLAYX+15, STARTDISPLAYY+270});
+    Rectangle box({STARTDISPLAYX, STARTDISPLAYY+285}, 20, 20, FL_BLACK, FL_YELLOW);
+    Text txtBox("Boxes", {STARTDISPLAYX+15, STARTDISPLAYY+295});
+    Rectangle target({STARTDISPLAYX, STARTDISPLAYY+310}, 20, 20, FL_BLACK, FL_MAGENTA);
+    Text txtTarget("Targets", {STARTDISPLAYX+15, STARTDISPLAYY+320});
+    Rectangle tp({STARTDISPLAYX, STARTDISPLAYY+335}, 20, 20, FL_BLACK, FL_CYAN);
+    Text txtTp("Tps", {STARTDISPLAYX+15, STARTDISPLAYY+345});
+    Rectangle wall({STARTDISPLAYX, STARTDISPLAYY+360}, 20, 20, FL_BLACK, FL_BLUE);
+    Text txtWall("Walls", {STARTDISPLAYX+15, STARTDISPLAYY+370});
+    player.draw(); box.draw(); target.draw(); tp.draw(); wall.draw();
+    txtPlayer.draw(); txtBox.draw(); txtTarget.draw(); txtTp.draw(); txtWall.draw();
+
+}
 void DisplayBoard::draw(){
     drawCells();
     displayTxt();
+    displayLegend();
 }
 
 
