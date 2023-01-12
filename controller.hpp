@@ -9,6 +9,10 @@ class Controll{
 
 public:
 
+  /*
+   * @brief: Function that will change the frame color if the mouse in on a cell
+   * @param mouseLoc: position of the mouse
+   */
     void mouseMove(Point mouseLoc);
     Point mouseClick(Point mouseLoc);
 
@@ -45,7 +49,7 @@ public:
     void tpPlayer(int x, int y);
 
     /*
-     * @brief: Function that teleport a player from his initial position to a new positon
+     * @brief: Function that modify xVector or yVector according to the keypressed of the player
      * @param keyCode: key pressed by the player
      * @param xVector: X coordinate of the player's position in the vector
      * @param yVector: Y coordinate of the player's position in the vector
@@ -247,7 +251,6 @@ public:
      * @param deltaX: the corresponding delta of the X axe of the move that the player wants to make 
      * @param deltaY: the corresponding delta of the Y axe of the move that the player wants to make
      * @param keyCode: key pressed by the player
-     * @param boxSize: size of the box of the corresponding object
      */
     void tpPlayerEmptyBoxToEmpty(const Point &position, int deltaX, int deltaY, int keyCode);
     /*
